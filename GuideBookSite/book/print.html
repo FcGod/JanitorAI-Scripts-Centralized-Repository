@@ -1,0 +1,3568 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Icehellionx Script Guide</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Icehellionx Script Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="-foreword"><a class="header" href="#-foreword">📘 Foreword</a></h1>
+<p>This guide was written to help people who aren’t coders learn how to make scripts that bring their characters and worlds to life. For many, scripting feels like a mysterious wall of symbols and rules. My goal is to show you that it’s not magic — it’s just building blocks stacked carefully, one step at a time.</p>
+<p>Whether you’re here to build roleplay characters, manage world lore, or just tinker for fun, I want this guide to be something you can flip through without feeling lost.</p>
+<p>Remember: scripting is not about writing the “perfect” code. It’s about creating something that feels alive, fun, and responsive. Start small, experiment, and let your characters grow with you.</p>
+<p>— <em>Icehellionx</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-introduction"><a class="header" href="#-introduction">📘 Introduction</a></h1>
+<p>Welcome to the <strong>Script Making Guide</strong>, a beginner-to-advanced handbook for writing scripts in a sandbox environment.</p>
+<p>This book starts at the absolute basics:</p>
+<ul>
+<li>What a script is.</li>
+<li>How it interacts with personality and scenario.</li>
+<li>Simple keyword checks.</li>
+</ul>
+<p>Then it builds steadily into intermediate and advanced topics:</p>
+<ul>
+<li>Lore structures.</li>
+<li>Probability and randomization.</li>
+<li>Message count gating.</li>
+<li>Reaction engines.</li>
+<li>Emotional hybrids.</li>
+<li>Modular frameworks like the <strong>Everything Lorebook.</strong></li>
+</ul>
+<p>By the time you finish, you’ll know how to:</p>
+<ul>
+<li>Write safe scripts that won’t crash.</li>
+<li>Make conversations feel dynamic and immersive.</li>
+<li>Organize large worlds into neat, reusable modules.</li>
+</ul>
+<p>The only requirement? Curiosity. If you can read and follow examples step-by-step, you can script.</p>
+<p>This guide has been written by <strong>Icehellionx</strong>, and shaped through weeks of testing, trial, and improvement. Every example, every snippet, has been verified to work in the sandbox environment described.</p>
+<p>Think of this book as your roadmap: start at Chapter 1, take it one step at a time, and by Chapter 25 you’ll be building full lore engines of your own.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-list"><a class="header" href="#-chapter-list">📘 Chapter List</a></h1>
+<p><strong>Beginner (Foundations)</strong></p>
+<ol>
+<li>What is a Script?</li>
+<li>Personality vs Scenario</li>
+<li>Context Guards</li>
+<li>Keywords &amp; Matching</li>
+<li>Progressive Reactions (Message Count Basics)</li>
+<li>Time &amp; Pacing</li>
+<li>Fake Memory with Scenario</li>
+<li>Building a Simple Lorebook</li>
+<li>Looping Safely</li>
+<li>Putting It All Together</li>
+<li>Quick Reference Cheat Sheet</li>
+</ol>
+<p><strong>Intermediate (Control &amp; Variety)</strong>
+12. Weighted Lore &amp; Probability
+13. Min/Max Message Gating
+14. Shifts &amp; Conditional Layers
+15. Relationships &amp; Ordered Keywords
+16. Event Lore (Randomized Story Beats)
+17. Simple Reaction Engines (Weighted Scores)</p>
+<p><strong>Advanced (Systems &amp; Frameworks)</strong>
+18. Performance &amp; Sandbox Limits
+19. Definitional vs Relational vs Event Lore
+20. Dynamic Lore Systems
+21. Adaptive Reaction Engines (Polarity &amp; Negation)
+22. Hybrid Emotional States
+23. Error Guards &amp; Sandbox Tricks
+24. The Everything Lorebook (People, Places, Traits, Events)
+25. Bringing It All Together (Full Advanced Script Example)</p>
+<p><strong>Reference</strong></p>
+<ul>
+<li>Glossary</li>
+<li>Appendix (Code Patterns, Sandbox Rules, Templates, Practice)</li>
+<li>Index</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-1-what-scripts-are"><a class="header" href="#-chapter-1-what-scripts-are">📘 Chapter 1: What Scripts Are</a></h1>
+<p>Imagine your character is like an actor in a play. Normally, they follow the script you wrote in their <strong>Personality</strong> and <strong>Scenario</strong> fields. But what if you wanted them to change their lines on the fly depending on what the user says? That’s where <strong>scripts</strong> come in.</p>
+<p>A <strong>script</strong> is just a tiny set of instructions you write in a very basic form of JavaScript. Think of it like a recipe card:</p>
+<ul>
+<li>If this happens → do that.</li>
+<li>If the user says “hello” → make the character smile.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-when-do-scripts-run"><a class="header" href="#-when-do-scripts-run">🟡 When Do Scripts Run?</a></h2>
+<p>Scripts are automatic. You don’t press a button to activate them. They run:</p>
+<ul>
+<li>Before every single bot reply.</li>
+<li>Right after the user sends a message.</li>
+<li>Every time the chat moves forward.</li>
+</ul>
+<p>That means your script is always “listening,” watching what the user says, and adjusting the character’s behavior in the background.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-what-can-scripts-change"><a class="header" href="#-what-can-scripts-change">🟡 What Can Scripts Change?</a></h2>
+<p>This is important: scripts only get to change <strong>two things</strong>:</p>
+<ol>
+<li>
+<p><strong>Personality</strong> → how the character acts or feels</p>
+<ul>
+<li>Example: “cheerful and supportive”</li>
+</ul>
+</li>
+<li>
+<p><strong>Scenario</strong> → what’s happening around the character</p>
+<ul>
+<li>Example: “It’s late at night, and the rain is tapping on the window.”</li>
+</ul>
+</li>
+</ol>
+<p>Everything else (like the character’s name, memories, or chat history) is locked. The sandbox doesn’t let you mess with it. Think of <strong>Personality</strong> and <strong>Scenario</strong> as two whiteboards you’re allowed to write on.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-context-object-your-toolbox"><a class="header" href="#-the-context-object-your-toolbox">🟡 The Context Object (Your Toolbox)</a></h2>
+<p>When your script runs, it’s given a <strong>context object</strong>. This is just a box of information about the current chat.</p>
+<ul>
+<li><code>context.character</code> → everything about your character</li>
+<li><code>context.chat</code> → information about the chat itself</li>
+</ul>
+<p>You’ll use these most (written on separate lines so you can copy them easily):</p>
+<p>context.character.personality    // you can add personality traits here
+context.character.scenario       // you can add scene details here
+context.chat.last_message        // the last thing the user typed
+context.chat.message_count       // how many messages have been sent so far</p>
+<p>Plain English:</p>
+<ul>
+<li>personality is the actor’s mood.</li>
+<li>scenario is the stage set.</li>
+<li>last_message is the latest line from the audience.</li>
+<li>message_count is how many lines have been spoken so far in the play.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-a-tiny-first-example"><a class="header" href="#-a-tiny-first-example">🟡 A Tiny First Example</a></h2>
+<p>Example: simple “hello” trigger</p>
+<p>if (context.chat.last_message.toLowerCase().indexOf("hello") !== -1) {
+context.character.scenario += "They greet you warmly.";
+context.character.personality += "Friendly and welcoming.";
+}</p>
+<p>What it means:</p>
+<ul>
+<li>Look at what the user just typed.</li>
+<li>Change it to lowercase so “HELLO” or “Hello” also works.</li>
+<li>Check if the word “hello” is in there.</li>
+<li>If yes, add two short notes: one to scenario (what’s happening) and one to personality (how they act).</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-1"><a class="header" href="#-key-takeaways-from-chapter-1">🟡 Key Takeaways from Chapter 1</a></h2>
+<ul>
+<li>Scripts are <em>if-this-then-that</em> instructions for your characters.</li>
+<li>They only control <strong>Personality</strong> and <strong>Scenario</strong>.</li>
+<li>They run <strong>every time the user types something</strong>.</li>
+<li>You use the <code>context</code> toolbox to get info about the conversation.</li>
+<li>With just a few lines, you can make your character react to words.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-2-the-context-object"><a class="header" href="#-chapter-2-the-context-object">📘 Chapter 2: The Context Object</a></h1>
+<p>When your script runs, it doesn’t start from scratch — it’s handed a <strong>context object</strong>.<br />
+Think of the <strong>context</strong> like a backpack your script always carries. Inside, you’ll find everything you need to know about:</p>
+<ul>
+<li>
+<p><strong>The character</strong> – their personality, scenario, and traits.</p>
+</li>
+<li>
+<p><strong>The chat</strong> – what the user said, how long the talk has gone, and (optionally) a few of the latest messages.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-inside-the-character-backpack"><a class="header" href="#-inside-the-character-backpack">🟢 Inside the Character Backpack</a></h2>
+<p>The script gives you a special box called <code>context.character</code>.</p>
+<p>Here’s what’s inside — some pieces are <em>read-only</em>, others are <em>editable</em>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Property</th><th>Meaning</th><th>Editable?</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td>the character’s full name</td><td>❌</td></tr>
+<tr><td><code>chat_name</code></td><td>their display name in chat</td><td>❌</td></tr>
+<tr><td><code>example_dialogs</code></td><td>sample training lines</td><td>❌</td></tr>
+<tr><td><strong><code>personality</code></strong></td><td>their mood, traits, and tone</td><td>✅</td></tr>
+<tr><td><strong><code>scenario</code></strong></td><td>what’s happening around them</td><td>✅</td></tr>
+</tbody></table>
+</div>
+<p>Plain English:</p>
+<ul>
+<li>
+<p><code>name</code> = their driver’s license — you can read it, not rewrite it.</p>
+</li>
+<li>
+<p><code>chat_name</code> = their nametag in the play.</p>
+</li>
+<li>
+<p><code>example_dialogs</code> = practice lines, hands off.</p>
+</li>
+<li>
+<p><code>personality</code> = their inner mood — you can add to it mid-scene.</p>
+</li>
+<li>
+<p><code>scenario</code> = the stage set — you can rearrange it safely.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-inside-the-chat-backpack"><a class="header" href="#-inside-the-chat-backpack">🟢 Inside the Chat Backpack</a></h2>
+<p>The script also gives you <code>context.chat</code>, which holds details about the conversation itself:</p>
+<ul>
+<li>
+<p><code>message_count</code> → how many total messages have been sent.</p>
+</li>
+<li>
+<p><code>last_message</code> → the most recent thing the user typed.</p>
+</li>
+<li>
+<p><code>last_messages</code> → an array of recent messages (new in modern sandbox).</p>
+</li>
+<li>
+<p><code>first_message_date</code> / <code>last_bot_message_date</code> → timestamps, if supported.</p>
+</li>
+</ul>
+<p>Plain English:</p>
+<ul>
+<li>
+<p><code>message_count</code> = the line number in the play.</p>
+</li>
+<li>
+<p><code>last_message</code> = the latest shout from the audience.</p>
+</li>
+<li>
+<p><code>last_messages</code> = a short scrollback — useful for multi-turn logic.</p>
+</li>
+<li>
+<p>The date fields are nice extras, but beginners can skip them.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-multi-message-context-looking-back-several-lines"><a class="header" href="#-multi-message-context-looking-back-several-lines">🟢 Multi-Message Context (Looking Back Several Lines)</a></h2>
+<p>By default, scripts only read the <strong>latest</strong> message.<br />
+But what if you want to react to something said a few turns ago — like a slow-burn emotion or a repeating word?</p>
+<p>You can create a small <strong>look-back window</strong>:</p>
+<pre><code class="language-js">const lastMessages = context.chat.last_messages
+  .slice(-5)                           // take the last 5 user messages
+  .map(m =&gt; m.message.toLowerCase())   // normalize casing
+  .join(" ");                          // merge into one searchable string
+</code></pre>
+<p>Now <code>lastMessages</code> is a single string containing recent chat history.</p>
+<p>You can use it exactly like <code>last_message</code>:</p>
+<pre><code class="language-js">if (lastMessages.includes("secret")) {
+  context.character.personality += ", becomes cautious about secrets.";
+}
+</code></pre>
+<h3 id="-why-this-matters"><a class="header" href="#-why-this-matters">🧠 Why This Matters</a></h3>
+<ul>
+<li>
+<p>Detects patterns spread across several turns.</p>
+</li>
+<li>
+<p>Prevents missing context from short back-and-forth lines.</p>
+</li>
+<li>
+<p>Enables <em>multi-message emotion tracking</em> and <em>progressive lore triggers.</em></p>
+</li>
+</ul>
+<p>💡 Tip: Adjust the depth with <code>.slice(-3)</code> or <code>.slice(-10)</code> depending on how much history you want.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-only-two-things-can-change"><a class="header" href="#-why-only-two-things-can-change">🟢 Why Only Two Things Can Change</a></h2>
+<p>Even with these tools, you can only modify:</p>
+<ul>
+<li>
+<p><code>context.character.personality</code></p>
+</li>
+<li>
+<p><code>context.character.scenario</code></p>
+</li>
+</ul>
+<p>Everything else stays locked — this keeps the sandbox safe and predictable.<br />
+Think of it like being allowed to <strong>write on the whiteboards</strong>, not <strong>remodel the theater</strong>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-exploring-context-in-action"><a class="header" href="#-example-exploring-context-in-action">🟢 Example: Exploring Context in Action</a></h2>
+<pre><code class="language-js">console.log("Last message:", context.chat.last_message);
+console.log("Total messages:", context.chat.message_count);
+console.log("Current personality:", context.character.personality);
+</code></pre>
+<p>These logs appear only in the <strong>debug panel</strong>, not in the visible chat.<br />
+They’re your flashlight when testing scripts.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-a-first-real-example"><a class="header" href="#-a-first-real-example">🟢 A First Real Example</a></h2>
+<p>Let’s make the character “warm up” over time:</p>
+<pre><code class="language-js">if (context.chat.message_count &gt; 20) {
+  context.character.personality += ", has really warmed up to the user";
+  context.character.scenario    += " The atmosphere feels much friendlier now.";
+}
+</code></pre>
+<p>Plain English:</p>
+<ul>
+<li>
+<p>After 20 messages → add warmth to both personality and scene.</p>
+</li>
+<li>
+<p>The longer the chat, the more natural and connected it feels.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-2"><a class="header" href="#-key-takeaways-from-chapter-2">🟢 Key Takeaways from Chapter 2</a></h2>
+<ul>
+<li>
+<p>The <strong>context object</strong> is your script’s toolbox.</p>
+</li>
+<li>
+<p><code>context.character</code> → everything about the character.</p>
+</li>
+<li>
+<p><code>context.chat</code> → everything about the conversation.</p>
+</li>
+<li>
+<p>You can now use <strong><code>last_messages</code></strong> to look several messages deep.</p>
+</li>
+<li>
+<p>Only <code>personality</code> and <code>scenario</code> are writable.</p>
+</li>
+<li>
+<p>Use these tools to make scripts react intelligently to history, timing, and emotion.</p>
+</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Treat <code>lastMessages</code> like short-term memory.<br />
+It won’t remember forever — but within a few turns, it can make your character feel truly attentive.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-3-the-sandbox-rules-what-works-and-what-doesnt"><a class="header" href="#-chapter-3-the-sandbox-rules-what-works-and-what-doesnt">📘 Chapter 3: The Sandbox Rules (What Works and What Doesn’t)</a></h1>
+<p>If you’ve ever played a video game in <strong>sandbox mode</strong>, you know you can experiment — but there are still boundaries. That’s exactly what happens here.</p>
+<p>Your script doesn’t run in unrestricted JavaScript like a professional programmer’s environment.<br />
+Instead, it runs in a <strong>safe sandbox</strong> — a controlled runtime that now supports most <strong>ES6 (modern JavaScript)</strong> features <strong>inside the sandbox scope</strong>, while still blocking anything that touches global objects or external systems.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-golden-rule"><a class="header" href="#-the-golden-rule">🟡 The Golden Rule</a></h2>
+<p>👉 <strong>You can only use the tools the sandbox gives you.</strong></p>
+<p>The sandbox now supports modern ES6 syntax — but not <em>everything</em>.<br />
+If you use something unsafe, async, or tied to the global runtime, the script may fail silently (nothing happens, no error message).</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-safe-tools-these-always-work"><a class="header" href="#-safe-tools-these-always-work">🟢 Safe Tools (These Always Work)</a></h2>
+<p>Here are the tools you can confidently use anywhere inside the sandbox.</p>
+<h3 id="strings"><a class="header" href="#strings"><strong>Strings</strong></a></h3>
+<ul>
+<li>
+<p><code>.toLowerCase()</code> → make text lowercase</p>
+</li>
+<li>
+<p><code>.includes("word")</code> → check if a word appears (ES6-safe replacement for <code>.indexOf</code>)</p>
+</li>
+<li>
+<p><code>.trim()</code> → remove spaces at the start and end</p>
+</li>
+<li>
+<p><code>.replace()</code> → swap or clean words</p>
+</li>
+<li>
+<p>Template literals: <code>`Hello ${name}`</code> ✅</p>
+</li>
+</ul>
+<h3 id="numbers--math"><a class="header" href="#numbers--math"><strong>Numbers &amp; Math</strong></a></h3>
+<ul>
+<li>
+<p><code>+ - * /</code> (basic math)</p>
+</li>
+<li>
+<p><code>Math.random()</code> → random 0–1</p>
+</li>
+<li>
+<p><code>Math.floor()</code> → round down</p>
+</li>
+<li>
+<p><code>Math.min()</code> / <code>Math.max()</code> → clamp values</p>
+</li>
+</ul>
+<h3 id="arrays-lists"><a class="header" href="#arrays-lists"><strong>Arrays (Lists)</strong></a></h3>
+<ul>
+<li>
+<p><code>.length</code> → how many items</p>
+</li>
+<li>
+<p><code>.includes()</code> → check for an element</p>
+</li>
+<li>
+<p><code>.forEach()</code> / <code>.map()</code> / <code>.filter()</code> ✅ (lightweight iterations now supported)</p>
+</li>
+<li>
+<p><code>for (const x of arr)</code> loops ✅</p>
+</li>
+</ul>
+<pre><code class="language-js">for (const item of arr) {
+  // do something with item
+}
+</code></pre>
+<h3 id="objects"><a class="header" href="#objects"><strong>Objects</strong></a></h3>
+<ul>
+<li>
+<p><code>Object.keys()</code>, <code>Object.values()</code>, <code>Object.assign()</code> ✅</p>
+</li>
+<li>
+<p>Destructuring: <code>const {a, b} = obj;</code> ✅</p>
+</li>
+<li>
+<p>Shorthand properties: <code>{ name, age }</code> ✅</p>
+</li>
+</ul>
+<h3 id="variables--functions"><a class="header" href="#variables--functions"><strong>Variables &amp; Functions</strong></a></h3>
+<ul>
+<li>
+<p><code>const</code> / <code>let</code> ✅ (use instead of <code>var</code>)</p>
+</li>
+<li>
+<p>Arrow functions ✅ → <code>arr.forEach(x =&gt; console.log(x))</code></p>
+</li>
+<li>
+<p>Function defaults: <code>function say(text = "Hi") { … }</code> ✅</p>
+</li>
+</ul>
+<h3 id="dates"><a class="header" href="#dates"><strong>Dates</strong></a></h3>
+<ul>
+<li>
+<p><code>new Date()</code></p>
+</li>
+<li>
+<p><code>.getHours()</code>, <code>.getMinutes()</code></p>
+</li>
+</ul>
+<h3 id="regular-expressions-regex"><a class="header" href="#regular-expressions-regex"><strong>Regular Expressions (Regex)</strong></a></h3>
+<ul>
+<li>
+<p>Basic checks like:</p>
+<pre><code class="language-js">if (/\bhello\b/i.test(text)) { … }
+</code></pre>
+<p>⚠ Look-behind and advanced Unicode features still not supported.</p>
+</li>
+</ul>
+<h3 id="debugging"><a class="header" href="#debugging"><strong>Debugging</strong></a></h3>
+<ul>
+<li><code>console.log()</code> works normally in the sandbox debug panel.</li>
+</ul>
+<p>✅ These are your everyday building blocks. They now include modern syntax, but still run safely inside the isolated context.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-unsafe--blocked-tools-these-still-dont-work"><a class="header" href="#-unsafe--blocked-tools-these-still-dont-work">🔴 Unsafe / Blocked Tools (These Still Don’t Work)</a></h2>
+<p>Some JavaScript features interact with the outside environment or the global runtime and remain blocked for safety.</p>
+<ul>
+<li>
+<p><strong>Async / Concurrency</strong></p>
+<ul>
+<li>
+<p><code>async</code> / <code>await</code>, <code>Promise</code>, <code>setTimeout</code>, <code>setInterval</code> → ❌</p>
+</li>
+<li>
+<p>No asynchronous I/O or delayed callbacks.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>External Access</strong></p>
+<ul>
+<li>
+<p><code>fetch</code>, <code>XMLHttpRequest</code>, <code>require</code>, <code>import</code>, <code>document</code>, <code>window</code> → ❌</p>
+</li>
+<li>
+<p>Anything that touches network, DOM, or file system is blocked.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Global Side Effects</strong></p>
+<ul>
+<li>Adding global variables, redefining <code>context</code>, or overwriting system objects → ❌</li>
+</ul>
+<hr />
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-gray-area-tools-work-in-most-hosts"><a class="header" href="#-gray-area-tools-work-in-most-hosts">🟡 Gray-Area Tools (Work in Most Hosts)</a></h2>
+<p>These features are usually fine but may behave inconsistently depending on implementation:</p>
+<ul>
+<li>
+<p><code>.padStart()</code> / <code>.padEnd()</code></p>
+</li>
+<li>
+<p><code>.repeat()</code></p>
+</li>
+<li>
+<p>Advanced regex flags (<code>/s</code>, look-behind, named groups)</p>
+</li>
+<li>
+<p>Spread syntax on extremely large arrays (<code>...bigArray</code>)</p>
+</li>
+</ul>
+<p>⚠ <strong>Tip:</strong> If you need absolute reliability, test your script once in the sandbox console before shipping.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-these-limits-exist"><a class="header" href="#-why-these-limits-exist">🟡 Why These Limits Exist</a></h2>
+<p>The sandbox is designed to:</p>
+<ol>
+<li>
+<p><strong>Stay Fast</strong> — Scripts run before every bot reply, so they must finish in milliseconds.</p>
+</li>
+<li>
+<p><strong>Stay Safe</strong> — No network, file, or global access.</p>
+</li>
+<li>
+<p><strong>Stay Simple</strong> — You get all core ES6 syntax without external complexity.</p>
+</li>
+</ol>
+<p>Think of it like a <strong>practice car with upgraded controls but a speed limiter</strong> — you can use all the modern conveniences, but you still can’t crash through the walls.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-safe-vs-unsafe"><a class="header" href="#-example-safe-vs-unsafe">🟡 Example: Safe vs Unsafe</a></h2>
+<p><strong>Safe (ES6-style):</strong></p>
+<pre><code class="language-js">if (context.chat.last_message.toLowerCase().includes("hello")) {
+  context.character.scenario += "They greet you warmly.";
+}
+</code></pre>
+<p><strong>Unsafe (still blocked):</strong></p>
+<pre><code class="language-js">await fetch("https://example.com/api");
+</code></pre>
+<p>What changed?</p>
+<ul>
+<li>
+<p>✅ <code>.includes()</code> is now allowed.</p>
+</li>
+<li>
+<p>❌ Async calls remain disabled.</p>
+</li>
+<li>
+<p>Template literals and <code>const</code> are fine inside the sandbox.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-3"><a class="header" href="#-key-takeaways-from-chapter-3">🟡 Key Takeaways from Chapter 3</a></h2>
+<ul>
+<li>
+<p>You’re in a <strong>sandbox-safe ES6 environment</strong> — modern syntax works inside script scope.</p>
+</li>
+<li>
+<p>✅ Safe: text tools, math, arrays, objects, regex, template literals, arrow functions.</p>
+</li>
+<li>
+<p>⚠ Gray Area: padding, repeating, advanced regex, very large spreads.</p>
+</li>
+<li>
+<p>❌ Blocked: async functions, timers, external calls, global access.</p>
+</li>
+<li>
+<p>Always favor <strong>clarity + simplicity</strong> — modern JS is available, but restraint keeps scripts fast and reliable.</p>
+</li>
+</ul>
+<hr />
+<p>Would you like me to apply this same <strong>ES6-Sandbox modernization</strong> style to Chapter 18 next (Performance &amp; Sandbox Limits)?</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-3-1"><a class="header" href="#-key-takeaways-from-chapter-3-1">🟡 Key Takeaways from Chapter 3</a></h2>
+<ul>
+<li>You’re in a <strong>sandbox</strong>, not full JavaScript</li>
+<li>✅ Safe: text basics, math, arrays with loops, dates, regex, console.log</li>
+<li>❌ Unsafe: modern features, array helpers, async, external APIs</li>
+<li>⚠ Gray area: <code>.includes</code>, <code>.padStart</code>, <code>.repeat</code> — avoid them if possible</li>
+<li>Always pick the <strong>safest, simplest tool</strong> when in doubt</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-4-how-to-match-words-safely"><a class="header" href="#-chapter-4-how-to-match-words-safely">📘 Chapter 4: How to Match Words Safely</a></h1>
+<p>So far we’ve learned <em>what scripts are</em> (little recipes), <em>what the context object is</em> (your backpack of tools), and <em>what the sandbox allows</em> (only the safe toys). Now it’s time to actually <strong>react to words</strong> the user types.</p>
+<p>This is the “hello world” of scripting:
+👉 <em>If the user says X, then make the character do Y.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-matching-needs-to-be-careful"><a class="header" href="#-why-matching-needs-to-be-careful">🟡 Why Matching Needs to Be Careful</a></h2>
+<p>At first glance, you might think:</p>
+<blockquote>
+<p>“Just check if the user’s message contains the word!”</p>
+</blockquote>
+<p>But computers are picky. Look at this:</p>
+<ul>
+<li>User types: <strong>“Hello there!”</strong></li>
+<li>If we only check for lowercase <strong>“hello”</strong>, we’ll miss it.</li>
+<li>If we check for <strong>“hell”</strong>, we might accidentally match <strong>“shells.”</strong></li>
+</ul>
+<p>That’s why we need <strong>safe matching</strong>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-normalize-the-message"><a class="header" href="#-step-1-normalize-the-message">🟡 Step 1: Normalize the Message</a></h2>
+<p>First, we make the user’s message lowercase so it doesn’t matter if they type “HELLO” or “hello.”</p>
+<p>var last = context.chat.last_message.toLowerCase();</p>
+<p>Plain English:
+“Take the user’s last line and make everything lowercase.”</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-pad-with-spaces"><a class="header" href="#-step-2-pad-with-spaces">🟡 Step 2: Pad with Spaces</a></h2>
+<p>Next, we add a space at the start and end:</p>
+<p>var padded = " " + last + " ";</p>
+<p>Why?
+So we only catch whole words.</p>
+<ul>
+<li>" hello " → ✅ matches.</li>
+<li>"shellows" → ❌ won’t match, because it doesn’t have spaces around it.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-check-for-the-word"><a class="header" href="#-step-3-check-for-the-word">🟡 Step 3: Check for the Word</a></h2>
+<p>Now we use the safest tool: <code>.indexOf()</code>.</p>
+<p>if (padded.indexOf(" hello ") !== -1) {
+context.character.scenario += "They greet you warmly.";
+context.character.personality += "Friendly and welcoming.";
+}</p>
+<p>Line by line:</p>
+<ul>
+<li>
+<p><code>if ( ... !== -1)</code> → means “if the word is found.”</p>
+</li>
+<li>
+<p>If found:</p>
+<ul>
+<li>Add to the <strong>scenario</strong>: “They greet you warmly.”</li>
+<li>Add to the <strong>personality</strong>: “Friendly and welcoming.”</li>
+</ul>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-in-action"><a class="header" href="#-example-in-action">🟡 Example in Action</a></h2>
+<ul>
+<li>User types: “HELLO!!!”</li>
+<li>Script lowercases → “hello!!!”</li>
+<li>Script pads → " hello!!! "</li>
+<li><code>indexOf(" hello ")</code> → finds it inside.</li>
+<li>Result: Character smiles and greets you.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-match-multiple-words"><a class="header" href="#-step-4-match-multiple-words">🟡 Step 4: Match Multiple Words</a></h2>
+<p>What if you want to catch <strong>hi, hey, hello</strong> all at once?
+We can use a simple list:</p>
+<p>var greetings = ["hi", "hello", "hey"];
+for (var i = 0; i &lt; greetings.length; i++) {
+if (padded.indexOf(" " + greetings[i] + " ") !== -1) {
+context.character.scenario += "They greet you warmly.";
+context.character.personality += "Friendly and welcoming.";
+break; // stop after the first match
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Make a list of possible greetings.</li>
+<li>Loop through them one by one.</li>
+<li>If one matches → trigger the response.</li>
+<li><code>break;</code> makes sure we don’t fire multiple times.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-match-phrases-two-or-more-words"><a class="header" href="#-step-5-match-phrases-two-or-more-words">🟡 Step 5: Match Phrases (Two or More Words)</a></h2>
+<p>Sometimes you want to catch phrases like <strong>“calm down.”</strong> That works too:</p>
+<p>if (padded.indexOf(" calm down ") !== -1) {
+context.character.personality += "Tries to stay calm.";
+}</p>
+<p>Notice: same trick, just with two words inside the quotes.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-extra-safety-regex-optional"><a class="header" href="#-extra-safety-regex-optional">🟡 Extra Safety: Regex (Optional)</a></h2>
+<p>If you’re feeling adventurous, you can use <strong>regex</strong> for trickier matches:</p>
+<p>if (/\b(help|assist|aid)\b/i.test(last)) {
+context.character.personality += "Eager to be helpful.";
+}</p>
+<p>What this means:</p>
+<ul>
+<li><code>\b</code> = word boundary (keeps it from matching inside longer words).</li>
+<li><code>(help|assist|aid)</code> = any of these words.</li>
+<li><code>i</code> = ignore capitalization.</li>
+</ul>
+<p>⚠️ Beginner tip: Regex is powerful, but can be confusing. Stick to <code>.indexOf</code> until you’re confident.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself"><a class="header" href="#-quick-practice-try-it-yourself">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Write a script that makes the character <strong>sad</strong> if the user types “sorry.”</li>
+<li>Write a script that makes the character <strong>excited</strong> if the user says “let’s go!”</li>
+<li>Write a script that makes the character <strong>mysterious</strong> if the user mentions “secret.”</li>
+</ol>
+<p>(Hint: Use <code>indexOf(" sorry ")</code>, <code>indexOf(" let's go ")</code>, etc.)</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-4"><a class="header" href="#-key-takeaways-from-chapter-4">🟡 Key Takeaways from Chapter 4</a></h2>
+<ul>
+<li>Always lowercase the message (<code>.toLowerCase()</code>).</li>
+<li>Always pad with spaces (<code>" " + last + " "</code>).</li>
+<li>Use <code>.indexOf(" word ") !== -1</code> for safe checks.</li>
+<li>You can catch multiple words with loops or regex.</li>
+<li>Keep responses short and simple.</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Don’t try to catch <em>every</em> word at once. Start small — one or two triggers — then build up. Scripts are like Lego bricks: stack them slowly and test as you go.</p>
+<hr />
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-5-progressive-examples-es6--multi-message-edition"><a class="header" href="#-chapter-5-progressive-examples-es6--multi-message-edition">📘 Chapter 5: Progressive Examples (ES6 + Multi-Message Edition)</a></h1>
+<p>By now you’ve learned the basics:</p>
+<ul>
+<li>
+<p>Scripts run automatically.</p>
+</li>
+<li>
+<p>They only change <em>personality</em> and <em>scenario</em>.</p>
+</li>
+<li>
+<p>You can safely match words and phrases.</p>
+</li>
+<li>
+<p>You can also look back through <strong>several recent messages</strong> using <code>lastMessages</code>.</p>
+</li>
+</ul>
+<p>Now let’s stack those building blocks into <strong>progressive examples</strong> — each one more advanced than the last.<br />
+Think of it like leveling up in a video game: start at Level 1 (simple trigger) and end at Level 10 (dynamic lorebook).</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-progression-roadmap"><a class="header" href="#-the-progression-roadmap">🗺️ The Progression Roadmap</a></h2>
+<p>1️⃣ Tiny Trigger → one word = one response<br />
+2️⃣ Multiple Keywords<br />
+3️⃣ Emotion Detection<br />
+4️⃣ Message Count Progression<br />
+5️⃣ Simple Lorebook (with priorities)<br />
+6️⃣ Scenario Lorebook (personality + scene)<br />
+7️⃣ Dynamic Lorebook (plain checks)<br />
+8️⃣ Timed Lore Reveals (gating)<br />
+9️⃣ Hybrid Systems (moods + context)<br />
+🔟 Advanced Lorebooks (multi-pass / probabilities / unlocks)</p>
+<hr />
+<h3 id="-before-we-start"><a class="header" href="#-before-we-start">💡 Before We Start</a></h3>
+<p>Let’s prepare the two basic text variables used in every example:</p>
+<pre><code class="language-js">const last = context.chat.last_message.toLowerCase();
+const padded = ` ${last} `;
+
+// optional: 5-message window for deeper context
+const lastMessages = context.chat.last_messages
+  .slice(-5)
+  .map(m =&gt; m.message.toLowerCase())
+  .join(" ");
+</code></pre>
+<p>You can use either <code>padded</code> (just the latest message)<br />
+or <code>lastMessages</code> (the recent conversation history) depending on how wide your check needs to be.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-1-the-tiny-trigger"><a class="header" href="#-level-1-the-tiny-trigger">🟢 Level 1: The Tiny Trigger</a></h2>
+<pre><code class="language-js">if (padded.includes(" hello ")) {
+  context.character.scenario    += "They greet you warmly.";
+  context.character.personality += "Friendly and welcoming.";
+}
+</code></pre>
+<p>Plain English:<br />
+If the user says “hello,” the bot greets them warmly.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-2-multiple-keywords"><a class="header" href="#-level-2-multiple-keywords">🟢 Level 2: Multiple Keywords</a></h2>
+<pre><code class="language-js">const greetings = ["hi", "hello", "hey"];
+
+for (const g of greetings) {
+  if (lastMessages.includes(` ${g} `)) {
+    context.character.scenario    += "They greet you warmly.";
+    context.character.personality += "Friendly and welcoming.";
+    break;
+  }
+}
+</code></pre>
+<p>Now the script catches any greeting from the <strong>last few messages</strong>, not just the newest.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-3-emotion-detection"><a class="header" href="#-level-3-emotion-detection">🟢 Level 3: Emotion Detection</a></h2>
+<pre><code class="language-js">const emotions = ["happy", "sad", "angry", "excited"];
+
+for (const e of emotions) {
+  if (lastMessages.includes(` ${e} `)) {
+    context.character.scenario += `The user seems ${e}.`;
+    break;
+  }
+}
+</code></pre>
+<p>Plain English:<br />
+Detects emotion even if the word appeared two or three turns ago.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-4-message-count-progression"><a class="header" href="#-level-4-message-count-progression">🟢 Level 4: Message Count Progression</a></h2>
+<pre><code class="language-js">const count = context.chat.message_count;
+
+if (count &lt; 5) {
+  context.character.personality += ", polite and formal";
+} else if (count &lt; 15) {
+  context.character.personality += ", warming up and more casual";
+} else if (count &lt; 30) {
+  context.character.personality += ", friendly and open";
+} else {
+  context.character.personality += ", deeply connected and trusting";
+}
+</code></pre>
+<p>Plain English:<br />
+The longer the chat, the closer the tone.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-5-simple-lorebook-with-priorities"><a class="header" href="#-level-5-simple-lorebook-with-priorities">🟢 Level 5: Simple Lorebook (with Priorities)</a></h2>
+<pre><code class="language-js">const lorebook = [
+  { keywords: ["godfather", "damien"], priority: 10, personality: ", a calculating and charismatic leader" },
+  { keywords: ["mafia", "family"],     priority:  5, personality: ", part of a powerful crime family" }
+];
+
+const activated = lorebook.filter(entry =&gt;
+  entry.keywords.some(k =&gt; lastMessages.includes(` ${k} `))
+);
+
+if (activated.length) {
+  activated.sort((a, b) =&gt; b.priority - a.priority);
+  context.character.personality += activated[0].personality;
+}
+</code></pre>
+<p>Plain English:<br />
+Checks across recent messages so multi-turn mentions still activate the same lore.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-6-scenario-lorebook-personality--scene"><a class="header" href="#-level-6-scenario-lorebook-personality--scene">🟢 Level 6: Scenario Lorebook (personality + scene)</a></h2>
+<pre><code class="language-js">const lorebook = [
+  { keywords: ["godfather"], personality: ", calculating and powerful", scenario: "The Godfather is in a tense meeting." },
+  { keywords: ["family"],    personality: ", loyal to family above all", scenario: "The mafia family spreads through the city." }
+];
+
+for (const entry of lorebook) {
+  if (entry.keywords.some(k =&gt; lastMessages.includes(` ${k} `))) {
+    context.character.personality += entry.personality;
+    context.character.scenario    += entry.scenario;
+  }
+}
+</code></pre>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-7-dynamic-lorebook-procedural"><a class="header" href="#-level-7-dynamic-lorebook-procedural">🟢 Level 7: Dynamic Lorebook (Procedural)</a></h2>
+<pre><code class="language-js">if (lastMessages.includes(" magic ")) {
+  context.character.personality += ", knowledgeable about magic";
+  context.character.scenario    += "They sense magical energies around them.";
+}
+</code></pre>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-8-timed-lore-reveals-gating"><a class="header" href="#-level-8-timed-lore-reveals-gating">🟢 Level 8: Timed Lore Reveals (Gating)</a></h2>
+<pre><code class="language-js">if (count &gt; 15 &amp;&amp; lastMessages.includes(" secret ")) {
+  context.character.personality += ", keeper of ancient secrets";
+  context.character.scenario    += "They whisper about the Sundering.";
+}
+</code></pre>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-9-hybrid-systems"><a class="header" href="#-level-9-hybrid-systems">🟢 Level 9: Hybrid Systems</a></h2>
+<pre><code class="language-js">if (lastMessages.includes(" painting ") &amp;&amp; lastMessages.includes(" happy ")) {
+  context.character.scenario += "They joyfully describe their love of painting.";
+}
+
+if (lastMessages.includes(" forest ") &amp;&amp; count &gt; 20) {
+  context.character.scenario += "The forest feels darker now, full of secrets.";
+}
+</code></pre>
+<p>Plain English:<br />
+Combines emotion + topic + timing for richer logic.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-level-10-advanced-lorebooks-multi-pass"><a class="header" href="#-level-10-advanced-lorebooks-multi-pass">🟢 Level 10: Advanced Lorebooks (Multi-Pass)</a></h2>
+<p>Advanced systems can add:</p>
+<ul>
+<li>
+<p><strong>Priorities</strong> – important traits win</p>
+</li>
+<li>
+<p><strong>Probabilities</strong> – random chance</p>
+</li>
+<li>
+<p><strong>Unlocks</strong> – one entry reveals another</p>
+</li>
+</ul>
+<p>Each pass can use <code>lastMessages</code> to scan deeper history for natural continuity.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-recap-table"><a class="header" href="#-recap-table">🟢 Recap Table</a></h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Level</th><th style="text-align: left">What It Adds</th><th style="text-align: left">Example</th></tr></thead><tbody>
+<tr><td style="text-align: center">1</td><td style="text-align: left">One-word trigger</td><td style="text-align: left">“hello” → greets you</td></tr>
+<tr><td style="text-align: center">2</td><td style="text-align: left">Multi-message keywords</td><td style="text-align: left">Catches hello said earlier</td></tr>
+<tr><td style="text-align: center">3</td><td style="text-align: left">Emotion detection</td><td style="text-align: left">“sad” → scene notes it</td></tr>
+<tr><td style="text-align: center">4</td><td style="text-align: left">Message progression</td><td style="text-align: left">Polite → trusting</td></tr>
+<tr><td style="text-align: center">5</td><td style="text-align: left">Lorebook priority</td><td style="text-align: left">Godfather beats mafia</td></tr>
+<tr><td style="text-align: center">6</td><td style="text-align: left">Lore + scene</td><td style="text-align: left">Expands setting</td></tr>
+<tr><td style="text-align: center">8</td><td style="text-align: left">Timed reveal</td><td style="text-align: left">Secret after 15 lines</td></tr>
+<tr><td style="text-align: center">9</td><td style="text-align: left">Hybrid logic</td><td style="text-align: left">Hobby + emotion = special</td></tr>
+<tr><td style="text-align: center">10</td><td style="text-align: left">Multi-pass system</td><td style="text-align: left">Priority + probability + unlock</td></tr>
+</tbody></table>
+</div>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-5"><a class="header" href="#-key-takeaways-from-chapter-5">🟢 Key Takeaways from Chapter 5</a></h2>
+<ul>
+<li>
+<p>Start small, grow step-by-step.</p>
+</li>
+<li>
+<p>Use <strong><code>lastMessages</code></strong> to catch context across multiple turns.</p>
+</li>
+<li>
+<p>Apply modern ES6 syntax (<code>const</code>, <code>let</code>, <code>.includes</code>, arrow functions).</p>
+</li>
+<li>
+<p>Use <strong>priorities</strong> to resolve conflicts.</p>
+</li>
+<li>
+<p>Gate lore with message count for natural progression.</p>
+</li>
+<li>
+<p>Combine timing, emotion, and context for living characters.</p>
+</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Levels 3 – 6 hit the sweet spot — they teach emotion tracking, progression, and simple lorebooks using multi-message awareness without overload.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-6-dynamic-behaviors-time-message-count-and-events"><a class="header" href="#-chapter-6-dynamic-behaviors-time-message-count-and-events">📘 Chapter 6: Dynamic Behaviors (Time, Message Count, and Events)</a></h1>
+<p>So far we’ve built scripts that react to <strong>words</strong>. But what if you want your character to change simply because the <strong>conversation is moving forward</strong>?</p>
+<p>This chapter shows you how to:</p>
+<ol>
+<li>Change personality based on <strong>message count</strong></li>
+<li>Make characters act differently at different <strong>times of day</strong></li>
+<li>Trigger special <strong>events</strong> at certain milestones</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-message-count-progression-growing-friendships"><a class="header" href="#-message-count-progression-growing-friendships">🟡 Message Count Progression (Growing Friendships)</a></h2>
+<p>One of the easiest ways to add realism is to let the character “warm up” as the chat goes on.</p>
+<p>var count = context.chat.message_count;</p>
+<p>if (count &lt; 5) {
+context.character.personality += ", polite and formal";
+context.character.scenario += " This feels like a cautious first meeting.";
+} else if (count &lt; 15) {
+context.character.personality += ", becoming more casual";
+context.character.scenario += " The atmosphere is loosening up.";
+} else if (count &lt; 30) {
+context.character.personality += ", open and friendly";
+context.character.scenario += " You’ve both settled into an easy rhythm.";
+} else {
+context.character.personality += ", deeply connected";
+context.character.scenario += " The bond feels strong and genuine.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Early messages → polite stranger</li>
+<li>Midway → casual and relaxed</li>
+<li>Long chats → trust and deep connection</li>
+</ul>
+<p>This is like a <strong>relationship arc</strong> unfolding as you keep talking.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-time-based-changes-day-and-night-personality"><a class="header" href="#-time-based-changes-day-and-night-personality">🟡 Time-Based Changes (Day and Night Personality)</a></h2>
+<p>Scripts can also read the clock! That means you can change how your character acts at night vs. day.</p>
+<p>var hour = new Date().getHours();</p>
+<p>if (hour &lt; 6 || hour &gt; 22) {
+context.character.personality += ", a bit sleepy";
+context.character.scenario += " It’s late at night, and everything feels quiet.";
+} else {
+context.character.personality += ", bright and energetic";
+context.character.scenario += " It’s daytime, the world is busy around you.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If it’s past 10 PM or before 6 AM → character feels sleepy</li>
+<li>Otherwise → character feels awake and lively</li>
+</ul>
+<p>This makes conversations feel grounded in a <em>living world</em>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-event-triggers-special-surprises"><a class="header" href="#-event-triggers-special-surprises">🟡 Event Triggers (Special Surprises)</a></h2>
+<p>You can create little “story beats” that happen at certain times in the chat.</p>
+<p>if (context.chat.message_count === 10) {
+context.character.personality += ", momentarily distracted";
+context.character.scenario += " Suddenly, their phone rings with an unexpected call.";
+}</p>
+<p>if (context.chat.message_count === 25) {
+context.character.personality += ", reactive to the environment";
+context.character.scenario += " The weather suddenly changes around them.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>At 10 messages: A phone rings (mini-event)</li>
+<li>At 25 messages: The weather shifts</li>
+</ul>
+<p>This gives the illusion that the <em>story has beats</em> like a TV episode.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-keyword--timing--extra-flavor"><a class="header" href="#-keyword--timing--extra-flavor">🟡 Keyword + Timing = Extra Flavor</a></h2>
+<p>You can also mix timing and keyword checks.</p>
+<p>var last = context.chat.last_message.toLowerCase();</p>
+<p>if (context.chat.message_count &gt; 15 &amp;&amp; last.indexOf(" secret ") !== -1) {
+context.character.personality += ", mysterious and cautious";
+context.character.scenario += " They whisper, as if revealing something hidden.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Only after 15+ messages…</li>
+<li>If the user mentions “secret”…</li>
+<li>The character reveals hidden knowledge</li>
+</ul>
+<p>This feels like <em>unlocking lore</em> through deeper conversation.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-putting-it-all-together"><a class="header" href="#-putting-it-all-together">🟡 Putting It All Together</a></h2>
+<p>Dynamic behaviors make your character:</p>
+<ul>
+<li><strong>Evolve over time</strong> (message count)</li>
+<li><strong>Feel tied to the world</strong> (day/night cycles)</li>
+<li><strong>Experience surprises</strong> (events at milestones)</li>
+<li><strong>Reveal secrets naturally</strong> (timed keyword gates)</li>
+</ul>
+<p>Even if you never touch “advanced lorebooks,” just adding <strong>message count + time-based + event triggers</strong> can make your bot feel much richer.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-6"><a class="header" href="#-key-takeaways-from-chapter-6">🟡 Key Takeaways from Chapter 6</a></h2>
+<ul>
+<li>Use <strong>message count</strong> to simulate relationship growth</li>
+<li>Use <strong>time of day</strong> for realism (night vs. day moods)</li>
+<li>Sprinkle in <strong>event triggers</strong> for surprise moments</li>
+<li>Combine timing + keywords for “unlockable” secrets</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Don’t overload your character with too many events at once. Just 2–3 well-placed beats can make a chat feel cinematic.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-7-memory--preferences-making-bots-remember"><a class="header" href="#-chapter-7-memory--preferences-making-bots-remember">📘 Chapter 7: Memory &amp; Preferences (Making Bots “Remember”)</a></h1>
+<p>Here’s the truth: scripts don’t actually <em>remember</em> things the way humans do. Every time the chat moves forward, the script starts fresh.</p>
+<p>👉 But! We can <strong>fake memory</strong> by writing details into the <code>scenario</code> (or sometimes <code>personality</code>). Since the model “reads” these fields before generating a reply, it will act like it remembered.</p>
+<p>Think of it like jotting notes on a sticky pad:</p>
+<ul>
+<li>User: “My name is Alex.”</li>
+<li>Script writes: “Remember: user’s name is Alex” into the scenario.</li>
+<li>Now the bot “sees” that note in future turns.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-trick-1-capturing-names"><a class="header" href="#-trick-1-capturing-names">🟡 Trick 1: Capturing Names</a></h2>
+<p>var last = context.chat.last_message.toLowerCase();</p>
+<p>if (last.indexOf("my name is") !== -1) {
+var match = context.chat.last_message.match(/my name is (\w+)/i);
+if (match) {
+context.character.scenario += " Remember: the user’s name is " + match[1] + ".";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user types “my name is …” → capture the word after it</li>
+<li>Add a note to the scenario: “Remember: the user’s name is Alex.”</li>
+<li>Now the bot will act like it knows your name later</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-trick-2-storing-interests-likes-and-dislikes"><a class="header" href="#-trick-2-storing-interests-likes-and-dislikes">🟡 Trick 2: Storing Interests (Likes and Dislikes)</a></h2>
+<p>We can also detect hobbies, foods, or other favorites.</p>
+<p>var last = context.chat.last_message.toLowerCase();
+var likes = ["pizza", "movies", "music", "hiking"];
+var dislikes = ["spiders", "loud noises", "crowds"];</p>
+<p>for (var i = 0; i &lt; likes.length; i++) {
+if (last.indexOf(likes[i]) !== -1) {
+context.character.personality += ", remembers the user likes " + likes[i];
+context.character.scenario += " They bring up " + likes[i] + " as a friendly topic.";
+}
+}</p>
+<p>for (var j = 0; j &lt; dislikes.length; j++) {
+if (last.indexOf(dislikes[j]) !== -1) {
+context.character.personality += ", remembers the user dislikes " + dislikes[j];
+context.character.scenario += " They avoid mentioning " + dislikes[j] + ".";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user says they like pizza → the bot remembers and might mention it</li>
+<li>If they say they dislike spiders → the bot avoids that topic</li>
+<li>These get added into personality and scenario as notes</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-trick-3-memory-by-repetition"><a class="header" href="#-trick-3-memory-by-repetition">🟡 Trick 3: Memory by Repetition</a></h2>
+<p>Scripts can also add reminders over time:</p>
+<p>context.character.personality += ", has a good memory for conversation details";
+context.character.scenario += " They remember important things the user has shared.";</p>
+<p>Plain English:
+Even if you don’t capture a name or hobby, you can add flavor text that says the bot “remembers.” This nudges the AI to act consistent with earlier lines.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-trick-4-hybrid-lore--memory"><a class="header" href="#-trick-4-hybrid-lore--memory">🟡 Trick 4: Hybrid Lore + Memory</a></h2>
+<p>You can combine lore with memory, so the bot responds differently based on what the user likes.</p>
+<p>Example:</p>
+<ul>
+<li>
+<p>If user says they like “stars,” and then mentions “magic,” the lore might be written with a positive spin:</p>
+<ul>
+<li>“Magic feels harmonious, like a song from the stars.”</li>
+</ul>
+</li>
+<li>
+<p>If user dislikes “darkness,” the same lore shifts to caution:</p>
+<ul>
+<li>“Magic can be dangerous, especially when tied to shadows.”</li>
+</ul>
+</li>
+</ul>
+<p>Plain English:
+This makes the world feel <strong>tailored</strong> to the user, like the character is really paying attention.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-1"><a class="header" href="#-quick-practice-try-it-yourself-1">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Make the bot <strong>remember a favorite color</strong> if the user says “I like blue.”</li>
+<li>Make the bot <strong>avoid scary topics</strong> if the user says “I’m afraid of spiders.”</li>
+<li>Make the bot <strong>store a pet’s name</strong> if the user says “My dog’s name is Max.”</li>
+</ol>
+<p>(Hint: use the same pattern as the “my name is” example, but change the word.)</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-7"><a class="header" href="#-key-takeaways-from-chapter-7">🟡 Key Takeaways from Chapter 7</a></h2>
+<ul>
+<li>Scripts don’t really “remember,” but you can fake it with <code>scenario</code> notes</li>
+<li>Capture names, hobbies, likes, dislikes with simple keyword checks</li>
+<li>Personality/scenario additions guide the bot to act consistent</li>
+<li>Hybrid systems combine lore with preferences for personal flavor</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Don’t overload memory with too many notes. A few well-placed reminders (“user likes pizza,” “user’s name is Alex”) go a long way.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-8-building-a-simple-lorebook"><a class="header" href="#-chapter-8-building-a-simple-lorebook">📘 Chapter 8: Building a Simple Lorebook</a></h1>
+<p>Up until now, you’ve been working with <strong>triggers</strong>: single words → single responses. That’s fine for small scripts, but what if you want your bot to <em>remember multiple pieces of world information</em>?</p>
+<p>👉 That’s where a <strong>lorebook</strong> comes in.</p>
+<p>A <strong>lorebook</strong> is just a collection of entries. Each entry is like a <strong>mini fact</strong>:</p>
+<ul>
+<li>Who someone is</li>
+<li>What a place looks like</li>
+<li>How a character reacts</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-the-mini-entry-one-fact"><a class="header" href="#-step-1-the-mini-entry-one-fact">🟡 Step 1: The Mini Entry (One Fact)</a></h2>
+<p>Here’s the smallest possible “lorebook”:</p>
+<p>var lorebook = [
+{ keywords: ["forest"], personality: ", at home in nature", scenario: "Tall trees sway in the breeze." }
+];</p>
+<p>var last = context.chat.last_message.toLowerCase();
+var padded = " " + last + " ";</p>
+<p>for (var i = 0; i &lt; lorebook.length; i++) {
+var entry = lorebook[i];
+for (var j = 0; j &lt; entry.keywords.length; j++) {
+if (padded.indexOf(" " + entry.keywords[j] + " ") !== -1) {
+context.character.personality += entry.personality;
+context.character.scenario += entry.scenario;
+break;
+}
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li><code>lorebook</code> is just a list (array) of entries</li>
+<li>Each entry has <strong>keywords</strong>, a <strong>personality trait</strong>, and a <strong>scenario note</strong></li>
+<li>If the user says “forest,” the bot adds forest lore</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-multiple-entries"><a class="header" href="#-step-2-multiple-entries">🟡 Step 2: Multiple Entries</a></h2>
+<p>Now let’s add more facts.</p>
+<p>var lorebook = [
+{ keywords: ["forest"], personality: ", at home in nature", scenario: "Tall trees sway in the breeze." },
+{ keywords: ["city"], personality: ", sharp and streetwise", scenario: "The streets buzz with activity." },
+{ keywords: ["river"], personality: ", calm and reflective", scenario: "Water flows gently nearby." }
+];</p>
+<p>Plain English:
+Now “forest,” “city,” and “river” each unlock their own lore.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-priorities"><a class="header" href="#-step-3-priorities">🟡 Step 3: Priorities</a></h2>
+<p>What if multiple entries trigger at once? We don’t want everything to fire.
+We add <strong>priority numbers</strong>. Higher priority wins.</p>
+<p>var lorebook = [
+{ keywords: ["godfather", "damien"], priority: 10, personality: ", a calculating and charismatic leader" },
+{ keywords: ["mafia", "family"], priority: 5, personality: ", part of a powerful crime family" }
+];</p>
+<p>var activated = [];
+for (var i = 0; i &lt; lorebook.length; i++) {
+var entry = lorebook[i];
+for (var j = 0; j &lt; entry.keywords.length; j++) {
+if (padded.indexOf(" " + entry.keywords[j] + " ") !== -1) {
+activated.push(entry);
+break;
+}
+}
+}</p>
+<p>activated.sort(function(a, b) { return b.priority - a.priority; });</p>
+<p>if (activated.length &gt; 0) {
+context.character.personality += activated[0].personality;
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If both “godfather” and “family” appear, “godfather” wins because it has higher priority</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-flat-style-beginner-friendly"><a class="header" href="#-step-4-flat-style-beginner-friendly">🟡 Step 4: Flat Style (Beginner-Friendly)</a></h2>
+<p>If arrays feel overwhelming, you can just write entries as <code>if</code> checks.</p>
+<p>if (padded.indexOf(" forest ") !== -1) {
+context.character.personality += ", at home in nature";
+context.character.scenario += "Tall trees sway in the breeze.";
+}</p>
+<p>if (padded.indexOf(" city ") !== -1) {
+context.character.personality += ", sharp and streetwise";
+context.character.scenario += "The streets buzz with activity.";
+}</p>
+<p>Plain English:
+This works the same as a lorebook — it’s just less organized. Fine for small scripts, but messy for big worlds.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-expanding-lore"><a class="header" href="#-step-5-expanding-lore">🟡 Step 5: Expanding Lore</a></h2>
+<p>Lorebooks can include more than just traits and places. You can add:</p>
+<ul>
+<li><strong>Relationships</strong> (e.g., “brother,” “mentor”)</li>
+<li><strong>Objects</strong> (e.g., “sword,” “ring”)</li>
+<li><strong>Factions</strong> (e.g., “mages guild,” “alchemists”)</li>
+</ul>
+<p>Example:</p>
+<p>var lorebook = [
+{ keywords: ["mentor"], personality: ", wise and strict", scenario: "Their mentor watches closely." },
+{ keywords: ["ring"], scenario: "A mysterious ring glints faintly." }
+];</p>
+<p>Plain English:
+Anything you want the bot to “know about” can go into a lorebook.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-recap-table-1"><a class="header" href="#-recap-table-1">🟡 Recap Table</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Style</th><th>Pros</th><th>Cons</th><th>Best For</th></tr></thead><tbody>
+<tr><td><strong>Flat if checks</strong></td><td>Easy to read, no arrays</td><td>Gets messy fast</td><td>Beginners, small projects</td></tr>
+<tr><td><strong>Simple lorebook array</strong></td><td>Organized, scalable</td><td>Slightly harder syntax</td><td>Medium projects</td></tr>
+<tr><td><strong>Lorebook w/ priorities</strong></td><td>Resolves conflicts, neat</td><td>Needs sorting step</td><td>Complex projects</td></tr>
+<tr><td><strong>Expanded lorebook</strong></td><td>Covers people, places, objects</td><td>More setup work</td><td>Large worldbuilding</td></tr>
+</tbody></table>
+</div>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-8"><a class="header" href="#-key-takeaways-from-chapter-8">🟡 Key Takeaways from Chapter 8</a></h2>
+<ul>
+<li>A <strong>lorebook</strong> is just a structured list of entries</li>
+<li>Each entry = keywords + personality + scenario</li>
+<li>Use <strong>priorities</strong> if multiple entries might trigger</li>
+<li>Start with flat if checks, move to arrays as your world grows</li>
+<li>Lorebooks keep scripts clean and organized — essential for big projects</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of a lorebook like a <strong>wiki inside your script</strong>. Each entry is a “page” (a fact), and keywords are the links that lead to it.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-9-best-practices--performance"><a class="header" href="#-chapter-9-best-practices--performance">📘 Chapter 9: Best Practices &amp; Performance</a></h1>
+<p>By now, you’ve seen scripts grow from <strong>tiny triggers</strong> to <strong>dynamic lorebooks</strong>. That’s powerful — but with more capability comes more ways to go off track.<br />
+This chapter focuses on keeping scripts:</p>
+<ul>
+<li>
+<p>✅ <strong>Safe</strong> — they never crash.</p>
+</li>
+<li>
+<p>✅ <strong>Efficient</strong> — they respond instantly even when complex.</p>
+</li>
+<li>
+<p>✅ <strong>Readable</strong> — you can return months later and still understand them.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-1-keep-it-focused--not-small"><a class="header" href="#-rule-1-keep-it-focused--not-small">🟢 Rule 1: Keep It Focused — Not “Small”</a></h2>
+<p>Scripts can now handle thousands of lines, but logical focus still matters.</p>
+<ul>
+<li>
+<p><strong>Good:</strong> clear functions and short logical blocks.</p>
+</li>
+<li>
+<p><strong>Bad:</strong> one 1,000-line function that does ten different things.</p>
+</li>
+</ul>
+<p>Think <em>cohesion</em>, not <em>file size.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-2-use-modern-syntax-for-clarity"><a class="header" href="#-rule-2-use-modern-syntax-for-clarity">🟢 Rule 2: Use Modern Syntax for Clarity</a></h2>
+<p>The sandbox supports ES6 features — use them for clean, readable code.</p>
+<pre><code class="language-js">const greetings = ["hi", "hello", "hey"];
+
+for (const g of greetings) {
+  if (padded.includes(` ${g} `)) {
+    context.character.personality += ", friendly and welcoming.";
+    break;
+  }
+}
+</code></pre>
+<ul>
+<li>
+<p><code>const</code> / <code>let</code> replace <code>var</code>.</p>
+</li>
+<li>
+<p>Template literals (<code>`${var}`</code>) improve readability.</p>
+</li>
+<li>
+<p>Arrow functions and <code>.forEach()</code> / <code>.map()</code> are safe for light loops.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-3-append-dont-overwrite"><a class="header" href="#-rule-3-append-dont-overwrite">🟢 Rule 3: Append, Don’t Overwrite</a></h2>
+<p>Never replace existing text in <code>personality</code> or <code>scenario</code>; always add to it.</p>
+<p>❌ Bad</p>
+<pre><code class="language-js">context.character.personality = "Happy";
+</code></pre>
+<p>✅ Good</p>
+<pre><code class="language-js">context.character.personality += ", feeling happy.";
+</code></pre>
+<p>Appending preserves accumulated context and prevents blank replies.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-4-favor-readable-logic-over-compression"><a class="header" href="#-rule-4-favor-readable-logic-over-compression">🟢 Rule 4: Favor Readable Logic Over Compression</a></h2>
+<p>The old 25 KB ceiling encouraged code-golf tricks.<br />
+Now you can write descriptively:</p>
+<pre><code class="language-js">if (isEvening &amp;&amp; isGreeting) {
+  context.character.scenario += " The café lights glow softly.";
+}
+</code></pre>
+<p>Readable code beats dense one-liners every time.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-5-use-modern-helpers-wisely"><a class="header" href="#-rule-5-use-modern-helpers-wisely">🟢 Rule 5: Use Modern Helpers Wisely</a></h2>
+<p>Array and object utilities make intent clearer — just avoid nesting them excessively.</p>
+<pre><code class="language-js">const moods = ["happy", "sad", "angry"];
+const found = moods.find(m =&gt; padded.includes(m));
+
+if (found) context.character.personality += `, senses the user is ${found}.`;
+</code></pre>
+<p><code>find</code>, <code>some</code>, <code>every</code>, <code>filter</code> are all sandbox-safe.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-6-clamp-your-outputs-still-important"><a class="header" href="#-rule-6-clamp-your-outputs-still-important">🟢 Rule 6: Clamp Your Outputs (Still Important)</a></h2>
+<p>While scripts can be larger, individual field updates should stay concise.<br />
+Short, atomic sentences remain easier for the model to interpret.</p>
+<ul>
+<li>
+<p><strong>Ideal addition:</strong> &lt; 600 characters.</p>
+</li>
+<li>
+<p><strong>Danger zone:</strong> multi-paragraph dumps.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-7-test-and-log-openly"><a class="header" href="#-rule-7-test-and-log-openly">🟢 Rule 7: Test and Log Openly</a></h2>
+<p>Testing is your friend:</p>
+<pre><code class="language-js">console.log("Last message:", context.chat.last_message);
+console.log("Personality now:", context.character.personality);
+</code></pre>
+<p><code>console.log</code> output appears in the sandbox debug panel — no harm done.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-8-fail-gracefully"><a class="header" href="#-rule-8-fail-gracefully">🟢 Rule 8: Fail Gracefully</a></h2>
+<p>If nothing matches, just leave things alone or provide a neutral fallback:</p>
+<pre><code class="language-js">if (!matched) context.character.personality += ", neutral and calm.";
+</code></pre>
+<p>Empty turns are fine; forced output feels robotic.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-9-comment-generously"><a class="header" href="#-rule-9-comment-generously">🟢 Rule 9: Comment Generously</a></h2>
+<pre><code class="language-js">// Greeting logic — triggers only once per chat start
+if (padded.includes(" hello ")) { ... }
+</code></pre>
+<p>Comments cost almost nothing but save hours later.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-rule-10-plan-for-growth-not-compression"><a class="header" href="#-rule-10-plan-for-growth-not-compression">🟢 Rule 10: Plan for Growth, Not Compression</a></h2>
+<p>Your sandbox can now handle complex logic trees, but clarity still wins.</p>
+<ul>
+<li>
+<p>Build features in layers (keywords → reactions → emotions).</p>
+</li>
+<li>
+<p>Add functions when patterns repeat.</p>
+</li>
+<li>
+<p>Keep related logic grouped by theme.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-9"><a class="header" href="#-key-takeaways-from-chapter-9">🟢 Key Takeaways from Chapter 9</a></h2>
+<ul>
+<li>
+<p>✅ Use modern ES6 syntax (<code>const</code>, <code>let</code>, arrow functions, template literals`).</p>
+</li>
+<li>
+<p>✅ Write for clarity and maintainability, not size limits.</p>
+</li>
+<li>
+<p>✅ Append text instead of overwriting.</p>
+</li>
+<li>
+<p>✅ Keep outputs concise and meaningful.</p>
+</li>
+<li>
+<p>✅ Test and comment liberally.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-10-putting-it-all-together"><a class="header" href="#-chapter-10-putting-it-all-together">📘 Chapter 10: Putting It All Together</a></h1>
+<p>We’ve learned the pieces one by one:</p>
+<ul>
+<li>How to match words (Chapter 4)</li>
+<li>How to build progressive triggers (Chapter 5)</li>
+<li>How to use time and message count for pacing (Chapter 6)</li>
+<li>How to fake memory with notes (Chapter 7)</li>
+<li>How to use structured lorebooks (Chapter 8)</li>
+<li>And how to keep things safe and efficient (Chapter 9)</li>
+</ul>
+<p>Now, let’s <strong>combine them all</strong> into one simple but powerful script.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-always-start-with-guards"><a class="header" href="#-step-1-always-start-with-guards">🟡 Step 1: Always Start with Guards</a></h2>
+<p>Every script should start by making sure the fields exist.</p>
+<p>// === CONTEXT GUARDS ===
+context.character = context.character || {};
+context.character.personality = context.character.personality || "";
+context.character.scenario = context.character.scenario || "";</p>
+<p>Plain English:</p>
+<ul>
+<li>If personality or scenario doesn’t exist yet, create them as empty strings</li>
+<li>This prevents errors before we do anything else</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-prepare-the-message"><a class="header" href="#-step-2-prepare-the-message">🟡 Step 2: Prepare the Message</a></h2>
+<p>We want the last user message in lowercase and padded with spaces.</p>
+<p>var last = String((context.chat &amp;&amp; context.chat.last_message) || "");
+var padded = " " + last.toLowerCase() + " ";</p>
+<p>Plain English:</p>
+<ul>
+<li><code>toLowerCase()</code> → makes it case-insensitive</li>
+<li><code>" " + … + " "</code> → makes it safe to check whole words</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-add-keyword-reactions"><a class="header" href="#-step-3-add-keyword-reactions">🟡 Step 3: Add Keyword Reactions</a></h2>
+<p>We’ll do greetings, emotions, and secrets.</p>
+<p>// Greetings
+var greetings = ["hello", "hi", "hey"];
+for (var i = 0; i &lt; greetings.length; i++) {
+if (padded.indexOf(" " + greetings[i] + " ") !== -1) {
+context.character.scenario += " They greet you warmly.";
+context.character.personality += " Friendly and welcoming.";
+break;
+}
+}</p>
+<p>// Emotions
+var emotions = ["happy", "sad", "angry", "excited"];
+for (var j = 0; j &lt; emotions.length; j++) {
+if (padded.indexOf(" " + emotions[j] + " ") !== -1) {
+context.character.scenario += " The user seems " + emotions[j] + ".";
+break;
+}
+}</p>
+<p>// Secrets
+if (padded.indexOf(" secret ") !== -1) {
+context.character.personality += " Becomes mysterious when secrets are mentioned.";
+context.character.scenario += " The atmosphere shifts into secrecy.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user greets → the bot greets back</li>
+<li>If they express an emotion → the bot notices it</li>
+<li>If they mention a secret → the bot becomes mysterious</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-add-message-count-progression"><a class="header" href="#-step-4-add-message-count-progression">🟡 Step 4: Add Message Count Progression</a></h2>
+<p>We’ll make the character grow friendlier the longer the chat goes.</p>
+<p>var count = context.chat.message_count;</p>
+<p>if (count &lt; 5) {
+context.character.personality += ", polite and cautious.";
+} else if (count &lt; 15) {
+context.character.personality += ", warming up and more casual.";
+} else if (count &lt; 30) {
+context.character.personality += ", open and relaxed.";
+} else {
+context.character.personality += ", deeply connected and trusting.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Short chat → polite</li>
+<li>Medium chat → casual</li>
+<li>Long chat → close friend</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-add-time-of-day-flavor"><a class="header" href="#-step-5-add-time-of-day-flavor">🟡 Step 5: Add Time-of-Day Flavor</a></h2>
+<p>Let’s make night feel sleepy, day feel lively.</p>
+<p>var hour = new Date().getHours();</p>
+<p>if (hour &lt; 6 || hour &gt; 22) {
+context.character.personality += ", a bit sleepy.";
+context.character.scenario += " It's late at night, and everything feels quiet.";
+} else {
+context.character.personality += ", alert and energetic.";
+context.character.scenario += " The world outside is lively.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Early morning / late night → sleepy</li>
+<li>Daytime → energetic</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-6-add-simple-memory-name-capture"><a class="header" href="#-step-6-add-simple-memory-name-capture">🟡 Step 6: Add Simple Memory (Name Capture)</a></h2>
+<p>We’ll make the bot “remember” if the user says their name.</p>
+<p>if (last.indexOf("my name is") !== -1) {
+var match = context.chat.last_message.match(/my name is (\w+)/i);
+if (match) {
+context.character.scenario += " Remember: the user’s name is " + match[1] + ".";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user says “my name is …” → store it in scenario</li>
+<li>Now the bot acts like it remembers your name</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-7-add-a-mini-lorebook"><a class="header" href="#-step-7-add-a-mini-lorebook">🟡 Step 7: Add a Mini Lorebook</a></h2>
+<p>Finally, let’s add some simple world lore.</p>
+<p>var lorebook = [
+{ keywords: ["forest"], personality: ", deeply connected to nature", scenario: " They are surrounded by tall trees and rustling leaves." },
+{ keywords: ["city"], personality: ", street-smart", scenario: " The bustling city streets surround them." }
+];</p>
+<p>for (var k = 0; k &lt; lorebook.length; k++) {
+var entry = lorebook[k];
+for (var m = 0; m &lt; entry.keywords.length; m++) {
+if (padded.indexOf(" " + entry.keywords[m] + " ") !== -1) {
+context.character.personality += entry.personality;
+context.character.scenario += entry.scenario;
+break;
+}
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user mentions “forest” → add nature lore</li>
+<li>If the user mentions “city” → add city lore</li>
+<li>These change the “stage set” of the conversation</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-8-put-it-all-together"><a class="header" href="#-step-8-put-it-all-together">🟡 Step 8: Put It All Together</a></h2>
+<p>At the end of the script, the character will:</p>
+<ul>
+<li>React to greetings, emotions, and secrets</li>
+<li>Grow more comfortable with message count</li>
+<li>Act differently depending on the time of day</li>
+<li>Remember a name if the user says it</li>
+<li>Add lore if certain keywords appear</li>
+</ul>
+<p>That’s a <strong>complete, beginner-friendly script</strong> that covers almost every trick we’ve learned so far.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-10"><a class="header" href="#-key-takeaways-from-chapter-10">🟡 Key Takeaways from Chapter 10</a></h2>
+<ul>
+<li>Always start with <strong>guards</strong></li>
+<li>Use <strong>safe matching</strong> (<code>toLowerCase</code>, <code>indexOf</code>, padding)</li>
+<li>Stack behaviors: keyword triggers + progression + time + memory + lore</li>
+<li>Keep entries <strong>short and atomic</strong></li>
+<li>Build slowly and test often</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Don’t copy this script wholesale into your bot. Instead, use it as a <strong>template</strong>. Delete the parts you don’t need, keep the parts you do, and expand with your own creativity.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-11-quick-reference-cheat-sheet"><a class="header" href="#-chapter-11-quick-reference-cheat-sheet">📘 Chapter 11: Quick Reference Cheat Sheet</a></h1>
+<p>Congratulations! 🎉 You’ve made it through the beginner guide.
+This chapter is your <strong>pocket survival kit</strong> for writing scripts. Keep it handy — it’s everything you really need at a glance.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-safe-tools-always-work"><a class="header" href="#-safe-tools-always-work">🟡 Safe Tools (Always Work)</a></h2>
+<ul>
+<li>
+<p><strong>Text</strong></p>
+<ul>
+<li><code>toLowerCase()</code> → makes text lowercase</li>
+<li><code>indexOf(" word ") !== -1</code> → check if a word is present</li>
+<li><code>trim()</code> → removes spaces</li>
+</ul>
+</li>
+<li>
+<p><strong>Numbers &amp; Math</strong></p>
+<ul>
+<li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> → basic math</li>
+<li><code>Math.random()</code> → random number 0–1</li>
+<li><code>Math.floor()</code> → round down</li>
+</ul>
+</li>
+<li>
+<p><strong>Arrays</strong></p>
+<ul>
+<li><code>arr.length</code> → how many items</li>
+<li><code>arr.indexOf("thing")</code> → check if “thing” is in list</li>
+<li><code>for</code> loops → loop through items</li>
+</ul>
+</li>
+<li>
+<p><strong>Dates</strong></p>
+<ul>
+<li><code>new Date().getHours()</code> → current hour</li>
+</ul>
+</li>
+<li>
+<p><strong>Regex</strong></p>
+<ul>
+<li><code>/\bword\b/i.test(text)</code> → check whole word safely</li>
+</ul>
+</li>
+<li>
+<p><strong>Debugging</strong></p>
+<ul>
+<li><code>console.log("Message:", context.chat.last_message);</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-unsafe-tools-never-work"><a class="header" href="#-unsafe-tools-never-work">🟡 Unsafe Tools (Never Work)</a></h2>
+<ul>
+<li><code>.map()</code>, <code>.filter()</code>, <code>.reduce()</code>, <code>.forEach()</code></li>
+<li>Arrow functions <code>() =&gt; {}</code></li>
+<li>Template strings <code>`Hello ${name}`</code></li>
+<li>Spread operator <code>...</code></li>
+<li><code>async/await</code>, Promises</li>
+<li>Classes</li>
+<li><code>try/catch</code> (errors can’t be caught)</li>
+<li><code>setTimeout</code>, <code>setInterval</code>, external calls (<code>fetch</code>)</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-gray-area-tools-avoid-them"><a class="header" href="#-gray-area-tools-avoid-them">🟡 Gray Area Tools (Avoid Them)</a></h2>
+<ul>
+<li><code>.includes()</code></li>
+<li><code>.repeat()</code></li>
+<li><code>.padStart()</code> / <code>.padEnd()</code></li>
+</ul>
+<p>They sometimes work, sometimes don’t, depending on the host. Beginners: stick with <code>.indexOf</code>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-common-patterns"><a class="header" href="#-common-patterns">🟡 Common Patterns</a></h2>
+<p><strong>Greeting Trigger</strong></p>
+<p>if (padded.indexOf(" hello ") !== -1) {
+context.character.scenario += "They greet you warmly.";
+context.character.personality += "Friendly and welcoming.";
+}</p>
+<p><strong>Multiple Keywords</strong></p>
+<p>var words = ["hi", "hey", "hello"];
+for (var i = 0; i &lt; words.length; i++) {
+if (padded.indexOf(" " + words[i] + " ") !== -1) {
+// do something
+break;
+}
+}</p>
+<p><strong>Message Count Progression</strong></p>
+<p>if (context.chat.message_count &gt; 10) {
+context.character.personality += ", more comfortable now.";
+}</p>
+<p><strong>Time of Day Flavor</strong></p>
+<p>var hour = new Date().getHours();
+if (hour &lt; 6 || hour &gt; 22) {
+context.character.personality += ", sleepy.";
+}</p>
+<p><strong>Name Capture</strong></p>
+<p>if (last.indexOf("my name is") !== -1) {
+var match = context.chat.last_message.match(/my name is (\w+)/i);
+if (match) context.character.scenario += " Remember: user’s name is " + match[1] + ".";
+}</p>
+<p><strong>Lorebook Entry</strong></p>
+<p>var lore = [
+{ keywords: ["forest"], personality: ", loves nature", scenario: "They walk among tall trees." }
+];</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-recap"><a class="header" href="#-best-practices-recap">🟡 Best Practices Recap</a></h2>
+<ul>
+<li>✅ Always <strong>append (<code>+=</code>)</strong>, never overwrite</li>
+<li>✅ Keep sentences <strong>short and atomic</strong></li>
+<li>✅ Loops: use <code>break;</code> to stop early</li>
+<li>✅ Test features before relying on them</li>
+<li>✅ Add <strong>comments</strong> to explain what code does</li>
+<li>❌ Don’t overload with giant word lists</li>
+<li>❌ Don’t write paragraphs into personality/scenario — keep it bite-sized</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-troubleshooting"><a class="header" href="#-quick-troubleshooting">🟡 Quick Troubleshooting</a></h2>
+<ul>
+<li><strong>“My script does nothing”</strong> → You probably used an unsupported feature (e.g., <code>.includes</code>)</li>
+<li><strong>“It’s repeating the same trait a lot”</strong> → Add a check (<code>if (!context.character.personality.includes("trait"))</code>)</li>
+<li><strong>“It’s too slow”</strong> → Cut down loops or break earlier</li>
+<li><strong>“It forgot what I told it”</strong> → Remember: fake memory by writing into <code>scenario</code></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-golden-formula"><a class="header" href="#-the-golden-formula">🟡 The Golden Formula</a></h2>
+<p>If you ever get lost, here’s the <strong>minimum skeleton</strong>:</p>
+<p>context.character = context.character || {};
+context.character.personality = context.character.personality || "";
+context.character.scenario = context.character.scenario || "";</p>
+<p>var last = String((context.chat &amp;&amp; context.chat.last_message) || "");
+var padded = " " + last.toLowerCase() + " ";</p>
+<p>// Example reaction
+if (padded.indexOf(" hello ") !== -1) {
+context.character.scenario += "They greet you warmly.";
+context.character.personality += "Friendly and welcoming.";
+}</p>
+<p>That’s all you really need to start building. Everything else is just stacking more blocks on top.</p>
+<hr />
+<p>✨ Pro Tip: The best scripts aren’t the fanciest. They’re the ones that quietly nudge your character into feeling alive, without you ever noticing the machinery behind it.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-12-weighted-lore--probability"><a class="header" href="#-chapter-12-weighted-lore--probability">📘 Chapter 12: Weighted Lore &amp; Probability</a></h1>
+<p>Up until now, your scripts have been <strong>deterministic</strong> — meaning: if the user types a word, the script <em>always</em> triggers the same response. That’s great for consistency, but it can feel predictable.</p>
+<p>What if sometimes the bot shares a story, but other times it stays quiet?
+What if mentioning “magic” doesn’t always flood the scene with spell lore?</p>
+<p>👉 That’s where <strong>weights and probability</strong> come in.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-use-probability"><a class="header" href="#-why-use-probability">🟡 Why Use Probability?</a></h2>
+<p>Humans aren’t machines — we don’t always react the same way every time. By adding probability, you can make responses feel:</p>
+<ul>
+<li><strong>Fresh</strong> → The same word doesn’t always trigger</li>
+<li><strong>Unpredictable</strong> → Surprises keep the conversation alive</li>
+<li><strong>Natural</strong> → Sometimes people mention something but don’t elaborate</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-random-roll"><a class="header" href="#-the-random-roll">🟡 The Random Roll</a></h2>
+<p>The sandbox has a built-in dice roller:</p>
+<p>Math.random()</p>
+<p>This gives a number between <strong>0 and 1</strong> (like a percentage).</p>
+<ul>
+<li><code>0.0</code> = 0%</li>
+<li><code>0.5</code> = 50%</li>
+<li><code>1.0</code> = 100%</li>
+</ul>
+<p>So if you want something to happen 50% of the time:</p>
+<p>if (Math.random() &lt; 0.5) {
+// do the thing
+}</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-adding-probability-to-lore"><a class="header" href="#-adding-probability-to-lore">🟡 Adding Probability to Lore</a></h2>
+<p>Here’s how we can add probability to a lore entry:</p>
+<p>var last = context.chat.last_message.toLowerCase();</p>
+<p>if (last.indexOf("magic") !== -1) {
+if (Math.random() &lt; 0.5) { // 50% chance
+context.character.personality += ", remembers old magical teachings.";
+context.character.scenario += " The air hums with faint magical energy.";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If the user mentions “magic”…</li>
+<li>Roll the dice</li>
+<li>If the roll is under 0.5 (50% chance) → trigger the lore</li>
+<li>Otherwise → nothing happens (bot stays quiet)</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-weighted-choices-like-a-roulette-wheel"><a class="header" href="#-weighted-choices-like-a-roulette-wheel">🟡 Weighted Choices (Like a Roulette Wheel)</a></h2>
+<p>Probability doesn’t have to be “yes or no.” You can also make the bot <strong>pick between multiple options</strong>.</p>
+<p>var options = [
+{ chance: 0.6, text: "They talk about a magical library." },
+{ chance: 0.3, text: "They recall a battle with a sorcerer." },
+{ chance: 0.1, text: "They stay silent, eyes distant." }
+];</p>
+<p>var roll = Math.random();
+var total = 0;</p>
+<p>for (var i = 0; i &lt; options.length; i++) {
+total += options[i].chance;
+if (roll &lt; total) {
+context.character.scenario += options[i].text;
+break;
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Options are given <strong>weights</strong> (60%, 30%, 10%)</li>
+<li>Roll the dice</li>
+<li>Whichever slot the dice falls into → that’s the chosen outcome</li>
+<li>So “magical library” happens most often, but sometimes you’ll get the rarer paths</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-realistic-example-telling-secrets"><a class="header" href="#-realistic-example-telling-secrets">🟡 Realistic Example: Telling Secrets</a></h2>
+<p>if (last.indexOf("secret") !== -1) {
+var roll = Math.random();
+if (roll &lt; 0.7) {
+context.character.personality += ", reluctant but burdened with knowledge.";
+context.character.scenario += " They hint at a secret but don’t reveal it.";
+} else {
+context.character.personality += ", daring enough to share forbidden truths.";
+context.character.scenario += " They whisper the real secret with trembling lips.";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>70% of the time → the bot stays cagey</li>
+<li>30% of the time → the bot spills the secret</li>
+<li>This feels human, because sometimes people hold back</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-probability"><a class="header" href="#-best-practices-for-probability">🟡 Best Practices for Probability</a></h2>
+<ul>
+<li>✅ Use probability for <strong>flavor</strong>, not for everything</li>
+<li>✅ Keep rare events <strong>special</strong> (don’t hide key lore behind a 1% chance)</li>
+<li>✅ Document your weights with comments so you remember why you picked them</li>
+<li>❌ Don’t chain too many random checks at once — randomness piles up and makes scripts unpredictable in bad ways</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-2"><a class="header" href="#-quick-practice-try-it-yourself-2">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>
+<p>Add a <strong>50% chance</strong> that the bot mentions the weather when the user says “outside.”</p>
+</li>
+<li>
+<p>Create a <strong>weighted choice</strong> where “forest” triggers either:</p>
+<ul>
+<li>60% → peaceful description</li>
+<li>30% → mysterious atmosphere</li>
+<li>10% → dangerous vibes</li>
+</ul>
+</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-12"><a class="header" href="#-key-takeaways-from-chapter-12">🟡 Key Takeaways from Chapter 12</a></h2>
+<ul>
+<li><code>Math.random()</code> gives you a 0–1 roll (your digital dice)</li>
+<li>Use <code>&lt; number</code> checks for simple percentages</li>
+<li>Use <strong>weighted choices</strong> for more variety</li>
+<li>Add probability for flavor, surprise, and realism</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of probability like seasoning in cooking — a little makes things delicious, but too much can ruin the dish.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-13-minmax-message-gating-unlocking-content-over-time"><a class="header" href="#-chapter-13-minmax-message-gating-unlocking-content-over-time">📘 Chapter 13: Min/Max Message Gating (Unlocking Content Over Time)</a></h1>
+<p>So far, we’ve used <strong>message count</strong> for gradual shifts (polite → casual → trusting). But what if you want to <strong>lock and unlock certain lore</strong> depending on how long the conversation has been going?</p>
+<p>That’s what <strong>min/max gating</strong> is for. It’s like setting a <strong>window of opportunity</strong>:</p>
+<ul>
+<li><em>Before 15 messages → the secret is hidden</em></li>
+<li><em>Between 16–30 messages → the secret is revealed</em></li>
+</ul>
+<p>👉 This creates natural pacing, like chapters in a story.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-use-gating"><a class="header" href="#-why-use-gating">🟡 Why Use Gating?</a></h2>
+<ul>
+<li><strong>Story beats</strong> → certain reveals only happen once the bond deepens</li>
+<li><strong>Mystery</strong> → early hints, later explanations</li>
+<li><strong>Progression</strong> → the chat feels like it has “levels”</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-simple-formula"><a class="header" href="#-the-simple-formula">🟡 The Simple Formula</a></h2>
+<p>You can check message count with two conditions:</p>
+<p>var count = context.chat.message_count;</p>
+<p>if (count &gt;= 5 &amp;&amp; count &lt;= 15) {
+context.character.scenario += " They seem hesitant to share anything personal yet.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If message count is <strong>between 5 and 15</strong> → add this scene note</li>
+<li>Outside that range → nothing happens</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-secrets-in-stages"><a class="header" href="#-example-secrets-in-stages">🟡 Example: Secrets in Stages</a></h2>
+<p>Let’s use gating to reveal a secret over time.</p>
+<p>var count = context.chat.message_count;</p>
+<p>if (count &lt;= 15 &amp;&amp; padded.indexOf(" secret ") !== -1) {
+context.character.personality += ", cautious about their secrets.";
+context.character.scenario += " They hint that there are things they cannot share yet.";
+}</p>
+<p>if (count &gt;= 16 &amp;&amp; count &lt;= 30 &amp;&amp; padded.indexOf(" secret ") !== -1) {
+context.character.personality += ", finally ready to open up.";
+context.character.scenario += " They whisper a deeper truth, as if trusting you more.";
+}</p>
+<p>if (count &gt; 30 &amp;&amp; padded.indexOf(" secret ") !== -1) {
+context.character.personality += ", burdened by secrets too heavy to ignore.";
+context.character.scenario += " They reveal everything, unable to hold it in any longer.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Early in the chat → they avoid the secret</li>
+<li>Midway → they share cautiously</li>
+<li>Later → they spill everything</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-event-unlock"><a class="header" href="#-example-event-unlock">🟡 Example: Event Unlock</a></h2>
+<p>You can also tie events to certain ranges:</p>
+<p>if (count === 10) {
+context.character.scenario += " A distant bell rings, marking a turning point in the conversation.";
+}</p>
+<p>if (count &gt; 20 &amp;&amp; count &lt; 25) {
+context.character.personality += ", feeling nostalgic.";
+context.character.scenario += " They recall something from their childhood.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>At exactly 10 messages → an event happens</li>
+<li>Between 20 and 25 messages → they enter a nostalgic mood</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-gating"><a class="header" href="#-best-practices-for-gating">🟡 Best Practices for Gating</a></h2>
+<ul>
+<li>✅ Use <strong>ranges</strong> for flexibility (e.g., 15–30), not just single numbers</li>
+<li>✅ Tie gates to <strong>story pacing</strong> (early, mid, late)</li>
+<li>✅ Combine with <strong>keywords</strong> (like “secret”) for more depth</li>
+<li>❌ Don’t make everything gated — the chat shouldn’t feel like a checklist</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-3"><a class="header" href="#-quick-practice-try-it-yourself-3">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Make a character <strong>stay guarded</strong> before 10 messages, but <strong>warm up</strong> between 10–20</li>
+<li>Add an <strong>event</strong> at exactly 25 messages where “a storm begins”</li>
+<li>Make the bot <strong>reveal a family story</strong> only if message count is above 30</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-13"><a class="header" href="#-key-takeaways-from-chapter-13">🟡 Key Takeaways from Chapter 13</a></h2>
+<ul>
+<li>Use <code>&gt;=</code> and <code>&lt;=</code> to create message count <strong>windows</strong></li>
+<li>Gating creates pacing and unlocks lore naturally</li>
+<li>Combine gating with <strong>keywords</strong> for deeper reveals</li>
+<li>Treat gating like <strong>chapters</strong> in a conversation — new arcs appear as the chat grows</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of min/max gating as <em>doors in a hallway</em>. Each door only opens after enough steps forward, revealing a new part of the story.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-14-shifts--conditional-layers"><a class="header" href="#-chapter-14-shifts--conditional-layers">📘 Chapter 14: Shifts &amp; Conditional Layers</a></h1>
+<p>So far, our lore entries have been <strong>flat</strong>: one keyword → one response. But real life isn’t flat. A forest feels different at <strong>day</strong> vs. <strong>night</strong>. A character acts differently when they’re <strong>calm</strong> vs. <strong>angry</strong>.</p>
+<p>👉 That’s where <strong>shifts</strong> (conditional layers) come in. They let one entry change flavor depending on extra context.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-flat-entry-no-shift"><a class="header" href="#-step-1-flat-entry-no-shift">🟡 Step 1: Flat Entry (No Shift)</a></h2>
+<p>if (padded.indexOf(" forest ") !== -1) {
+context.character.scenario += "The forest surrounds you.";
+}</p>
+<p>Plain English:
+Anytime the user says “forest,” we just add: <em>“The forest surrounds you.”</em>
+Always the same, no matter what else is happening.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-adding-a-shift-day-vs-night"><a class="header" href="#-step-2-adding-a-shift-day-vs-night">🟡 Step 2: Adding a Shift (Day vs. Night)</a></h2>
+<p>if (padded.indexOf(" forest ") !== -1) {
+if (padded.indexOf(" day ") !== -1) {
+context.character.scenario += "The forest feels alive in the daylight.";
+} else if (padded.indexOf(" night ") !== -1) {
+context.character.scenario += "The forest feels eerie under the moonlight.";
+} else {
+context.character.scenario += "The forest surrounds you.";
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If “forest” + “day” → bright forest</li>
+<li>If “forest” + “night” → eerie forest</li>
+<li>Otherwise, default forest</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-lorebook-with-shifts"><a class="header" href="#-step-3-lorebook-with-shifts">🟡 Step 3: Lorebook with Shifts</a></h2>
+<p>We can store shifts <strong>inside an entry</strong>.</p>
+<p>var lorebook = [
+{
+keywords: ["forest"],
+scenario: "The forest surrounds you.",
+shifts: [
+{ keywords: ["day"], scenario: "The forest glows with sunlight." },
+{ keywords: ["night"], scenario: "The forest grows dark and quiet." }
+]
+}
+];</p>
+<p>Processing looks like:</p>
+<ol>
+<li>Match “forest.”</li>
+<li>Add its base scenario.</li>
+<li>Check if any <strong>shift keywords</strong> also match → add their text.</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-emotional-shifts"><a class="header" href="#-step-4-emotional-shifts">🟡 Step 4: Emotional Shifts</a></h2>
+<p>Shifts don’t have to be time-based — they can be <strong>emotional layers</strong>.</p>
+<p>var lorebook = [
+{
+keywords: ["mentor"],
+personality: ", wise and strict",
+shifts: [
+{ keywords: ["trust"], personality: ", softens when trusted" },
+{ keywords: ["anger"], personality: ", harsh when angry" }
+]
+}
+];</p>
+<p>Plain English:</p>
+<ul>
+<li>“Mentor” = wise and strict</li>
+<li>If “trust” is present → add soft trait</li>
+<li>If “anger” is present → add harsh trait</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-probabilistic-shifts"><a class="header" href="#-step-5-probabilistic-shifts">🟡 Step 5: Probabilistic Shifts</a></h2>
+<p>You can add <strong>random variety</strong> into shifts.</p>
+<p>if (padded.indexOf(" tavern ") !== -1) {
+if (Math.random() &lt; 0.5) {
+context.character.scenario += "The tavern is rowdy tonight.";
+} else {
+context.character.scenario += "The tavern is quiet and dimly lit.";
+}
+}</p>
+<p>Plain English:
+Same keyword, two possible moods. Keeps the world fresh.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-6-layered-shifts-stacking"><a class="header" href="#-step-6-layered-shifts-stacking">🟡 Step 6: Layered Shifts (Stacking)</a></h2>
+<p>Multiple conditions can layer together.</p>
+<p>if (padded.indexOf(" forest ") !== -1) {
+if (padded.indexOf(" night ") !== -1) {
+context.character.scenario += "The forest is dark and silent.";
+if (padded.indexOf(" wolves ") !== -1) {
+context.character.scenario += "You hear wolves howling in the distance.";
+}
+}
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Forest + Night → dark forest</li>
+<li>Forest + Night + Wolves → adds a howling event</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-recap-table-2"><a class="header" href="#-recap-table-2">🟡 Recap Table</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>Example</th><th>Use Case</th></tr></thead><tbody>
+<tr><td><strong>Flat</strong></td><td>“Forest surrounds you”</td><td>Always the same response</td></tr>
+<tr><td><strong>Time-based shift</strong></td><td>“Day → bright” / “Night → eerie”</td><td>Environmental changes</td></tr>
+<tr><td><strong>Emotional shift</strong></td><td>“Mentor + trust → softer”</td><td>Character reactions</td></tr>
+<tr><td><strong>Probabilistic shift</strong></td><td>Tavern noisy vs. quiet</td><td>Variety / replayability</td></tr>
+<tr><td><strong>Layered shift</strong></td><td>Night + Wolves = howling</td><td>Stacking depth</td></tr>
+</tbody></table>
+</div>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-14"><a class="header" href="#-key-takeaways-from-chapter-14">🟡 Key Takeaways from Chapter 14</a></h2>
+<ul>
+<li>Shifts = <strong>conditional flavors</strong> that modify a base entry</li>
+<li>Use them for <strong>time, mood, emotion, or randomness</strong></li>
+<li>Shifts make the world <strong>react to context</strong> instead of staying flat</li>
+<li>Layer shifts for <strong>rich storytelling</strong> without bloating your script</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of shifts like <em>lighting in a movie scene</em>. The set (forest) doesn’t change, but the lighting (day, night, candle, storm) transforms the mood completely.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-15-ordered-keywords-sequential-logic"><a class="header" href="#-chapter-15-ordered-keywords-sequential-logic">📘 Chapter 15: Ordered Keywords (Sequential Logic)</a></h1>
+<p>So far, your triggers have been simple:</p>
+<ul>
+<li>“happy” → add cheerful trait</li>
+<li>“forest” → add forest scene</li>
+</ul>
+<p>But what if you only want something to fire if <strong>keywords appear in order</strong>?</p>
+<p>👉 Example: “She teases you… then admits her feelings.”</p>
+<ul>
+<li>If the user only says “tease,” it shouldn’t fire</li>
+<li>If they only say “feelings,” it shouldn’t fire</li>
+<li>But if “tease” comes <strong>before</strong> “feelings,” it unlocks a special event</li>
+</ul>
+<p>This is called <strong>sequential logic.</strong></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-flat-keywords-no-order"><a class="header" href="#-step-1-flat-keywords-no-order">🟡 Step 1: Flat Keywords (No Order)</a></h2>
+<p>if (padded.indexOf(" tease ") !== -1) {
+context.character.personality += ", playful and teasing.";
+}
+if (padded.indexOf(" feelings ") !== -1) {
+context.character.scenario += "They hint about their deeper feelings.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If “tease” shows up → playful</li>
+<li>If “feelings” shows up → emotional hint</li>
+<li>Works fine, but doesn’t check <em>order</em></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-multi-keyword-both-present-any-order"><a class="header" href="#-step-2-multi-keyword-both-present-any-order">🟡 Step 2: Multi-Keyword (Both Present, Any Order)</a></h2>
+<p>if (padded.indexOf(" tease ") !== -1 &amp;&amp; padded.indexOf(" feelings ") !== -1) {
+context.character.scenario += "Their teasing shifts into something heartfelt.";
+}</p>
+<p>Plain English:
+This only triggers if both words appear, but it doesn’t care which one comes first.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-sequential-logic-order-matters"><a class="header" href="#-step-3-sequential-logic-order-matters">🟡 Step 3: Sequential Logic (Order Matters)</a></h2>
+<p>var teaseIndex = padded.indexOf(" tease ");
+var feelingsIndex = padded.indexOf(" feelings ");</p>
+<p>if (teaseIndex !== -1 &amp;&amp; feelingsIndex !== -1 &amp;&amp; teaseIndex &lt; feelingsIndex) {
+context.character.scenario += "The teasing slowly turns into a confession of feelings.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Both words must appear</li>
+<li>“tease” must come <strong>before</strong> “feelings”</li>
+<li>Only then does the special scenario fire</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-story-example"><a class="header" href="#-step-4-story-example">🟡 Step 4: Story Example</a></h2>
+<p><strong>User says:</strong>
+“She confessed her feelings, almost teasing.”
+→ <em>Does not fire</em> (feelings came before tease)</p>
+<p><strong>User says:</strong>
+“She kept teasing until she admitted her feelings.”
+→ <em>Fires</em> (tease came first)</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-expanded-sequences"><a class="header" href="#-step-5-expanded-sequences">🟡 Step 5: Expanded Sequences</a></h2>
+<p>You can extend this idea to longer chains.</p>
+<p>var meetIndex = padded.indexOf(" meet ");
+var fightIndex = padded.indexOf(" fight ");
+var reconcileIndex = padded.indexOf(" reconcile ");</p>
+<p>if (meetIndex !== -1 &amp;&amp; fightIndex !== -1 &amp;&amp; reconcileIndex !== -1) {
+if (meetIndex &lt; fightIndex &amp;&amp; fightIndex &lt; reconcileIndex) {
+context.character.scenario += "They met, fought, and finally reconciled.";
+}
+}</p>
+<p>Plain English:
+The script only fires if the <strong>full sequence</strong> appears in order.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-recap-table-3"><a class="header" href="#-recap-table-3">🟡 Recap Table</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>Example</th><th>Order Matters?</th></tr></thead><tbody>
+<tr><td><strong>Flat</strong></td><td>“tease” → playful</td><td>❌ No</td></tr>
+<tr><td><strong>Multi-keyword</strong></td><td>“tease” + “feelings” → heartfelt</td><td>❌ No</td></tr>
+<tr><td><strong>Sequential</strong></td><td>“tease” → “feelings”</td><td>✅ Yes</td></tr>
+<tr><td><strong>Long chain</strong></td><td>meet → fight → reconcile</td><td>✅ Yes</td></tr>
+</tbody></table>
+</div>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-15"><a class="header" href="#-key-takeaways-from-chapter-15">🟡 Key Takeaways from Chapter 15</a></h2>
+<ul>
+<li>Sequential logic checks <strong>position</strong> as well as presence</li>
+<li>Lets you script <strong>story beats</strong> that unfold in order</li>
+<li>Great for arcs like: teasing → feelings, fight → reconcile, secret → betrayal</li>
+<li>Without order checks, scripts may fire in unintended contexts</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of sequential logic like <em>sheet music</em>. Notes (keywords) only make sense when they’re played in the right order.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-16-event-lore-randomized-story-beats--ambient-flavor"><a class="header" href="#-chapter-16-event-lore-randomized-story-beats--ambient-flavor">📘 Chapter 16: Event Lore (Randomized Story Beats &amp; Ambient Flavor)</a></h1>
+<p>Up until now, every script has been <strong>user-driven</strong>:</p>
+<ul>
+<li>The bot reacts to keywords</li>
+<li>The bot responds to message count</li>
+</ul>
+<p>But what if sometimes <em>the world moves on its own</em>?</p>
+<p>👉 That’s where <strong>Event Lore</strong> comes in. These are little <strong>ambient events</strong> — bells tolling, phones ringing, weather shifting — that fire on timers, random rolls, or story pacing. They add surprise and immersion, like background flavor in a movie scene.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-use-event-lore"><a class="header" href="#-why-use-event-lore">🟡 Why Use Event Lore?</a></h2>
+<ul>
+<li>Keeps the conversation world feeling <em>alive</em></li>
+<li>Adds <strong>surprise</strong> — the user didn’t “trigger” it, but it still happens</li>
+<li>Creates <strong>beats</strong> like in storytelling — little climaxes and turning points</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-1-timed-events"><a class="header" href="#-example-1-timed-events">🟡 Example 1: Timed Events</a></h2>
+<p>if (context.chat.message_count === 10) {
+context.character.scenario += " A church bell rings in the distance, marking the tenth exchange.";
+}</p>
+<p>if (context.chat.message_count === 25) {
+context.character.scenario += " A sudden breeze stirs, carrying whispers from nowhere.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>At exactly 10 messages → bell sound</li>
+<li>At 25 messages → eerie breeze</li>
+<li>These happen <em>even if the user didn’t mention anything</em></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-2-random-events"><a class="header" href="#-example-2-random-events">🟡 Example 2: Random Events</a></h2>
+<p>if (Math.random() &lt; 0.2) {
+context.character.scenario += " A bird flutters past, wings scattering dust motes.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Every message, roll the dice</li>
+<li>20% of the time → add a random environmental detail</li>
+<li>Feels like the world has background “ticks”</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-3-event-pools"><a class="header" href="#-example-3-event-pools">🟡 Example 3: Event Pools</a></h2>
+<p>var events = [
+" A phone rings suddenly in the distance.",
+" Thunder rumbles faintly overhead.",
+" Someone knocks at the door unexpectedly."
+];</p>
+<p>if (Math.random() &lt; 0.15) {
+var pick = events[Math.floor(Math.random() * events.length)];
+context.character.scenario += pick;
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>15% of the time → grab a random “ambient beat” from the pool</li>
+<li>This creates a rotation of surprises</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-4-event-lore--keywords"><a class="header" href="#-example-4-event-lore--keywords">🟡 Example 4: Event Lore + Keywords</a></h2>
+<p>if (padded.indexOf(" dream ") !== -1 &amp;&amp; Math.random() &lt; 0.3) {
+context.character.scenario += " A dreamlike haze falls over the scene, blurring reality.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>If “dream” is mentioned, sometimes (30% chance) the world itself becomes dreamlike</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-event-lore"><a class="header" href="#-best-practices-for-event-lore">🟡 Best Practices for Event Lore</a></h2>
+<ul>
+<li>✅ Use sparingly — 1–2 ambient beats every 10–15 messages feels natural</li>
+<li>✅ Keep events short and atmospheric</li>
+<li>✅ Tie rare events to “big moments” (like a storm starting at message 50)</li>
+<li>❌ Don’t spam random events every turn — it overwhelms the conversation</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-4"><a class="header" href="#-quick-practice-try-it-yourself-4">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Create a <strong>10% chance per message</strong> for a <strong>mysterious shadow</strong> to appear</li>
+<li>Add an <strong>event pool</strong> with at least 3 “city noises” (sirens, honking, chatter)</li>
+<li>Make an event where at <strong>exactly 30 messages</strong>, the character receives a <strong>letter</strong> that changes the tone of the conversation</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-16"><a class="header" href="#-key-takeaways-from-chapter-16">🟡 Key Takeaways from Chapter 16</a></h2>
+<ul>
+<li><strong>Event lore</strong> creates surprises independent of user input</li>
+<li>Use <strong>timed events</strong> for predictable beats</li>
+<li>Use <strong>random rolls</strong> for ambient flavor</li>
+<li>Use <strong>event pools</strong> for variety</li>
+<li>Combine with <strong>keywords</strong> for rare, dramatic twists</li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Think of event lore like a <em>movie soundtrack</em>. The characters may not control it, but it shapes how the scene feels.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-17-simple-reaction-engines-weighted-keyword-scores"><a class="header" href="#-chapter-17-simple-reaction-engines-weighted-keyword-scores">📘 Chapter 17: Simple Reaction Engines (Weighted Keyword Scores)</a></h1>
+<p>So far, your scripts have been <strong>on/off switches</strong>:</p>
+<ul>
+<li>If the user says “happy” → add cheerful personality</li>
+<li>If the user says “sad” → add somber personality</li>
+</ul>
+<p>That’s good for basics, but what if you want your character to build up <strong>stronger reactions</strong> depending on <em>how many</em> related words show up?</p>
+<p>👉 That’s what a <strong>reaction engine</strong> does: instead of a single trigger, it <strong>scores words</strong> and reacts based on the total.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-use-weighted-scores"><a class="header" href="#-why-use-weighted-scores">🟡 Why Use Weighted Scores?</a></h2>
+<ul>
+<li>Captures <strong>intensity</strong> (a little teasing vs. a lot of teasing)</li>
+<li>Prevents <strong>false positives</strong> (one weak word doesn’t immediately flip a mood)</li>
+<li>Creates <strong>gradual escalation</strong> (small signals build into a bigger reaction)</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-1-scoring-touch-words"><a class="header" href="#-example-1-scoring-touch-words">🟡 Example 1: Scoring Touch Words</a></h2>
+<p>Let’s say we want the bot to react to physical contact, but only if enough signals appear.</p>
+<p>var touchWords = ["touch", "hold", "grab", "caress"];
+var score = 0;</p>
+<p>for (var i=0; i&lt;touchWords.length; i++) {
+if (padded.indexOf(" " + touchWords[i] + " ") !== -1) {
+score++;
+}
+}</p>
+<p>if (score &gt;= 2) {
+context.character.personality += ", responsive to physical closeness.";
+context.character.scenario    += " Their body language shifts as the touch lingers.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>Scan for “touch,” “hold,” “grab,” “caress.”</li>
+<li>Add 1 point for each match.</li>
+<li>If at least 2 are found → trigger the reaction.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-2-weighted-keywords"><a class="header" href="#-example-2-weighted-keywords">🟡 Example 2: Weighted Keywords</a></h2>
+<p>Not all words are equal. “caress” might carry more weight than “touch.”</p>
+<p>var reactions = [
+{ word: "touch",  weight: 1 },
+{ word: "hold",   weight: 2 },
+{ word: "caress", weight: 3 }
+];</p>
+<p>var score = 0;
+for (var i=0; i&lt;reactions.length; i++) {
+if (padded.indexOf(" " + reactions[i].word + " ") !== -1) {
+score += reactions[i].weight;
+}
+}</p>
+<p>if (score &gt;= 3) {
+context.character.personality += ", reacting strongly to intimacy.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>“touch” = +1</li>
+<li>“hold” = +2</li>
+<li>“caress” = +3</li>
+<li>Add them up → the stronger the words, the faster the threshold is reached.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-example-3-escalating-tiers"><a class="header" href="#-example-3-escalating-tiers">🟡 Example 3: Escalating Tiers</a></h2>
+<p>Once you have a score, you can make different levels of reaction.</p>
+<p>if (score === 1) {
+context.character.personality += ", slightly responsive.";
+} else if (score === 2) {
+context.character.personality += ", noticeably moved.";
+} else if (score &gt;= 3) {
+context.character.personality += ", deeply affected.";
+}</p>
+<p>Plain English:</p>
+<ul>
+<li>1 point → mild response</li>
+<li>2 points → stronger</li>
+<li>3+ points → intense</li>
+</ul>
+<p>This feels much more natural than instant jumps.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-reaction-engines"><a class="header" href="#-best-practices-for-reaction-engines">🟡 Best Practices for Reaction Engines</a></h2>
+<ul>
+<li>✅ Use scores for <strong>emotions, physical actions, or tone shifts</strong></li>
+<li>✅ Assign weights carefully (not every word is equal)</li>
+<li>✅ Keep thresholds low (2–3 points is usually enough)</li>
+<li>❌ Don’t make the math too complex — keep it simple and readable</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-5"><a class="header" href="#-quick-practice-try-it-yourself-5">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>
+<p>Make a reaction engine for <strong>anger words</strong> (angry, furious, rage).</p>
+<ul>
+<li>1 = mild annoyance, 2 = frustration, 3+ = full rage</li>
+</ul>
+</li>
+<li>
+<p>Build a <strong>flirtation engine</strong> where playful words (“wink,” “tease,” “smirk”) add up until the bot becomes overtly flirty</p>
+</li>
+<li>
+<p>Create a <strong>fear engine</strong> where words like “dark,” “scary,” and “danger” escalate tension in the scenario</p>
+</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-17"><a class="header" href="#-key-takeaways-from-chapter-17">🟡 Key Takeaways from Chapter 17</a></h2>
+<ul>
+<li>Reaction engines score <strong>multiple inputs</strong> instead of just flipping a switch</li>
+<li>Scores allow for <strong>gradual escalation</strong> and <strong>intensity tiers</strong></li>
+<li>Weighted words add realism (some words count more)</li>
+<li>This is the first step toward <strong>dynamic emotional engines</strong></li>
+</ul>
+<hr />
+<p>✨ Pro Tip: Reaction engines are like a thermometer — the more words you pile in, the hotter the mood gets.</p>
+<hr />
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-18-performance--sandbox-limits-how-far-you-can-push-scripts--es6-edition"><a class="header" href="#-chapter-18-performance--sandbox-limits-how-far-you-can-push-scripts--es6-edition">📘 Chapter 18: Performance &amp; Sandbox Limits (How Far You Can Push Scripts — ES6 Edition)</a></h1>
+<p>Scripts today are faster, larger, and far more forgiving than in the early sandbox days.<br />
+The environment now runs <strong>modern ES6 JavaScript</strong>, supports complex logic, and handles far bigger script sizes without breaking.<br />
+But performance still matters — not because the sandbox is fragile, but because clarity keeps your character snappy and reliable.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-limits-exist"><a class="header" href="#-why-limits-exist">🟢 Why Limits Exist</a></h2>
+<p>Even with more room to breathe, limits protect three things:</p>
+<ul>
+<li>
+<p><strong>Safety</strong> — no one can crash the host or access external systems.</p>
+</li>
+<li>
+<p><strong>Speed</strong> — your logic still runs before every message, so efficiency matters.</p>
+</li>
+<li>
+<p><strong>Consistency</strong> — every script behaves the same across platforms.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-1-javascript-version-es6-sandbox"><a class="header" href="#-limit-1-javascript-version-es6-sandbox">🟢 Limit 1: JavaScript Version (ES6 Sandbox)</a></h2>
+<p>The sandbox now supports most ES6 features inside its safe scope.</p>
+<p>✅ Works</p>
+<ul>
+<li>
+<p><code>const</code>, <code>let</code>, arrow functions, template literals</p>
+</li>
+<li>
+<p><code>.includes()</code>, <code>.map()</code>, <code>.filter()</code>, <code>.find()</code>, <code>.forEach()</code></p>
+</li>
+<li>
+<p>object and array destructuring</p>
+</li>
+<li>
+<p>default parameters</p>
+</li>
+<li>
+<p><code>Object.assign()</code>, <code>Object.keys()</code>, <code>Object.values()</code></p>
+</li>
+</ul>
+<p>❌ Still Blocked</p>
+<ul>
+<li>
+<p><code>async/await</code>, <code>Promise</code>, <code>setTimeout</code>, <code>setInterval</code></p>
+</li>
+<li>
+<p><code>fetch</code>, <code>XMLHttpRequest</code>, <code>import</code>, <code>require</code></p>
+</li>
+<li>
+<p><code>document</code>, <code>window</code>, or any global DOM access</p>
+</li>
+<li>
+<p>extending sandbox globals or writing to outside scope</p>
+</li>
+</ul>
+<p>Rule of thumb: anything that talks to the <em>outside world</em> is still off-limits.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-2-script-size-and-memory"><a class="header" href="#-limit-2-script-size-and-memory">🟢 Limit 2: Script Size and Memory</a></h2>
+<p>The sandbox now allows scripts up to ≈ <strong>300 KB</strong> of code — a massive leap from the old 25 KB limit.</p>
+<p>You can build multi-layered systems, emotion engines, and full lorebooks in one file.<br />
+Still, keep individual <strong>string additions short</strong> (≈ &lt; 600 characters each) so outputs stay readable and never exceed per-turn message budgets.</p>
+<p><strong>Guideline:</strong></p>
+<ul>
+<li>
+<p>Short sentences = more stable outputs.</p>
+</li>
+<li>
+<p>Big scripts = fine. Big <em>replies</em> = risky.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-3-loops-and-iteration"><a class="header" href="#-limit-3-loops-and-iteration">🟢 Limit 3: Loops and Iteration</a></h2>
+<p>The loop guardrails are essentially gone.<br />
+You can now iterate thousands of times safely as long as your code finishes quickly.</p>
+<pre><code class="language-js">for (const word of dictionary) {
+  if (lastMessages.includes(word)) found.push(word);
+}
+</code></pre>
+<p>Still use <code>break</code> or <code>return</code> to exit early when a match is found — not because you have to, but because clean logic reads better and saves time.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-4-execution-time"><a class="header" href="#-limit-4-execution-time">🟢 Limit 4: Execution Time</a></h2>
+<p>Each script still has a small time slice (a few milliseconds).<br />
+If something takes too long, the sandbox stops quietly.<br />
+In practice, this only happens with accidental infinite loops or huge JSON parses.</p>
+<p>✅ Safe: hundreds of loops, short text operations.<br />
+⚠️ Risky: recursive functions with no end condition.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-5-memory--state-persistence"><a class="header" href="#-limit-5-memory--state-persistence">🟢 Limit 5: Memory &amp; State Persistence</a></h2>
+<p>There’s still <strong>no persistent memory</strong> between messages.<br />
+Every run starts fresh — your only “storage” is what you write into:</p>
+<pre><code class="language-js">context.character.personality
+context.character.scenario
+</code></pre>
+<p>Use those fields as your notes.<br />
+They travel forward in the conversation, effectively acting as your short-term memory.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-6-error-handling"><a class="header" href="#-limit-6-error-handling">🟢 Limit 6: Error Handling</a></h2>
+<p>The sandbox still skips <code>try / catch</code>, so guards remain good practice:</p>
+<pre><code class="language-js">context.character = context.character || {};
+context.character.personality = context.character.personality || "";
+context.character.scenario    = context.character.scenario    || "";
+</code></pre>
+<p>These prevent undefined errors and silent crashes.<br />
+If something fails, <code>console.log()</code> it — debugging works everywhere now.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-limit-7-randomness--variation"><a class="header" href="#-limit-7-randomness--variation">🟢 Limit 7: Randomness &amp; Variation</a></h2>
+<p><code>Math.random()</code> works normally.<br />
+You can safely randomize lines, choose probabilities, or mix personality shifts.</p>
+<pre><code class="language-js">if (Math.random() &lt; 0.3) {
+  context.character.personality += ", unexpectedly playful";
+}
+</code></pre>
+<p>Use randomness for color, not for crucial logic that the story depends on.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-performance-tips-for-the-modern-sandbox"><a class="header" href="#-performance-tips-for-the-modern-sandbox">🟢 Performance Tips for the Modern Sandbox</a></h2>
+<ul>
+<li>
+<p>✅ Use ES6 syntax – <code>const</code>, arrow functions, template strings.</p>
+</li>
+<li>
+<p>✅ Break large systems into helper functions for clarity.</p>
+</li>
+<li>
+<p>✅ Append short phrases, not novels, each turn.</p>
+</li>
+<li>
+<p>✅ Exit loops early when goals are met.</p>
+</li>
+<li>
+<p>✅ Use <code>lastMessages</code> for context without extra memory.</p>
+</li>
+<li>
+<p>✅ Test in the debug panel with <code>console.log()</code>.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice--spot-the-real-limit"><a class="header" href="#-quick-practice--spot-the-real-limit">🟢 Quick Practice — Spot the Real Limit</a></h2>
+<p><strong>1️⃣ Why is this now safe?</strong></p>
+<pre><code class="language-js">if (context.chat.last_message.toLowerCase().includes("hello")) {
+  context.character.scenario += "They greet you warmly.";
+}
+</code></pre>
+<p>✅ Because <code>.includes()</code> and template literals are now supported.</p>
+<p><strong>2️⃣ When could this still fail?</strong></p>
+<pre><code class="language-js">while (true) { /* ... */ }
+</code></pre>
+<p>❌ Infinite loop — the sandbox will time out silently.</p>
+<p><strong>3️⃣ Why prefer shorter additions?</strong><br />
+Large multi-paragraph strings can exceed chat token limits even though the sandbox accepts them. Keep responses natural and concise.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-18"><a class="header" href="#-key-takeaways-from-chapter-18">🟢 Key Takeaways from Chapter 18</a></h2>
+<ul>
+<li>
+<p>You’re in a <strong>modern ES6 sandbox</strong>, not legacy ES5.</p>
+</li>
+<li>
+<p>Script size limit ≈ 300 KB — build big systems safely.</p>
+</li>
+<li>
+<p>Loops are virtually unlimited; just avoid infinite ones.</p>
+</li>
+<li>
+<p>Per-turn text additions should stay under ~600 characters.</p>
+</li>
+<li>
+<p>Still no async functions or external fetch calls.</p>
+</li>
+<li>
+<p>Use guards and <code>console.log()</code> for debugging.</p>
+</li>
+<li>
+<p>Performance issues today come from logic design, not sandbox ceilings.</p>
+</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong><br />
+You’re no longer writing “tiny, fragile scripts.”<br />
+You’re building full systems — so write them like software: modular, readable, and maintainable.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-19-definitional-vs-relational-vs-event-lore"><a class="header" href="#-chapter-19-definitional-vs-relational-vs-event-lore">📘 Chapter 19: Definitional vs. Relational vs. Event Lore</a></h1>
+<p>Not all lore entries serve the same purpose. Some define <strong>what things are</strong>, some explain <strong>how they connect</strong>, and some move the story with <strong>what happens.</strong></p>
+<p>👉 Think of it like writing a play:</p>
+<ul>
+<li><strong>Definitional lore</strong> = the stage and cast list.</li>
+<li><strong>Relational lore</strong> = how the cast feels about each other.</li>
+<li><strong>Event lore</strong> = the script that makes things happen.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-type-1-definitional-lore"><a class="header" href="#-type-1-definitional-lore">🟡 Type 1: Definitional Lore</a></h2>
+<p><strong>What it is:</strong></p>
+<ul>
+<li>Baseline facts about people, places, or objects.</li>
+<li>Things that don’t change often.</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>“The Godfather is calculating and charismatic.”</li>
+<li>“The forest is filled with tall pines.”</li>
+</ul>
+<p>Example code:</p>
+<p>if (padded.indexOf(" godfather ") !== -1) {
+context.character.personality += ", calculating and charismatic.\n\n";
+context.character.scenario    += "He sits in a lavish study.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong>
+Definitional lore tells us <em>what exists.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-type-2-relational-lore"><a class="header" href="#-type-2-relational-lore">🟡 Type 2: Relational Lore</a></h2>
+<p><strong>What it is:</strong></p>
+<ul>
+<li>How characters, groups, or places connect.</li>
+<li>Explains bonds, rivalries, trust, or loyalty.</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>“Damien is loyal to family above all else.”</li>
+<li>“The mage guild distrusts the alchemists.”</li>
+</ul>
+<p>Example code:</p>
+<p>if (padded.indexOf(" family ") !== -1) {
+context.character.personality += ", loyal to family above all.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong>
+Relational lore tells us <em>how things relate.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-type-3-event-lore"><a class="header" href="#-type-3-event-lore">🟡 Type 3: Event Lore</a></h2>
+<p><strong>What it is:</strong></p>
+<ul>
+<li>Story beats that happen at a specific moment.</li>
+<li>Can be tied to time, message count, or triggers.</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>“At 20 messages, the phone rings.”</li>
+<li>“When secrets are mentioned, they whisper about the Sundering.”</li>
+</ul>
+<p>Example code:</p>
+<p>if (context.chat.message_count === 20) {
+context.character.scenario += "A phone rings suddenly, breaking the silence.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong>
+Event lore tells us <em>when things happen.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-comparison"><a class="header" href="#-quick-comparison">🟡 Quick Comparison</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Lore Type</th><th>Purpose</th><th>Example</th><th>Code Shape</th></tr></thead><tbody>
+<tr><td><strong>Definitional</strong></td><td>Establish facts</td><td>“Godfather is calculating”</td><td>Keyword → baseline trait</td></tr>
+<tr><td><strong>Relational</strong></td><td>Define connections</td><td>“Mage guild distrusts alchemists”</td><td>Keyword → bond/rivalry</td></tr>
+<tr><td><strong>Event</strong></td><td>Move story forward</td><td>“At 20 messages, a phone rings”</td><td>Message count / trigger</td></tr>
+</tbody></table>
+</div>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-how-they-work-together-story-snippet"><a class="header" href="#-how-they-work-together-story-snippet">🟡 How They Work Together (Story Snippet)</a></h2>
+<p><strong>User says:</strong> “Tell me about the Godfather and his family.”</p>
+<ul>
+<li><strong>Definitional lore fires:</strong>
+<em>Godfather = calculating leader.</em></li>
+<li><strong>Relational lore fires:</strong>
+<em>Loyal to family above all.</em></li>
+<li><strong>Event lore adds (at msg 20):</strong>
+<em>A phone rings during the meeting.</em></li>
+</ul>
+<p>👉 Combined, this paints a rich scene: <em>A calculating Godfather, loyal family ties, and a sudden event interrupting.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-19"><a class="header" href="#-key-takeaways-from-chapter-19">🟡 Key Takeaways from Chapter 19</a></h2>
+<ul>
+<li><strong>Definitional lore</strong> = what exists.</li>
+<li><strong>Relational lore</strong> = how it connects.</li>
+<li><strong>Event lore</strong> = when things happen.</li>
+<li>Together, they form a <strong>world Bible</strong> for your script.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-20-dynamic-lore-systems-mixing--evolving-entries-over-time"><a class="header" href="#-chapter-20-dynamic-lore-systems-mixing--evolving-entries-over-time">📘 Chapter 20: Dynamic Lore Systems (Mixing &amp; Evolving Entries Over Time)</a></h1>
+<p>Up until now, your lore entries have been <strong>static</strong>:</p>
+<ul>
+<li>If a word shows up → add this personality/scene.</li>
+<li>If message count hits 10 → fire this event.</li>
+</ul>
+<p>That’s good, but static lore can feel predictable. A <strong>dynamic lore system</strong> lets entries:</p>
+<ul>
+<li>Change depending on <em>when</em> they fire.</li>
+<li>Build on each other in stages.</li>
+<li>Unlock or replace previous notes with new ones.</li>
+</ul>
+<p>👉 Think of it like a TV show: characters, relationships, and events <strong>evolve</strong> as the episodes go on.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-1-progressive-lore-entries"><a class="header" href="#-strategy-1-progressive-lore-entries">🟡 Strategy 1: Progressive Lore Entries</a></h2>
+<p>Have the same keyword trigger <strong>different effects</strong> at different stages.</p>
+<p>Example code:</p>
+<p>var count = context.chat.message_count;</p>
+<p>if (padded.indexOf(" forest ") !== -1) {
+if (count &lt; 10) {
+context.character.scenario += " The forest feels calm and welcoming.\n\n";
+} else if (count &lt; 20) {
+context.character.scenario += " The forest begins to feel mysterious, shadows lengthening.\n\n";
+} else {
+context.character.scenario += " The forest feels dangerous now, with unseen creatures watching.\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Early: peaceful forest.</li>
+<li>Midway: mysterious forest.</li>
+<li>Later: dangerous forest.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-2-evolving-traits"><a class="header" href="#-strategy-2-evolving-traits">🟡 Strategy 2: Evolving Traits</a></h2>
+<p>Replace or upgrade personality notes as time goes on.</p>
+<p>Example code:</p>
+<p>if (padded.indexOf(" trust ") !== -1) {
+if (count &lt; 15) {
+context.character.personality += ", cautious about trust.\n\n";
+} else {
+context.character.personality += ", openly trusting now.\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong>
+The same keyword (“trust”) means <strong>different things</strong> early vs. later in the chat.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-3-unlock-chains"><a class="header" href="#-strategy-3-unlock-chains">🟡 Strategy 3: Unlock Chains</a></h2>
+<p>Lore can <strong>unlock other lore.</strong></p>
+<p>Example code:</p>
+<p>if (padded.indexOf(" secret ") !== -1) {
+context.character.scenario += " They hint at something hidden.\n\n";
+context.character.personality += ", a keeper of secrets.\n\n";</p>
+<p>// Unlock related lore
+if (count &gt; 20) {
+context.character.scenario += " They finally share a secret about the Sundering.\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Mentioning “secret” creates a new trait.</li>
+<li>If enough time has passed, it unlocks the <em>next layer</em> of lore.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-4-lore-fusion"><a class="header" href="#-strategy-4-lore-fusion">🟡 Strategy 4: Lore Fusion</a></h2>
+<p>Two lore entries can combine into something new.</p>
+<p>Example code:</p>
+<p>if (padded.indexOf(" magic ") !== -1 &amp;&amp; padded.indexOf(" forest ") !== -1) {
+context.character.scenario += " The forest is alive with strange magical energy.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Normally, “magic” and “forest” have separate notes.</li>
+<li>If both appear → they fuse into a <strong>unique blended event.</strong></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-5-probability-based-lore-variants"><a class="header" href="#-strategy-5-probability-based-lore-variants">🟡 Strategy 5: Probability-Based Lore Variants</a></h2>
+<p>Keep lore fresh by adding randomness.</p>
+<p>Example code:</p>
+<p>if (padded.indexOf(" dragon ") !== -1) {
+if (Math.random() &lt; 0.5) {
+context.character.scenario += " A dragon roars in the distance.\n\n";
+} else {
+context.character.scenario += " A dragon flies overhead, wings blotting out the sun.\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Mentioning “dragon” doesn’t always give the same response.</li>
+<li>Sometimes you get a roar, sometimes a sighting.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-dynamic-lore"><a class="header" href="#-best-practices-for-dynamic-lore">🟡 Best Practices for Dynamic Lore</a></h2>
+<ul>
+<li>✅ Use <strong>message count</strong> to stage lore progression.</li>
+<li>✅ Upgrade traits instead of just stacking new ones.</li>
+<li>✅ Unlock new entries gradually for pacing.</li>
+<li>✅ Fuse multiple keywords for surprising combos.</li>
+<li>✅ Add probability for variety.</li>
+<li>❌ Don’t make every entry dynamic — keep some static for stability.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-6"><a class="header" href="#-quick-practice-try-it-yourself-6">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Make a “river” lore entry that starts calm, then grows wild after 20 messages.</li>
+<li>Create a “friendship” entry that changes from “cautious” to “trusting” after 15 messages.</li>
+<li>Write a fusion entry where “fire” + “forest” creates a wildfire scene.</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-20"><a class="header" href="#-key-takeaways-from-chapter-20">🟡 Key Takeaways from Chapter 20</a></h2>
+<ul>
+<li>Dynamic lore <strong>evolves over time</strong> instead of staying flat.</li>
+<li>Use message count for pacing.</li>
+<li>Traits can <strong>shift, unlock, or fuse</strong> with others.</li>
+<li>Randomness keeps entries fresh.</li>
+<li>This turns static worlds into <strong>living stories.</strong></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-21-adaptive-reaction-engines-polarity-negation--composite-moods"><a class="header" href="#-chapter-21-adaptive-reaction-engines-polarity-negation--composite-moods">📘 Chapter 21: Adaptive Reaction Engines (Polarity, Negation &amp; Composite Moods)</a></h1>
+<p>So far, our reaction engines have been about <strong>adding points</strong> until a threshold is hit. That’s useful, but real emotions aren’t one-directional. People can:</p>
+<ul>
+<li>Feel positive <strong>or</strong> negative about a topic (<strong>polarity</strong>).</li>
+<li>Cancel out reactions if something is denied (<strong>negation</strong>).</li>
+<li>Hold <strong>mixed feelings</strong> (like bittersweet emotions).</li>
+</ul>
+<p>👉 This is where adaptive engines shine: they calculate <em>direction</em> and <em>blend</em>, not just “on/off.”</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-polarity-positive-vs-negative"><a class="header" href="#-polarity-positive-vs-negative">🟡 Polarity (Positive vs. Negative)</a></h2>
+<p>Instead of just counting, we give words <strong>+ or – values.</strong></p>
+<p>Example code:</p>
+<p>var polarityWords = [
+{ word: "love",  score: +2 },
+{ word: "like",  score: +1 },
+{ word: "hate",  score: -2 },
+{ word: "dislike", score: -1 }
+];</p>
+<p>var polarity = 0;
+for (var i=0; i&lt;polarityWords.length; i++) {
+if (padded.indexOf(" " + polarityWords[i].word + " ") !== -1) {
+polarity += polarityWords[i].score;
+}
+}</p>
+<p>if (polarity &gt; 0) {
+context.character.personality += ", warm and affectionate.\n\n";
+} else if (polarity &lt; 0) {
+context.character.personality += ", cold and distant.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Positive words push polarity up.</li>
+<li>Negative words push it down.</li>
+<li>Result = affectionate OR distant.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-negation-canceling-out"><a class="header" href="#-negation-canceling-out">🟡 Negation (Canceling Out)</a></h2>
+<p>We also need to handle when a user says the <strong>opposite</strong>:</p>
+<ul>
+<li>“I’m <em>not</em> happy.”</li>
+<li>“I <em>don’t</em> like that.”</li>
+</ul>
+<p>We can scan for negation words before we score.</p>
+<p>Example code:</p>
+<p>var negation = (padded.indexOf(" not ") !== -1 || padded.indexOf(" don't ") !== -1);</p>
+<p>if (padded.indexOf(" happy ") !== -1) {
+if (negation) {
+context.character.personality += ", notes the user isn’t actually happy.\n\n";
+} else {
+context.character.personality += ", mirrors the user’s happiness.\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>If “happy” is present → check if negation words appear nearby.</li>
+<li>If yes → treat it as <em>opposite</em>.</li>
+<li>If no → treat normally.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-composite-moods-blends"><a class="header" href="#-composite-moods-blends">🟡 Composite Moods (Blends)</a></h2>
+<p>Sometimes two emotional signals combine into a <strong>mixed state.</strong></p>
+<p>Example code:</p>
+<p>var happy = padded.indexOf(" happy ") !== -1;
+var sad   = padded.indexOf(" sad ") !== -1;</p>
+<p>if (happy &amp;&amp; sad) {
+context.character.personality += ", sensing a bittersweet mix of joy and sadness.\n\n";
+} else if (happy) {
+context.character.personality += ", uplifted by joy.\n\n";
+} else if (sad) {
+context.character.personality += ", touched by sorrow.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>If both “happy” and “sad” show up → treat as <strong>bittersweet</strong> instead of ignoring one.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-advanced-example-weighted-polarity--negation"><a class="header" href="#-advanced-example-weighted-polarity--negation">🟡 Advanced Example: Weighted Polarity + Negation</a></h2>
+<p>Example code:</p>
+<p>var polarityWords = [
+{ word: "love", score: +2 },
+{ word: "like", score: +1 },
+{ word: "hate", score: -2 },
+{ word: "angry", score: -1 }
+];</p>
+<p>var polarity = 0;
+for (var i=0; i&lt;polarityWords.length; i++) {
+var w = polarityWords[i];
+if (padded.indexOf(" " + w.word + " ") !== -1) {
+var neg = (padded.indexOf(" not " + w.word) !== -1 || padded.indexOf(" don't " + w.word) !== -1);
+polarity += (neg ? -w.score : w.score);
+}
+}</p>
+<p>if (polarity &gt; 1) {
+context.character.personality += ", affectionate and engaged.\n\n";
+} else if (polarity &lt; -1) {
+context.character.personality += ", hostile and dismissive.\n\n";
+} else {
+context.character.personality += ", neutral but observant.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Words push polarity positive or negative.</li>
+<li>Negation flips the meaning.</li>
+<li>End result = warm, hostile, or neutral depending on balance.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-adaptive-engines"><a class="header" href="#-best-practices-for-adaptive-engines">🟡 Best Practices for Adaptive Engines</a></h2>
+<ul>
+<li>✅ Use polarity when you want <em>direction</em> (love vs hate).</li>
+<li>✅ Use negation so the bot doesn’t misread “not happy” as “happy.”</li>
+<li>✅ Use composite moods for realism (bittersweet, conflicted).</li>
+<li>❌ Don’t overload with giant wordlists — start small (3–5 words each).</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-7"><a class="header" href="#-quick-practice-try-it-yourself-7">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>
+<p>Create a polarity engine for <strong>trust vs. doubt.</strong></p>
+<ul>
+<li>“trust” = +2, “doubt” = -2.</li>
+</ul>
+</li>
+<li>
+<p>Add negation so “don’t trust” = -2 instead of +2.</p>
+</li>
+<li>
+<p>Build a composite mood where <strong>“fear” + “hope”</strong> = “anxious but determined.”</p>
+</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-21"><a class="header" href="#-key-takeaways-from-chapter-21">🟡 Key Takeaways from Chapter 21</a></h2>
+<ul>
+<li>Adaptive engines track <strong>direction</strong>, not just intensity.</li>
+<li><strong>Polarity</strong> lets emotions swing positive or negative.</li>
+<li><strong>Negation</strong> prevents misreads.</li>
+<li><strong>Composite moods</strong> allow mixed feelings.</li>
+<li>Together, they make bots feel more human.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-22-hybrid-emotional-states-blending-multiple-engines"><a class="header" href="#-chapter-22-hybrid-emotional-states-blending-multiple-engines">📘 Chapter 22: Hybrid Emotional States (Blending Multiple Engines)</a></h1>
+<p>So far, we’ve built:</p>
+<ul>
+<li><strong>Simple engines</strong> (counting words = reaction).</li>
+<li><strong>Adaptive engines</strong> (positive vs negative, negation, composite moods).</li>
+</ul>
+<p>But people don’t just feel <em>one</em> thing at once.
+👉 You can be <strong>nervous AND excited.</strong>
+👉 You can be <strong>angry AND affectionate.</strong></p>
+<p>This is where <strong>hybrid emotional states</strong> come in: combining multiple engines to calculate a <em>blend</em>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-use-hybrids"><a class="header" href="#-why-use-hybrids">🟡 Why Use Hybrids?</a></h2>
+<ul>
+<li>More realistic — characters act like people, not switches.</li>
+<li>Adds tension and nuance — “bittersweet,” “playful but shy,” etc.</li>
+<li>Lets you script <strong>conflicting emotions</strong> instead of forcing a single tone.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-1-multiple-scores"><a class="header" href="#-strategy-1-multiple-scores">🟡 Strategy 1: Multiple Scores</a></h2>
+<p>Run two engines at the same time, then combine the results.</p>
+<p>Example code:</p>
+<p>// Excitement Engine
+var exciteWords = ["excited", "thrilled", "can't wait"];
+var excite = 0;
+for (var i=0; i&lt;exciteWords.length; i++) {
+if (padded.indexOf(exciteWords[i]) !== -1) excite++;
+}</p>
+<p>// Fear Engine
+var fearWords = ["scared", "afraid", "nervous"];
+var fear = 0;
+for (var j=0; j&lt;fearWords.length; j++) {
+if (padded.indexOf(fearWords[j]) !== -1) fear++;
+}</p>
+<p>// Blend
+if (excite &gt; 0 &amp;&amp; fear &gt; 0) {
+context.character.personality += ", excited but nervous.\n\n";
+context.character.scenario    += " Their smile is wide, but their hands tremble.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>If “excited” words and “fear” words both show up → bot enters a hybrid “nervous-excited” state.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-2-weighted-blends"><a class="header" href="#-strategy-2-weighted-blends">🟡 Strategy 2: Weighted Blends</a></h2>
+<p>Not all emotions are equal. Maybe “fear” should outweigh “excitement.”</p>
+<p>Example code:</p>
+<p>var state = (excite * 1) + (fear * 2);</p>
+<p>if (state &gt;= 3 &amp;&amp; fear &gt; 0 &amp;&amp; excite &gt; 0) {
+context.character.personality += ", anxious but determined.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Excitement counts less, fear counts more.</li>
+<li>Final mood is “anxious but determined.”</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-3-triangular-states"><a class="header" href="#-strategy-3-triangular-states">🟡 Strategy 3: Triangular States</a></h2>
+<p>You can blend <strong>three engines</strong> for even more realism.</p>
+<p>Example code:</p>
+<p>var love = padded.indexOf(" love ") !== -1 ? 1 : 0;
+var jealous = padded.indexOf(" jealous ") !== -1 ? 1 : 0;
+var anger = padded.indexOf(" angry ") !== -1 ? 1 : 0;</p>
+<p>if (love &amp;&amp; jealous) {
+context.character.personality += ", affectionate but jealous.\n\n";
+}
+if (love &amp;&amp; anger) {
+context.character.personality += ", passionate but short-tempered.\n\n";
+}
+if (jealous &amp;&amp; anger) {
+context.character.personality += ", bitter and defensive.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Any <strong>pair</strong> of emotions creates a hybrid.</li>
+<li>You don’t need every possible combo — just the ones that matter to your story.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-strategy-4-default--hybrid-override"><a class="header" href="#-strategy-4-default--hybrid-override">🟡 Strategy 4: Default + Hybrid Override</a></h2>
+<p>Sometimes you want one reaction engine to run normally… but then override it if hybrids are detected.</p>
+<p>Example code:</p>
+<p>if (excite &gt; 0) {
+context.character.personality += ", clearly excited.\n\n";
+}
+if (fear &gt; 0) {
+context.character.personality += ", visibly nervous.\n\n";
+}</p>
+<p>// Hybrid override
+if (excite &gt; 0 &amp;&amp; fear &gt; 0) {
+context.character.personality += ", a jittery mix of excitement and nerves.\n\n";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Base states always add something.</li>
+<li>If both exist, add a <strong>hybrid note on top</strong>.</li>
+<li>This creates layered complexity.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-for-hybrids"><a class="header" href="#-best-practices-for-hybrids">🟡 Best Practices for Hybrids</a></h2>
+<ul>
+<li>✅ Start with just 2–3 emotional axes (don’t overload).</li>
+<li>✅ Use hybrids for <strong>contrast</strong> (joy + fear, love + jealousy).</li>
+<li>✅ Let one state <strong>dominate</strong> if needed (fear outweighs joy).</li>
+<li>❌ Don’t try to cover every possible combo — just the meaningful ones.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-8"><a class="header" href="#-quick-practice-try-it-yourself-8">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Create a hybrid for <strong>happy + tired</strong> = “content but yawning.”</li>
+<li>Make <strong>angry + sad</strong> = “heartbroken rage.”</li>
+<li>Try adding a third axis: <strong>love + fear + trust</strong> — what kind of hybrid would that make?</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-22"><a class="header" href="#-key-takeaways-from-chapter-22">🟡 Key Takeaways from Chapter 22</a></h2>
+<ul>
+<li>Hybrid states let characters feel <strong>multiple emotions at once.</strong></li>
+<li>Run multiple engines side by side.</li>
+<li>Use weighting to balance which emotion dominates.</li>
+<li>Hybrids add realism, tension, and nuance.</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Hybrid states are like music chords — one note alone is simple, but blending two or three creates richness and emotion.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-23-error-guards--sandbox-tricks-keeping-scripts-safe-and-stable"><a class="header" href="#-chapter-23-error-guards--sandbox-tricks-keeping-scripts-safe-and-stable">📘 Chapter 23: Error Guards &amp; Sandbox Tricks (Keeping Scripts Safe and Stable)</a></h1>
+<p>If you’ve ever had a script suddenly stop working for no clear reason, you’ve probably hit a <strong>sandbox limitation.</strong> The problem is, the sandbox won’t tell you what went wrong — it just fails silently.</p>
+<p>👉 The solution: <strong>error guards</strong> and <strong>safe coding habits.</strong></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-whats-an-error-guard"><a class="header" href="#-whats-an-error-guard">🟡 What’s an Error Guard?</a></h2>
+<p>An <strong>error guard</strong> is a little snippet of code at the start of your script that makes sure the sandbox won’t crash if something is missing.</p>
+<p>The “golden guard” looks like this:</p>
+<p>// === CONTEXT GUARDS ===
+context.character = context.character || {};
+context.character.personality = context.character.personality || "";
+context.character.scenario    = context.character.scenario || "";</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>If <code>context.character</code> doesn’t exist → create it.</li>
+<li>If personality/scenario don’t exist → make them empty strings.</li>
+<li>This prevents “undefined” errors from breaking the script.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-guarding-loops"><a class="header" href="#-guarding-loops">🟡 Guarding Loops</a></h2>
+<p>Loops can crash scripts if they run too long. Add <strong>limits</strong> and <strong>breaks.</strong></p>
+<p>for (var i=0; i&lt;keywords.length &amp;&amp; i&lt;100; i++) {
+if (padded.indexOf(" " + keywords[i] + " ") !== -1) {
+// do something
+break; // stop once found
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Cap loops so they don’t spin forever.</li>
+<li>Exit early when you’ve already found what you need.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-guarding-against-overwrites"><a class="header" href="#-guarding-against-overwrites">🟡 Guarding Against Overwrites</a></h2>
+<p>Never replace personality or scenario. Always <strong>append (<code>+=</code>)</strong>.</p>
+<p>❌ Wrong:
+context.character.personality = "angry";
+(Deletes everything else!)</p>
+<p>✅ Right:
+context.character.personality += ", now angrier than before.";</p>
+<p>📖 <strong>Plain English:</strong> Always add, never erase.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-sandbox-tricks"><a class="header" href="#-sandbox-tricks">🟡 Sandbox Tricks</a></h2>
+<p>Here are a few survival hacks:</p>
+<ol>
+<li>
+<p><strong>No modern JavaScript.</strong></p>
+<ul>
+<li>❌ Doesn’t work: arrow functions, <code>.map()</code>, <code>.includes()</code>, template strings, <code>async/await</code>.</li>
+<li>✅ Safe: <code>for</code> loops, <code>indexOf</code>, <code>+</code> string concatenation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Keep strings short.</strong></p>
+<ul>
+<li>Stay under a few hundred characters per update.</li>
+<li>Giant paragraphs risk being cut off or ignored.</li>
+</ul>
+</li>
+<li>
+<p><strong>Randomness is fine.</strong></p>
+<ul>
+<li><code>Math.random()</code> works.</li>
+<li>Use it for probability and event lore, but not for critical story beats.</li>
+</ul>
+</li>
+<li>
+<p><strong>No persistent memory.</strong></p>
+<ul>
+<li>Scripts reset every turn.</li>
+<li>If you need “memory,” write notes into <code>scenario</code> (see Chapter 7).</li>
+</ul>
+</li>
+<li>
+<p><strong>Fail gracefully.</strong></p>
+<ul>
+<li>If a check doesn’t match anything, just leave personality/scenario unchanged.</li>
+<li>Don’t try to force output every turn.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-debugging-tip"><a class="header" href="#-debugging-tip">🟡 Debugging Tip</a></h2>
+<p>You can use <code>console.log</code> to peek at what’s happening:</p>
+<p>console.log("Message count:", context.chat.message_count);
+console.log("Last message:", context.chat.last_message);</p>
+<p>📖 <strong>Plain English:</strong> Logs let you see what the sandbox <em>thinks</em> is going on — super useful for troubleshooting.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-recap-1"><a class="header" href="#-best-practices-recap-1">🟡 Best Practices Recap</a></h2>
+<ul>
+<li>✅ Always start with <strong>context guards.</strong></li>
+<li>✅ Always lowercase and pad user input.</li>
+<li>✅ Cap loops and add <code>break;</code>.</li>
+<li>✅ Append strings instead of overwriting.</li>
+<li>✅ Keep outputs small.</li>
+<li>✅ Use debugging with <code>console.log</code>.</li>
+<li>❌ Don’t assume modern JavaScript works — it doesn’t.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-9"><a class="header" href="#-quick-practice-try-it-yourself-9">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Add context guards to this broken snippet:</li>
+</ol>
+<p>context.character.personality += " cheerful";</p>
+<ol start="2">
+<li>Fix this unsafe loop:</li>
+</ol>
+<p>for (var i=0; i&lt;1000; i++) { ... }</p>
+<ol start="3">
+<li>Rewrite this dangerous overwrite safely:</li>
+</ol>
+<p>context.character.scenario = "dark room";</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-23"><a class="header" href="#-key-takeaways-from-chapter-23">🟡 Key Takeaways from Chapter 23</a></h2>
+<ul>
+<li>Guards prevent crashes from undefined fields.</li>
+<li>Loops and strings must be <strong>kept lean.</strong></li>
+<li>Always append, never overwrite.</li>
+<li>Scripts reset every turn — use scenario for “memory.”</li>
+<li>Sandbox = ES5 only, no modern JS.</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Think of error guards as <em>seatbelts.</em> You hope you never need them, but when things go wrong, they keep your script from flying off the road.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-24-the-everything-lorebook-modular-framework-for-people-places-traits--events"><a class="header" href="#-chapter-24-the-everything-lorebook-modular-framework-for-people-places-traits--events">📘 Chapter 24: The Everything Lorebook (Modular Framework for People, Places, Traits &amp; Events)</a></h1>
+<p>By now, you’ve seen how lore entries can define people, places, relationships, and events. But when scripts start getting big, it’s easy to get lost.</p>
+<p>👉 The <strong>Everything Lorebook</strong> is a way to <strong>organize lore into categories</strong> so you can keep it clear and expandable.</p>
+<p>Think of it like a filing cabinet:</p>
+<ul>
+<li>One drawer for <strong>people.</strong></li>
+<li>One for <strong>places.</strong></li>
+<li>One for <strong>traits.</strong></li>
+<li>One for <strong>events.</strong></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-the-core-structure"><a class="header" href="#-the-core-structure">🟡 The Core Structure</a></h2>
+<p>Here’s the skeleton of an “Everything Lorebook”:</p>
+<p>var lorebook = {
+people: [
+{ keywords: ["damien", "godfather"], personality: ", calculating leader", scenario: "He sits in a lavish study." },
+{ keywords: ["sophia"], personality: ", fiery and ambitious", scenario: "She moves with restless energy." }
+],
+places: [
+{ keywords: ["forest"], scenario: "Tall pines surround the clearing.", personality: ", grounded in nature" },
+{ keywords: ["city"], scenario: "The streets bustle with life.", personality: ", sharp and streetwise" }
+],
+traits: [
+{ keywords: ["trust"], personality: ", cautious about trust" },
+{ keywords: ["anger"], personality: ", prone to flashes of temper" }
+],
+events: [
+{ trigger: "count==10", scenario: "A church bell tolls in the distance." },
+{ trigger: "count&gt;20", scenario: "A storm begins brewing overhead." }
+]
+};</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li><code>people</code> → who the characters are.</li>
+<li><code>places</code> → where things happen.</li>
+<li><code>traits</code> → personality flags and behavior layers.</li>
+<li><code>events</code> → timed or triggered story beats.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-processing-the-lorebook"><a class="header" href="#-processing-the-lorebook">🟡 Processing the Lorebook</a></h2>
+<p>We loop through each category and check for matches.</p>
+<p>// Process people
+for (var i=0; i&lt;lorebook.people.length; i++) {
+var entry = lorebook.people[i];
+for (var j=0; j&lt;entry.keywords.length; j++) {
+if (padded.indexOf(" " + entry.keywords[j] + " ") !== -1) {
+context.character.personality += entry.personality || "";
+context.character.scenario    += entry.scenario || "";
+break;
+}
+}
+}</p>
+<p>You’d do the same for <code>places</code>, <code>traits</code>, and <code>events</code> (with small tweaks).</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-event-handling"><a class="header" href="#-event-handling">🟡 Event Handling</a></h2>
+<p>Events are a little different: they don’t rely on keywords, but on conditions.</p>
+<p>var count = context.chat.message_count;</p>
+<p>for (var i=0; i&lt;lorebook.events.length; i++) {
+var entry = lorebook.events[i];</p>
+<p>if (entry.trigger === "count==10" &amp;&amp; count === 10) {
+context.character.scenario += entry.scenario + "\n\n";
+}</p>
+<p>if (entry.trigger === "count&gt;20" &amp;&amp; count &gt; 20) {
+context.character.scenario += entry.scenario + "\n\n";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>If the trigger condition is true → event fires.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-modular-lorebooks-are-powerful"><a class="header" href="#-why-modular-lorebooks-are-powerful">🟡 Why Modular Lorebooks Are Powerful</a></h2>
+<ul>
+<li><strong>Organization:</strong> Keeps your entries neat and grouped.</li>
+<li><strong>Scalability:</strong> Easy to expand — just add to the right category.</li>
+<li><strong>Flexibility:</strong> You can apply different rules per category (e.g., probability for events, shifts for traits).</li>
+<li><strong>Reusability:</strong> You can lift one category out (like “places”) and use it in another project.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-expansion-layers-within-categories"><a class="header" href="#-expansion-layers-within-categories">🟡 Expansion: Layers Within Categories</a></h2>
+<p>You can also make each category support <strong>shifts, weights, and gates.</strong></p>
+<p>Example:</p>
+<p>{
+keywords: ["magic"],
+personality: ", wise in magic",
+scenario: "The air hums with energy.",
+shifts: [
+{ keywords: ["stars"], scenario: "Magic glimmers like starlight." },
+{ keywords: ["shadows"], scenario: "Magic feels heavy and dark." }
+],
+probability: 0.5,
+minCount: 10
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Base: “magic” → wise in magic.</li>
+<li>Shifts: “stars” → light flavor, “shadows” → dark flavor.</li>
+<li>Probability: 50% chance to trigger.</li>
+<li>minCount: only works after 10+ messages.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices"><a class="header" href="#-best-practices">🟡 Best Practices</a></h2>
+<ul>
+<li>✅ Separate lore into <strong>people, places, traits, events.</strong></li>
+<li>✅ Use categories for readability and scaling.</li>
+<li>✅ Add layers (shifts, weights, probability, gates) only where needed.</li>
+<li>❌ Don’t try to cram <em>everything</em> into one mega-entry — split it.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-10"><a class="header" href="#-quick-practice-try-it-yourself-10">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Add a new <strong>person</strong> entry for “mentor” who is wise but strict.</li>
+<li>Add a <strong>place</strong> entry for “desert” with shifting moods for “day” vs “night.”</li>
+<li>Add a <strong>trait</strong> entry for “curiosity” that only unlocks after 15 messages.</li>
+<li>Add an <strong>event</strong> entry that fires at message 30 — “an unexpected guest arrives.”</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-24"><a class="header" href="#-key-takeaways-from-chapter-24">🟡 Key Takeaways from Chapter 24</a></h2>
+<ul>
+<li>The <strong>Everything Lorebook</strong> is a modular way to organize big scripts.</li>
+<li>Categories = people, places, traits, events.</li>
+<li>Processing each category keeps things clean and scalable.</li>
+<li>Entries can support shifts, probability, and gating.</li>
+<li>This turns chaotic scripts into <strong>structured world engines.</strong></li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Think of the Everything Lorebook like a <em>world wiki inside your bot.</em> Each entry is a page, and the categories are your table of contents.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-chapter-25-advanced-layered-lore-mixing-modular-systems-together"><a class="header" href="#-chapter-25-advanced-layered-lore-mixing-modular-systems-together">📘 Chapter 25: Advanced Layered Lore (Mixing Modular Systems Together)</a></h1>
+<p>At this point you’ve seen:</p>
+<ul>
+<li><strong>Definitional lore</strong> (facts about people, places, objects).</li>
+<li><strong>Relational lore</strong> (connections, bonds, rivalries).</li>
+<li><strong>Event lore</strong> (beats that fire on timing or triggers).</li>
+<li><strong>Dynamic lore</strong> (entries that evolve with time or context).</li>
+<li><strong>The Everything Lorebook</strong> (modular organization for people, places, traits, events).</li>
+</ul>
+<p>👉 Chapter 25 takes it further: showing how to <strong>combine these systems</strong> into one <strong>layered engine</strong>.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-why-layer-lore"><a class="header" href="#-why-layer-lore">🟡 Why Layer Lore?</a></h2>
+<ul>
+<li>Keeps worlds <strong>organized</strong> but <strong>alive.</strong></li>
+<li>Lets one keyword trigger <strong>multiple categories</strong> at once.</li>
+<li>Supports <strong>growth over time</strong> without spaghetti code.</li>
+</ul>
+<p>Think of it like an orchestra:
+<em>Definitional = instruments, Relational = harmonies, Event = percussion beats, Dynamic = changes in tempo.</em></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-1-multi-category-entries"><a class="header" href="#-step-1-multi-category-entries">🟡 Step 1: Multi-Category Entries</a></h2>
+<p>Sometimes a single keyword belongs in multiple drawers. For example, “forest” is both a place and an emotional tone.</p>
+<p>var lorebook = {
+places: [
+{ keywords: ["forest"], scenario: "Tall trees sway in the wind." }
+],
+traits: [
+{ keywords: ["forest"], personality: ", grounded and calm" }
+]
+};</p>
+<p>📖 <strong>Plain English:</strong>
+Mentioning “forest” expands both scene and personality at once.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-2-stacking-layers"><a class="header" href="#-step-2-stacking-layers">🟡 Step 2: Stacking Layers</a></h2>
+<p>Entries can fire <strong>in order</strong>: definitional first, then relational, then events.</p>
+<p>if (padded.indexOf(" mentor ") !== -1) {
+context.character.personality += ", wise and strict";
+}</p>
+<p>if (padded.indexOf(" mentor ") !== -1 &amp;&amp; padded.indexOf(" trust ") !== -1) {
+context.character.personality += ", softens when trusted";
+}</p>
+<p>if (count === 20 &amp;&amp; padded.indexOf(" mentor ") !== -1) {
+context.character.scenario += " The mentor shares a secret at this moment.";
+}</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Baseline = wise mentor.</li>
+<li>Relation = softer if trust is mentioned.</li>
+<li>Event = unlocks at message 20.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-3-probability--layers"><a class="header" href="#-step-3-probability--layers">🟡 Step 3: Probability + Layers</a></h2>
+<p>Combine randomness with layers for replayability.</p>
+<p>if (padded.indexOf(" tavern ") !== -1) {
+if (Math.random() &lt; 0.5) {
+context.character.scenario += " The tavern is loud and rowdy.";
+} else {
+context.character.scenario += " The tavern is quiet, a hushed corner of town.";
+}
+}</p>
+<p>📖 <strong>Plain English:</strong>
+“Tavern” always fires, but its mood shifts randomly. Next time, the same keyword feels fresh.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-4-modular--dynamic-expansion"><a class="header" href="#-step-4-modular--dynamic-expansion">🟡 Step 4: Modular + Dynamic Expansion</a></h2>
+<p>Everything Lorebook categories can each have <strong>shifts, weights, and gates.</strong></p>
+<p>var lorebook = {
+traits: [
+{
+keywords: ["courage"],
+personality: ", brave but uncertain",
+shifts: [
+{ keywords: ["fear"], personality: ", courage tested against fear" }
+],
+minCount: 10
+}
+]
+};</p>
+<p>📖 <strong>Plain English:</strong></p>
+<ul>
+<li>Base trait = courage.</li>
+<li>If “fear” is also present → courage changes flavor.</li>
+<li>Only activates after 10 messages.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-step-5-fusion-across-categories"><a class="header" href="#-step-5-fusion-across-categories">🟡 Step 5: Fusion Across Categories</a></h2>
+<p>Two categories can merge into something new.</p>
+<p>if (padded.indexOf(" magic ") !== -1 &amp;&amp; padded.indexOf(" city ") !== -1) {
+context.character.scenario += " The city hums with magical energy, streetlamps glowing with arcane fire.";
+}</p>
+<p>📖 <strong>Plain English:</strong>
+Magic + city fuse into a special hybrid entry.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-best-practices-1"><a class="header" href="#-best-practices-1">🟡 Best Practices</a></h2>
+<ul>
+<li>✅ Start modular (people, places, traits, events).</li>
+<li>✅ Add <strong>layers</strong> (shifts, gates, probability) only where meaningful.</li>
+<li>✅ Let categories <strong>cross-pollinate</strong> for richer worlds.</li>
+<li>❌ Don’t overload — keep layers atomic and short.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-quick-practice-try-it-yourself-11"><a class="header" href="#-quick-practice-try-it-yourself-11">🟡 Quick Practice (Try It Yourself!)</a></h2>
+<ol>
+<li>Add a <strong>place</strong> entry for “desert” with day/night shifts.</li>
+<li>Add a <strong>trait</strong> “jealousy” that only fires after 20 messages.</li>
+<li>Fuse <strong>love + jealousy</strong> into “possessive affection.”</li>
+</ol>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-key-takeaways-from-chapter-25"><a class="header" href="#-key-takeaways-from-chapter-25">🟡 Key Takeaways from Chapter 25</a></h2>
+<ul>
+<li>Advanced lore = <strong>layers working together.</strong></li>
+<li>Definitional + relational + event + dynamic entries all coexist.</li>
+<li>Modular categories keep things clean.</li>
+<li>Shifts, probability, and gating add flavor.</li>
+<li>Fusion creates unique story beats.</li>
+</ul>
+<hr />
+<p>✨ <strong>Pro Tip:</strong> Think of layered lore like <em>stacking transparent sheets</em>. Each sheet adds detail, but together they form the full picture of a living world.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-glossary-of-key-terms"><a class="header" href="#-glossary-of-key-terms">📘 Glossary of Key Terms</a></h1>
+<ul>
+<li><strong>Append (<code>+=</code>)</strong> → Adding text onto the end of an existing field, instead of replacing it. Example: <code>personality += ", happy"</code> adds without deleting what was already there.</li>
+<li><strong>Sandbox (Boundary)</strong> → The controlled environment where scripts run. It enforces limits (older JavaScript/ES5, short strings, lean loops).</li>
+<li><strong>Context Guards</strong> → A short snippet at the start of a script that ensures <code>personality</code> and <code>scenario</code> exist, preventing crashes.</li>
+<li><strong>Dynamic Lore</strong> → Lore that changes depending on time, message count, probability, or other triggers.</li>
+<li><strong>Event Lore</strong> → Story beats or ambient details that happen at certain counts, randomly, or independently of user input.</li>
+<li><strong>Everything Lorebook</strong> → A modular structure for organizing lore entries into categories like people, places, traits, and events.</li>
+<li><strong>Gating</strong> → Unlocking traits, events, or lore only when message count passes certain thresholds (min/max).</li>
+<li><strong>Hybrid Emotional States</strong> → When two or more emotions blend into a mixed mood (e.g., excited + scared = nervous excitement).</li>
+<li><strong>indexOf</strong> → The safe ES5 method to check if a string contains a word. Example: <code>padded.indexOf(" happy ") !== -1</code>.</li>
+<li><strong>Keywords</strong> → Words that trigger specific lore entries or reactions.</li>
+<li><strong>Lorebook</strong> → A collection of entries that add personality/scene details based on triggers.</li>
+<li><strong>Negation</strong> → Detecting when a word is canceled by “not” or “don’t.” Example: “not happy” ≠ happy.</li>
+<li><strong>Padded input</strong> → Adding spaces before and after text (<code>" " + text + " "</code>) so word checks are safe (avoids matching “hat” inside “that”).</li>
+<li><strong>Personality</strong> → The part of the character definition that describes <em>who they are.</em> Scripts can append to it during conversation.</li>
+<li><strong>Polarity</strong> → Positive/negative scoring in reaction engines (e.g., love = +2, hate = –2).</li>
+<li><strong>Probability</strong> → Adding randomness with <code>Math.random()</code>, making some responses happen only sometimes.</li>
+<li><strong>Reaction Engine</strong> → A script that scores multiple words (and sometimes polarity/negation) to determine emotional states, rather than a simple on/off trigger.</li>
+<li><strong>Scenario</strong> → The part of the character definition that describes <em>what’s happening around them.</em> Scripts can append events, places, or lore here.</li>
+<li><strong>Sequential Logic</strong> → Checking if two or more words appear in a specific order (e.g., “tease” → “feelings”).</li>
+<li><strong>Shifts</strong> → Variants of a lore entry that change based on secondary keywords (e.g., “magic” with “stars” = light magic; “magic” with “shadows” = dark magic).</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-appendix-a-common-code-patterns"><a class="header" href="#-appendix-a-common-code-patterns">📘 Appendix A: Common Code Patterns</a></h1>
+<blockquote>
+<p>These snippets assume you’ve already set up:
+<code>var last = context.chat.last_message.toLowerCase();</code>
+<code>var padded = " " + last + " ";</code>
+<code>var count = context.chat.message_count;</code></p>
+</blockquote>
+<p><strong>Greeting Trigger</strong>
+<code>if (padded.indexOf(" hello ") !== -1) {</code>
+<code>context.character.scenario    += "They greet you warmly.\n\n";</code>
+<code>context.character.personality += "Friendly and welcoming.\n\n";</code>
+<code>}</code></p>
+<p><strong>Message Count Gating</strong>
+<code>if (count &gt;= 10 &amp;&amp; count &lt;= 20) {</code>
+<code>context.character.personality += ", opening up more.\n\n";</code>
+<code>}</code></p>
+<p><strong>Random Event</strong>
+<code>if (Math.random() &lt; 0.2) {</code>
+<code>context.character.scenario += "A bird flutters past.\n\n";</code>
+<code>}</code></p>
+<p><strong>Reaction Engine (Anger)</strong>
+<code>var angerWords = ["angry", "mad", "furious"];</code>
+<code>var score = 0;</code>
+<code>for (var i = 0; i &lt; angerWords.length; i++) {</code>
+<code>if (padded.indexOf(" " + angerWords[i] + " ") !== -1) score++;</code>
+<code>}</code>
+<code>if (score &gt;= 2) {</code>
+<code>context.character.personality += ", visibly angry.\n\n";</code>
+<code>}</code></p>
+<p><strong>Sequential Logic (Order Matters)</strong>
+<code>var teaseIndex    = padded.indexOf(" tease ");</code>
+<code>var feelingsIndex = padded.indexOf(" feelings ");</code>
+<code>if (teaseIndex !== -1 &amp;&amp; feelingsIndex !== -1 &amp;&amp; teaseIndex &lt; feelingsIndex) {</code>
+<code>context.character.scenario += "The teasing turns into a confession of feelings.\n\n";</code>
+<code>}</code></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-appendix-b-sandbox-rules-cheat-sheet"><a class="header" href="#-appendix-b-sandbox-rules-cheat-sheet">📘 Appendix B: Sandbox Rules Cheat Sheet</a></h1>
+<ul>
+<li>✅ Allowed: <code>for</code> loops, <code>if/else</code>, <code>indexOf</code>, <code>toLowerCase</code>, string concatenation (<code>+</code>), basic math, <code>Math.random()</code>.</li>
+<li>❌ Not Allowed (ES5 sandbox): <code>.map()</code>, <code>.filter()</code>, <code>.reduce()</code>, <code>.forEach()</code>, arrow functions <code>() =&gt; {}</code>, template strings using backticks, <code>async/await</code>, classes, <code>try/catch</code>.</li>
+<li>Safe loop size: under 300 checks (keep it lean; break early when possible).</li>
+<li>Safe string size per addition: under ~600 characters (short, atomic sentences).</li>
+<li>Rough hard ceiling per turn (all text combined): ~27,000 characters.</li>
+<li>No persistent memory — fake memory by writing notes into <code>scenario</code>.</li>
+<li>Fail gracefully — if nothing matches, it’s okay to do nothing this turn.</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-appendix-c-copy-paste-templates"><a class="header" href="#-appendix-c-copy-paste-templates">📘 Appendix C: Copy-Paste Templates</a></h1>
+<p><strong>Error Guard Starter</strong>
+<code>context.character = context.character || {};</code>
+<code>context.character.personality = context.character.personality || "";</code>
+<code>context.character.scenario    = context.character.scenario || "";</code></p>
+<p><strong>Everything Lorebook Starter</strong>
+<code>var lorebook = {</code>
+<code>people: [],</code>
+<code>places: [],</code>
+<code>traits: [],</code>
+<code>events: []</code>
+<code>};</code></p>
+<p><strong>Weighted Choice Function</strong>
+<code>function weightedChoice(options) {</code>
+<code>var roll = Math.random(), total = 0;</code>
+<code>for (var i = 0; i &lt; options.length; i++) {</code>
+<code>total += options[i].chance;</code>
+<code>if (roll &lt; total) return options[i].text;</code>
+<code>}</code>
+<code>return "";</code>
+<code>}</code></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-appendix-d-practice-challenges"><a class="header" href="#-appendix-d-practice-challenges">📘 Appendix D: Practice Challenges</a></h1>
+<ol>
+<li>Make a lore entry for “ocean” that shifts between calm (day) and stormy (night).</li>
+<li>Build a simple polarity engine for trust vs. doubt.</li>
+<li>Add an event that fires at 15 messages: “a knock at the door.”</li>
+<li>Write a hybrid mood for happy + tired = “content but yawning.”</li>
+</ol>
+<blockquote>
+<p>Bonus: Add a 10% chance per message for a tiny ambient event (e.g., “distant footsteps”) and see how often it feels right vs. too frequent.</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
