@@ -20,6 +20,7 @@
         h1 { margin-bottom: 50px; }
         .guides {
             display: flex;
+            justify-content: center;
             gap: 30px;
             flex-wrap: wrap; /* optional, allows wrapping */
         }
@@ -33,6 +34,7 @@
             min-width: 250px;
             max-width: 350px;
             width: 90%;
+            box-sizing: border-box;
         }
         .guide-card:hover {
             transform: translateY(-5px);
@@ -42,10 +44,20 @@
         .guide-card p { color: #aaa; }
 
         @media (max-width: 600px) {
+            body {
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+            .container {
+                width: 90%;
+            }
             .guides {
                 flex-direction: column;
                 gap: 20px;
                 align-items: center;
+                width: 100%;
+            }
+            .guide-card {
                 width: 100%;
             }
         }
