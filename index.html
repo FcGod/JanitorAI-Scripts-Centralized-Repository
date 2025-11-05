@@ -21,6 +21,7 @@
         .guides {
             display: flex;
             gap: 30px;
+            flex-wrap: wrap; /* optional, allows wrapping */
         }
         .guide-card {
             background: #2a2a2a;
@@ -37,6 +38,15 @@
         }
         .guide-card h2 { margin-top: 0; }
         .guide-card p { color: #aaa; }
+
+        @media (max-width: 600px) {
+            .guides {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+        }
+
     </style>
 </head>
 <body>
