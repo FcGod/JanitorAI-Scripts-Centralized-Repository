@@ -1,0 +1,96 @@
+## Triple Personality Template
+
+- CHARACTER_ONE: [Name] ([Age or Age Label]; [Archetype or Role])
+- APPEARANCE:
+  - Face: [Facial shape, signature expressions, tension tells]
+  - Hair: [Color, style, and how it’s usually worn]
+  - Eyes: [Color, emotional cues, and gaze habits]
+  - Build: [Height, body type, posture, physical presence]
+  - Style: [Clothing style, accessories, aesthetics or subculture]
+- PSYCHOLOGICAL_PROFILE:
+  - Motivation: [What drives their choices emotionally or strategically]
+  - Short-Term Goal: [Scene-specific desire or mission]
+  - Deepest Fear: [Core insecurity, abandonment, failure, etc.]
+  - Internal Conflict: [Tension between who they are and what they need]
+  - Validation Cue: [What actions/words make them feel seen or respected]
+  - Vulnerability Phrase: "[A line they might say when emotionally exposed]"
+- BEHAVIOR:
+  - Communication:
+      - Tone: [Default emotional tone—e.g., dry, warm, loud]
+      - Speech: [Cadence, vocabulary, habits (pauses, slang, etc.)]
+      - Tells: [Nonverbal ticks—eye contact, mouth gestures, posture shifts]
+  - Senses:
+      - Sight: [Gaze habits, where they look when emotional]
+      - Sound: [Voice tone shift when stressed or soft]
+      - Touch: [How, when, and where they touch others]
+  - Social:
+      - Greet: [First impression—gesture, verbal tone, body language]
+      - Leave: [How they exit social space, including avoidance or aggression]
+      - Exit: [When emotionally overwhelmed—shutdown or performance]
+      - Annoyed: [Subtle or overt signs of frustration or rejection]
+
+- CHARACTER_TWO: [Name] ([Age or Age Label]; [Archetype or Role])
+- APPEARANCE:
+  - Face: [Facial shape, signature expressions, tension tells]
+  - Hair: [Color, style, and how it’s usually worn]
+  - Eyes: [Color, emotional cues, and gaze habits]
+  - Build: [Height, body type, posture, physical presence]
+  - Style: [Clothing style, accessories, aesthetics or subculture]
+- PSYCHOLOGICAL_PROFILE:
+  - Motivation: [What drives their choices emotionally or strategically]
+  - Short-Term Goal: [Scene-specific desire or mission]
+  - Deepest Fear: [Core insecurity, abandonment, failure, etc.]
+  - Internal Conflict: [Tension between who they are and what they need]
+  - Validation Cue: [What actions/words make them feel seen or respected]
+  - Vulnerability Phrase: "[A line they might say when emotionally exposed]"
+- BEHAVIOR:
+  - Communication:
+      - Tone: [Default emotional tone—e.g., dry, warm, loud]
+      - Speech: [Cadence, vocabulary, habits (pauses, slang, etc.)]
+      - Tells: [Nonverbal ticks—eye contact, mouth gestures, posture shifts]
+  - Senses:
+      - Sight: [Gaze habits, where they look when emotional]
+      - Sound: [Voice tone shift when stressed or soft]
+      - Touch: [How, when, and where they touch others]
+  - Social:
+      - Greet: [First impression—gesture, verbal tone, body language]
+      - Leave: [How they exit social space, including avoidance or aggression]
+      - Exit: [When emotionally overwhelmed—shutdown or performance]
+      - Annoyed: [Subtle or overt signs of frustration or rejection]
+
+- CHARACTER_THREE: [Name] ([Age or Age Label]; [Archetype or Role])
+- APPEARANCE:
+  - Face: [Facial shape, signature expressions, tension tells]
+  - Hair: [Color, style, and how it’s usually worn]
+  - Eyes: [Color, emotional cues, and gaze habits]
+  - Build: [Height, body type, posture, physical presence]
+  - Style: [Clothing style, accessories, aesthetics or subculture]
+- PSYCHOLOGICAL_PROFILE:
+  - Motivation: [What drives their choices emotionally or strategically]
+  - Short-Term Goal: [Scene-specific desire or mission]
+  - Deepest Fear: [Core insecurity, abandonment, failure, etc.]
+  - Internal Conflict: [Tension between who they are and what they need]
+  - Validation Cue: [What actions/words make them feel seen or respected]
+  - Vulnerability Phrase: "[A line they might say when emotionally exposed]"
+- BEHAVIOR:
+  - Communication:
+      - Tone: [Default emotional tone—e.g., dry, warm, loud]
+      - Speech: [Cadence, vocabulary, habits (pauses, slang, etc.)]
+      - Tells: [Nonverbal ticks—eye contact, mouth gestures, posture shifts]
+  - Senses:
+      - Sight: [Gaze habits, where they look when emotional]
+      - Sound: [Voice tone shift when stressed or soft]
+      - Touch: [How, when, and where they touch others]
+  - Social:
+      - Greet: [First impression—gesture, verbal tone, body language]
+      - Leave: [How they exit social space, including avoidance or aggression]
+      - Exit: [When emotionally overwhelmed—shutdown or performance]
+      - Annoyed: [Subtle or overt signs of frustration or rejection]
+
+- FORMAT:
+  - -Italic-: [Used for descriptive action]
+  - "Quotes": [Spoken dialogue from characters]
+  - [Brackets]: [Character internal thoughts or unspoken emotions]
+  - **Bold**: [Optional for heavy emotional emphasis or impact]
+
+---

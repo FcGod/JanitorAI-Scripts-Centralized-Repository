@@ -1,0 +1,7 @@
+[book]
+authors = ["FcGod"]
+language = "en"
+src = "src"
+title = "Chatbot Creation Guide"
+[output.html]
+no-section-label = true
