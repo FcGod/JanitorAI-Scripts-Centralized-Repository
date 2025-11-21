@@ -1,0 +1,33 @@
+/* Token estimator cosmetics */
+.tok-wrap .table.small table { width: 100%; border-collapse: collapse; }
+.tok-wrap th, .tok-wrap td { padding: 4px 8px; }
+.tok-wrap th { border-bottom: 1px solid rgba(255,255,255,.1); font-weight: 600; }
+.tok-wrap td { border-bottom: 1px dashed rgba(255,255,255,.06); }
+.tok-wrap tr:nth-child(even) { background: rgba(255,255,255,.03); }
+
+/* Right align numeric columns (items, chars, tokens) */
+#tbl-actor td:nth-child(2),
+#tbl-actor td:nth-child(3),
+#tbl-actor td:nth-child(4),
+#tbl-facet td:nth-child(2),
+#tbl-facet td:nth-child(3),
+#tbl-facet td:nth-child(4),
+#tbl-cat td:nth-child(2),
+#tbl-cat td:nth-child(3),
+#tbl-cat td:nth-child(4),
+#tbl-turn td:nth-child(2),
+#tbl-turn td:nth-child(3),
+#tbl-turn td:nth-child(4) { text-align: right; }
+
+/* Token panel controls: make third cell fit content */
+.tok-wrap .row > div:last-child {
+  flex: 0 0 auto;
+  min-width: 220px; /* tweak as you like */
+}
+
+/* nicer inline alignment for the checkbox label */
+.tok-wrap .row .row-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -1,0 +1,76 @@
+/* ==================================================================
+   File: css/panels/lorebook.panel.css
+   Module: LorebookPanel styles (external stylesheet)
+   Version: 1.0.0
+   Scope: Only targets the LorebookPanel (.lb-*) utility classes
+   Notes:
+     - This mirrors the minimal runtime styles previously injected by
+       lorebook.panel.js via injectCss().
+     - Uses CSS variables with sensible fallbacks for easy theming.
+     - Safe to include globally; selectors are prefixed with .lb-.
+   Integration:
+     <link rel="stylesheet" href="css/panels/lorebook.panel.css">
+   Theming:
+     Define these (optional) variables in your global theme to match Studio:
+       --panel, --muted, --ink
+   ================================================================== */
+
+/* Optional defaults (uncomment to enforce panel theme locally)
+:root {
+  --panel: #0d1225;
+  --muted: #252a42;
+  --ink:   #e6eaff;
+}
+*/
+
+/* Layout */
+#panel-lorebook .lb-wrap{display:flex;flex-direction:column;gap:10px}
+#panel-lorebook .lb-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#panel-lorebook .lb-body{display:grid;grid-template-columns:1fr 420px;gap:10px;min-height:420px}
+#panel-lorebook .lb-col{min-height:0}
+
+/* Surfaces */
+#panel-lorebook .lb-list{background:var(--panel,#0d1225);border:1px solid var(--muted,#252a42);border-radius:12px;padding:8px;overflow:auto;min-height:0}
+#panel-lorebook .lb-editor{background:var(--panel,#0d1225);border:1px solid var(--muted,#252a42);border-radius:12px;padding:10px;overflow:auto}
+
+/* Rows */
+#panel-lorebook .lb-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--muted,#252a42);padding:8px;border-radius:6px;cursor:pointer;user-select:none}
+#panel-lorebook .lb-row:last-child{border-bottom-color:transparent}
+#panel-lorebook .lb-row:hover{background:rgba(122,162,247,0.08)}
+#panel-lorebook .lb-row.active{background:rgba(122,162,247,0.15);border-color:#5c86e9}
+
+/* Text bits */
+#panel-lorebook .lb-name{font-weight:600;color:var(--ink,#e6eaff)}
+#panel-lorebook .lb-meta{opacity:.7;font-size:12px}
+
+/* Pills & status */
+#panel-lorebook .lb-pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--muted,#252a42);font-size:12px;margin-left:6px;line-height:1.6}
+#panel-lorebook .lb-pill.status.ok{color:#9ece6a}
+#panel-lorebook .lb-pill.status.warn{color:#e0af68}
+#panel-lorebook .lb-pill.status.err{color:#f7768e}
+
+/* Form */
+#panel-lorebook .lb-field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+#panel-lorebook .lb-label{font-size:12px;opacity:.8}
+#panel-lorebook .lb-field input[type="text"],
+#panel-lorebook .lb-field input[type="number"],
+#panel-lorebook .lb-field textarea,
+#panel-lorebook .lb-field select{background:#0f1530;border:1px solid var(--muted,#252a42);color:var(--ink,#e6eaff);border-radius:8px;padding:6px 8px}
+#panel-lorebook .lb-field textarea{min-height:140px;resize:vertical}
+#panel-lorebook .lb-field input:focus,
+#panel-lorebook .lb-field textarea:focus,
+#panel-lorebook .lb-field select:focus{outline:2px solid #5c86e9;outline-offset:2px;border-color:#5c86e9}
+
+/* Buttons */
+#panel-lorebook #panel-lorebook .btn{background:#1b2035;border:1px solid var(--muted,#252a42);color:var(--ink,#e6eaff);padding:7px 10px;border-radius:10px;cursor:pointer;transition:transform .06s ease,opacity .12s ease}
+#panel-lorebook #panel-lorebook .btn:hover{opacity:.95}
+#panel-lorebook #panel-lorebook .btn:active{transform:translateY(1px)}
+#panel-lorebook #panel-lorebook .btn.acc{background:#7aa2f7;color:#091023;border-color:#5c86e9}
+#panel-lorebook #panel-lorebook .btn.err{background:#f7768e;color:#2a0b12}
+
+/* Toolbar bits */
+#panel-lorebook .lb-search{display:inline-flex;gap:6px;margin-left:8px}
+#panel-lorebook .lb-check{display:inline-flex;gap:6px;align-items:center;margin:0 6px}
+
+/* Misc */
+#panel-lorebook .lb-counter{font-size:12px;opacity:.7;margin:-4px 0 8px 0}

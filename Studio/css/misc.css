@@ -1,0 +1,69 @@
+/* ================================
+   MythOS Studio — Misc. Cleanups
+   Normalizes old panels with odd backgrounds/borders
+   ================================ */
+
+/* Root fixups */
+:root {
+    --panel: transparent;
+    --border: rgba(255, 255, 255, 0.12);
+    --accent: #6b7cff;
+}
+
+/* General reset for stray dark/brown backgrounds */
+body,
+.cm-panel,
+.card,
+.panel-body,
+.row {
+    background: transparent !important;
+    color: inherit;
+}
+
+/* Standard border + padding */
+.card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 12px;
+}
+
+/* Make tabs + wrap neutral and unified */
+.parent-tabs,
+.cm-tabs {
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+}
+
+.parent-tabs button,
+.cm-tabs button {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.parent-tabs button.active,
+.cm-tabs button.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+    font-weight: 600;
+}
+
+/* For tables and muted rows */
+.table.small th,
+.table.small td {
+    background: transparent !important;
+    color: inherit;
+}
+
+/* Patch for any pre-theme .muted spans that had brown fallback */
+.muted {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Remove leftover color hints from experimental debug panels */
+#panel-testing,
+#panel-engine {
+    background: transparent !important;
+}

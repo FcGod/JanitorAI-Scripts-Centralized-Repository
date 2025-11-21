@@ -1,0 +1,134 @@
+/* /css/panels/focus.panel.css — MythOS-token version */
+
+/* Radar canvas + tooltip (shared with project) */
+#panel-project .focus-radar-canvas,
+#panel-focus   .focus-radar-canvas {
+  display: block;
+  background: var(--panel-alt, #14161a);
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--line, #252a33);
+}
+#panel-project .focus-radar-tooltip,
+#panel-focus   .focus-radar-tooltip {
+  background: var(--panel-alt, #161a20);
+  color: var(--text, #e8eef7);
+  border: 1px solid var(--line, #2a3140);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  padding: 6px 8px;
+}
+
+/* Layout */
+#panel-focus .focus-wrap { display:flex; gap:12px; height:100%; }
+#panel-focus .focus-left  {
+  width: 420px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  overflow: auto;
+}
+#panel-focus .focus-right {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  overflow: auto;
+}
+
+/* Toolbar */
+#panel-focus .focus-toolbar { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+#panel-focus .focus-toolbar label { color: var(--ink); font-size:13px; font-weight:600; }
+#panel-focus .focus-toolbar .chk { display:flex; align-items:center; gap:6px; margin-left:auto; }
+
+/* Buttons (mini + regular) */
+#panel-focus .btn, #panel-focus .btn-mini {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s;
+}
+#panel-focus .btn:hover, #panel-focus .btn-mini:hover {
+  border-color: var(--accent);
+  transform: scale(1.02);
+}
+
+/* Allocation rows/cards */
+#panel-focus .focus-row {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#panel-focus .r-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+#panel-focus .r-name { color: var(--text); font-weight:600; font-size:13px; }
+#panel-focus .r-lock { color: var(--muted); font-size:12px; }
+#panel-focus .r-mid  { display:grid; grid-template-columns: 54px 1fr 86px; gap:8px; align-items:center; }
+#panel-focus .r-pct  { color: var(--ink); font-weight:600; font-size:13px; text-align:right; }
+
+/* Range + number inputs */
+#panel-focus .fa-slider { width:100%; }
+#panel-focus input[type="range"] {
+  appearance:none;
+  height: 6px;
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+#panel-focus input[type="range"]::-webkit-slider-thumb{
+  appearance:none; width:14px; height:14px;
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 65%, #000);
+  border-radius: 50%;
+}
+#panel-focus input[type="range"]::-moz-range-thumb{
+  width:14px; height:14px; border-radius:50%;
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 65%, #000);
+}
+#panel-focus input[type="number"]{
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 6px;
+  width: 100%;
+}
+#panel-focus input[type="number"]::placeholder { color: var(--muted); }
+#panel-focus input[type="range"]:focus,
+#panel-focus input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* Helper text */
+#panel-focus .muted { color: var(--muted); font-size:12px; }
+
+/* Allocation pills / summary chips */
+#panel-focus .alloc-pill {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* Optional blocks if you use them */
+#panel-focus .alloc-list,
+#panel-focus .alloc-row,
+#panel-focus .alloc-sidebar,
+#panel-focus .controls,
+#panel-focus .summary,
+#panel-focus .legend {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+}

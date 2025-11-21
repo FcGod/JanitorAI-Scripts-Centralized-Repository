@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MythOS Engine v5 — Sanity Test Harness</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #121212; color: #eee; padding: 2em; }
+  h1 { color: #8cf; }
+  pre { background: #1e1e1e; padding: 1em; border-radius: 8px; color: #0f0; overflow-x: auto; }
+  .pass { color: #0f0; }
+  .fail { color: #f66; }
+</style>
+</head>
+<body>
+<h1>MythOS v5 Sanity Harness</h1>
+<p>Open DevTools Console for detailed logs.</p>
+<pre id="log"></pre>
+
+<script src="mythos-engine-v5.bundle.js"></script>
+<script>
+(function() {
+  const out = document.getElementById('log');
+  function print(msg, cls) {
+    const p = document.createElement('div');
+    if (cls) p.className = cls;
+    p.textContent = msg;
+    out.appendChild(p);
+  }
+
+  try {
+    // === Define a simple test world ===
+    const cfg = {
+      world: { validLocations: ["town", "bar", "dock"] },
+      locations: [
+        { id: "town", name: "Town", exits: ["bar"], loreKeys: ["LOC:TOWN"] },
+        { id: "bar", name: "Bar", exits: ["town", "dock"], loreKeys: ["LOC:BAR"] },
+        { id: "dock", name: "Dock", exits: ["bar"], loreKeys: ["LOC:DOCK"] }
+      ],
+      actors: [
+        { id: "nora", startLocation: "bar",
+          defaults: { emotion: {V:0,A:0,D:0,F:0}, loreKeys:["ACT:NORA"] } }
+      ],
+      features: { debug: true }
+    };
+
+    // === Initialize engine ===
+    const boot = MythOS.init(cfg);
+    console.log("Engine Boot:", boot);
+
+    const tests = [
+      { desc: "Move user to bar", cmd: "[goTo:bar] Hello." },
+      { desc: "Nudge Nora’s emotion", cmd: "[nudgeEmo:nora:{\"V\":0.2}]" },
+      { desc: "Spawn a new beat", cmd: "[spawnBeat:intro]" },
+      { desc: "Set a custom flag", cmd: "[setFlag:user.testFlag:true]" },
+      { desc: "Attempt invalid move", cmd: "[goTo:cave]" }
+    ];
+
+    tests.forEach(t => {
+      const result = MythOS.runTurn({ reply: t.cmd });
+      console.log("Turn:", t.desc, result);
+      const ok = result && result.diff;
+      print((ok ? "✔ " : "✖ ") + t.desc, ok ? "pass" : "fail");
+    });
+
+    print("All tests executed. Check console for detailed state.", "pass");
+  } catch (err) {
+    print("Harness failed: " + err.message, "fail");
+    console.error(err);
+  }
+}());
+</script>
+</body>
+</html>

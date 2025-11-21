@@ -1,0 +1,198 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>MythOS Engine v5 — Local Dry-Run Harness (ES5)</title>
+<style>
+  :root { --bg:#0b0d10; --fg:#e6ebf0; --muted:#9aa4af; --panel:#151a20; --accent:#63b3ff; }
+  html,body { background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin:0; }
+  header { padding:16px 20px; border-bottom:1px solid #1f2730; }
+  h1 { margin:0 0 4px 0; font-size:18px; }
+  main { padding:16px 20px; display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  section { background: var(--panel); border:1px solid #1f2730; border-radius:12px; padding:12px; box-shadow:0 1px 0 #0f1318; }
+  h2 { font-size:14px; margin:0 0 8px 0; color: var(--accent); }
+  textarea, pre, input, button { width:100%; box-sizing:border-box; background:#0f1318; color:var(--fg); border:1px solid #2a3440; border-radius:10px; padding:8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  textarea { min-height:120px; }
+  pre { min-height:140px; white-space: pre-wrap; }
+  button { cursor:pointer; background:#122233; }
+  .row { display:flex; gap:8px; }
+  .row > * { flex:1; }
+  small { color: var(--muted); }
+  .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#0e1722; border:1px solid #203044; color:#a7c7ff; font-size:12px; }
+</style>
+
+<header>
+  <h1>MythOS Engine v5 — Local Dry-Run Harness <span class="pill">local</span></h1>
+  <small>Paste your CFG or let Studio push one. Click <b>Init Engine</b>, then paste a mock reply and click <b>Run Turn</b>.</small>
+</header>
+
+<script>
+/*
+ * MythOS — Local Harness Bridge (ES5)
+ * Purpose: capture cfg passed to engine.init and expose it; accept cm:cfg:push from Studio.
+ * Supports both window.MythOS and legacy window.SPE engines.
+ */
+(function(){
+  'use strict';
+
+  function exposeGetter(cfg){
+    try {
+      window.__HARNESS_CFG = cfg;
+      // legacy expose for external parity checks
+      if (window.SPE && typeof window.SPE.getCfg !== 'function') {
+        window.SPE.getCfg = function(){ return window.__HARNESS_CFG || null; };
+      }
+      if (window.MythOS && typeof window.MythOS.getCfg !== 'function') {
+        window.MythOS.getCfg = function(){ return window.__HARNESS_CFG || null; };
+      }
+    } catch(_e){}
+  }
+
+  function wrapInit(ns){
+    if (!ns || typeof ns.init !== 'function') return;
+    if (!ns.__origInit){
+      var orig = ns.init;
+      ns.__origInit = orig;
+      ns.init = function(cfg){
+        exposeGetter(cfg);
+        return orig.apply(this, arguments);
+      };
+    }
+  }
+
+  function tryWrap(){
+    var anyFound = false;
+    if (window.SPE)    { wrapInit(window.SPE); anyFound = true; }
+    if (window.MythOS) { wrapInit(window.MythOS); anyFound = true; }
+    if (!anyFound) setTimeout(tryWrap, 100);
+  }
+  tryWrap();
+
+  // Accept pushes from Studio (postMessage bridge)
+  window.addEventListener('message', function(e){
+    var d = e && e.data; if (!d) return;
+    var t = d.type || d.topic || '';
+    if (t === 'cm:cfg:push'){
+      var cfg = d.cfg || (d.payload && d.payload.cfg) || null;
+      var ns = window.MythOS || window.SPE;
+      if (cfg && ns && typeof ns.init === 'function'){
+        try { ns.init(cfg); } catch(_e){}
+      }
+    } else if (t === 'cm:cfg:request'){
+      var cur = (window.MythOS && window.MythOS.getCfg && window.MythOS.getCfg())
+             || (window.SPE    && window.SPE.getCfg    && window.SPE.getCfg())
+             || (window.__HARNESS_CFG || null);
+      try { e.source && e.source.postMessage({ type:'cm:cfg:response', cfg: cur }, e.origin || '*'); } catch(_e){}
+    }
+  }, false);
+})();
+</script>
+
+<main>
+  <section>
+    <h2>1) Configuration (CFG JSON)</h2>
+    <textarea id="cfg">{}</textarea>
+    <div class="row" style="margin-top:8px">
+      <button id="init">Init Engine</button>
+      <button id="reset">Reset STATE</button>
+    </div>
+    <small id="initStatus">Engine not initialized.</small>
+  </section>
+
+  <section>
+    <h2>2) Mock Model Reply</h2>
+    <textarea id="reply">[goTo:bar] Nora smiles. [nudgeEmo:nora:{"V":0.05,"A":0.10}] [spawnBeat:service-offer]</textarea>
+    <div class="row" style="margin-top:8px">
+      <button id="run">Run Turn</button>
+      <button id="auto">Auto-Reply (Mock)</button>
+    </div>
+    <small>Tip: Try invalid moves (e.g., <code>[goTo:alley]</code>) to see guard logs.</small>
+  </section>
+
+  <section>
+    <h2>Result — Diff</h2>
+    <pre id="diff">(diff will appear here)</pre>
+  </section>
+
+  <section>
+    <h2>Result — Lore Keys</h2>
+    <pre id="lore">(lore keys will appear here)</pre>
+  </section>
+
+  <section style="grid-column: 1 / span 2;">
+    <h2>Current STATE Snapshot</h2>
+    <pre id="state">(state snapshot will appear here)</pre>
+  </section>
+</main>
+
+<!-- Use the rebranded v5 template; it exposes legacy CFG alias too -->
+<script src="/engine/mythos-engine-v5-janitorai-skeleton.js"></script>
+<script>
+(function(){
+  'use strict';
+  var boot = null;
+
+  function qs(id){ return document.getElementById(id); }
+  function show(id, obj){ try { qs(id).textContent = (typeof obj === 'string') ? obj : JSON.stringify(obj, null, 2); } catch(e){ qs(id).textContent = String(obj); } }
+  function report(msg){ show('initStatus', msg); if (window.console && console.log) console.log('[HARNESS]', msg); }
+  function safeParseJSON(txt){ try { return JSON.parse(txt); } catch(e){ return { __ERR__: String(e) }; } }
+
+  function engineNS(){ return window.MythOS || window.SPE; }
+
+  function initEngine(){
+    try {
+      var cfgObj = safeParseJSON(qs('cfg').value);
+      if (cfgObj.__ERR__) { report('CFG parse error: ' + cfgObj.__ERR__); return; }
+      var ns = engineNS();
+      if (!ns || typeof ns.init !== 'function'){ report('Engine not loaded or init() missing'); return; }
+      boot = ns.init(cfgObj);
+      var cfg = (boot && boot.cfg) || cfgObj || {};
+      var locs = (cfg.locations||[]).length, actors=(cfg.actors||[]).length;
+      report('Engine initialized. Locations: ' + locs + ', Actors: ' + actors);
+      refreshState();
+    } catch(e){ report('Engine init failed: ' + (e && e.message ? e.message : e)); if (window.console && console.error) console.error(e); }
+  }
+
+  function refreshState(){
+    try {
+      var s = boot && boot.state;
+      var c = boot && boot.cfg;
+      var snapshot = { cfg: { world: c && c.world, counts: { locations: (c&&c.locations?c.locations.length:0), actors: (c&&c.actors?c.actors.length:0) } }, state: s };
+      show('state', snapshot);
+    } catch(e) { show('state', 'No state available until init.'); }
+  }
+
+  function runTurn(manual){
+    try {
+      if (!boot) { report('Initialize engine first.'); return; }
+      var ns = engineNS();
+      var replyText = manual || qs('reply').value;
+      var res = (ns && typeof ns.runTurn === 'function') ? ns.runTurn({ reply: replyText }) : (window.SPE && SPE.runTurn({ reply: replyText }));
+      show('diff', res && res.diff ? res.diff : '(no diff)');
+      show('lore', res && res.loreKeys ? res.loreKeys : '(no lore keys)');
+      refreshState();
+      if (window.console && console.log) console.log('[HARNESS] turn result', res);
+    } catch(e){ report('Run turn failed: ' + (e && e.message ? e.message : e)); if (window.console && console.error) console.error(e); }
+  }
+
+  function autoReply(){
+    try {
+      if (!boot) { report('Initialize engine first.'); return; }
+      var ns = engineNS(); var cfg = boot.cfg; var reply = []; var from = boot.state && boot.state.user ? boot.state.user.location : null;
+      // Try to use any adjacency helper present (legacy SPE modules)
+      var m = (ns && ns._modules) || (window.SPE && SPE._modules);
+      if (m && m.Ids && from) {
+        if (m.Ids.isAdjacent(cfg, from, 'bar'))       reply.push('[goTo:bar]');
+        else if (m.Ids.isAdjacent(cfg, from, 'foyer')) reply.push('[goTo:foyer]');
+      }
+      reply.push('[nudgeEmo:nora:{"V":0.05,"A":0.10}]');
+      reply.push('[spawnBeat:service-offer]');
+      reply.push('Nora gestures at the menu with a friendly grin.');
+      runTurn(reply.join(' '));
+    } catch(e){ report('Auto-reply failed: ' + (e && e.message ? e.message : e)); if (window.console && console.error) console.error(e); }
+  }
+
+  qs('init').onclick = initEngine;
+  qs('reset').onclick = function(){ boot = null; show('initStatus', 'Engine not initialized.'); show('diff',''); show('lore',''); show('state',''); };
+  qs('run').onclick = function(){ runTurn(); };
+  qs('auto').onclick = autoReply;
+})();
+</script>

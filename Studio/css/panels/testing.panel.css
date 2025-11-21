@@ -1,0 +1,29 @@
+/* Testing Panel — scoped to #panel-testing */
+#panel-testing .test-wrap{ display:grid; grid-template-columns: 260px 1fr 320px; gap:12px; }
+#panel-testing .card{ background: var(--panel, #12161d); border: 1px solid var(--line, #252a33); border-radius:12px; padding:10px; }
+#panel-testing h3{ margin:0 0 8px 0; font-size:14px; color: var(--text, #e8eef7); }
+
+#panel-testing .scenario-item{ background: var(--panel-alt, #161a20); border:1px solid var(--line, #2a3140); border-radius:8px; padding:8px; margin-bottom:8px; cursor:pointer; }
+#panel-testing .scenario-item.active{ border-color: var(--accent, #5dd3c9); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent, #5dd3c9) 50%, transparent); }
+#panel-testing .scenario-item .title{ font-weight:600; color: var(--text, #e8eef7); }
+#panel-testing .scenario-item .tone{ font-size:12px; color: var(--muted, #9aa7b2); }
+
+#panel-testing .row{ display:flex; gap:8px; align-items:center; margin:6px 0; }
+#panel-testing label{ color: var(--muted, #9aa7b2); font-size:12.5px; }
+
+#panel-testing input, #panel-testing select, #panel-testing button.btn{
+  background: var(--panel-alt, #161a20); border:1px solid var(--line, #2a3140); color: var(--text, #e8eef7); border-radius:8px; padding:6px 8px;
+}
+
+#panel-testing .transcript{ display:flex; flex-direction:column; gap:6px; }
+#panel-testing .msg{ padding:6px 8px; border-radius:8px; border:1px solid var(--line, #2a3140); background: var(--panel-alt, #141820); }
+#panel-testing .msg .role{ color: var(--muted, #9aa7b2); margin-right:6px; font-family: "JetBrains Mono", monospace; }
+#panel-testing .msg .tk{ color: var(--muted, #9aa7b2); margin-left:6px; }
+
+#panel-testing .msg.asst{ cursor:pointer; }
+#panel-testing .msg.asst:hover{ border-color: var(--accent, #5dd3c9); }
+
+#panel-testing .inspector .why-row{ display:flex; gap:8px; justify-content:space-between; padding:2px 0; }
+#panel-testing .inspector label{ color: var(--muted, #9aa7b2); }
+#panel-testing .audit.ok{ color:#7ad7c6; }
+#panel-testing .audit-box ul.audit{ margin:0; padding-left:16px; }

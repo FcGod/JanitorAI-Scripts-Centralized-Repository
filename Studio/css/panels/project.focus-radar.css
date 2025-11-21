@@ -1,0 +1,31 @@
+/* Focus Panel (scoped) */
+#panel-focus.focus-wrap { display:flex; gap:12px; height:100%; }
+#panel-focus .focus-left { width:420px; background:#1b1b1b; border-radius:8px; padding:12px; box-shadow: inset 0 0 0 1px #2a2a2a; overflow:auto; }
+#panel-focus .focus-right { flex:1; background:#181818; border-radius:8px; padding:12px; box-shadow: inset 0 0 0 1px #262626; overflow:auto; }
+
+#panel-focus .focus-toolbar { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+#panel-focus .focus-toolbar label { color:#ddd; font-size:13px; font-weight:600; }
+#panel-focus .focus-toolbar .chk { display:flex; align-items:center; gap:6px; margin-left:auto; }
+#panel-focus .btn-mini { background:#2a2a2a; color:#fff; border:1px solid #3c3c3c; border-radius:4px; padding:6px 10px; cursor:pointer; }
+#panel-focus .btn-mini:hover { background:#3d6cff; border-color:#4d7cff; }
+
+#panel-focus .focus-row { background:#202020; border-radius:8px; padding:10px; margin-bottom:10px; box-shadow:0 0 0 1px #2b2b2b; }
+#panel-focus .r-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+#panel-focus .r-name { color:#fff; font-weight:600; font-size:13px; }
+#panel-focus .r-lock { color:#9aa2ad; font-size:12px; }
+#panel-focus .r-mid { display:grid; grid-template-columns: 54px 1fr 86px; gap:8px; align-items:center; }
+#panel-focus .r-pct { color:#cfd3da; font-weight:600; font-size:13px; text-align:right; }
+
+#panel-focus .fa-slider { width:100%; }
+#panel-focus input[type=range]{ appearance:none; height:6px; background:#0f0f0f; border:1px solid #2e2e2e; border-radius:6px; }
+#panel-focus input[type=range]::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; background:#4da3ff; border:1px solid #78b6ff; border-radius:50%; }
+#panel-focus input[type=number]{ background:#101010; border:1px solid #333; border-radius:4px; color:#ddd; padding:6px; }
+
+#panel-focus .muted { color:#9aa2ad; font-size:12px; }
+
+#panel-project .focus-radar-canvas,
+#panel-focus .focus-radar-canvas{
+  display:block; background:#14161a; border-radius:8px; box-shadow:0 0 0 1px #252a33;
+}
+#panel-project .focus-radar-tooltip,
+#panel-focus .focus-radar-tooltip{ box-shadow:0 2px 8px rgba(0,0,0,0.4); }

@@ -1,0 +1,196 @@
+/* /css/panels/speech.panel.css — MythOS-token version */
+
+/* Layout */
+#panel-speech .speech-wrap { display:flex; gap:12px; height:100%; }
+#panel-speech .speech-col-left  { width:220px; }
+#panel-speech .speech-col-right { flex:1; }
+
+/* Sidebar */
+#panel-speech .speech-col-left .actor-list {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  overflow-y: auto;
+}
+#panel-speech .actor-card {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; transition: background .15s, box-shadow .15s;
+  color: var(--text);
+}
+#panel-speech .actor-card:hover { box-shadow: 0 0 0 1px var(--accent-2); }
+#panel-speech .actor-card.active { box-shadow: 0 0 0 1px var(--accent); }
+#panel-speech .actor-name { font-weight:500; font-size:13px; }
+#panel-speech .actor-status { width:10px; height:10px; border-radius:50%; margin-left:6px; }
+#panel-speech .actor-status.green{ background:#3fa43f; }
+#panel-speech .actor-status.yellow{ background:#e7b93f; }
+#panel-speech .actor-status.red{ background:#e34a4a; }
+
+/* Editor shell + cards */
+#panel-speech .speech-col-right {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  overflow-y:auto;
+}
+#panel-speech .speech-editor .card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+/* Compact toolbar */
+#panel-speech .speech-toolbar {
+  display:flex; justify-content:flex-end; gap:8px; margin-bottom:8px;
+}
+#panel-speech .speech-toolbar .btn-mini {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px; padding: 6px 10px;
+}
+
+/* Field rows (label left, select middle, meter right) */
+#panel-speech .field-row {
+  display: grid;
+  grid-template-columns: 110px minmax(200px,1fr) 140px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+#panel-speech .field-row .left { color: var(--ink); font-weight:600; font-size:13px; }
+#panel-speech .field-row .field select,
+#panel-speech .field-row .field input[type="text"] { max-width:420px; }
+
+/* Inputs */
+#panel-speech input,
+#panel-speech select,
+#panel-speech textarea {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px;
+}
+#panel-speech input::placeholder,
+#panel-speech textarea::placeholder { color: var(--muted); }
+#panel-speech input:focus,
+#panel-speech select:focus,
+#panel-speech textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* Meters */
+#panel-speech .field-row .meter {
+  height: 8px;
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+#panel-speech .field-row .meter-spacer { background: transparent; border: none; }
+#panel-speech .field-row .meter .meter-fill {
+  height:100%;
+  width:0%;
+  background: var(--accent);
+  transition: width .2s ease;
+}
+
+/* Quirks */
+#panel-speech .quirk-label { display:block; color: var(--ink); font-weight:600; font-size:13.5px; margin-bottom:6px; }
+#panel-speech .row-inline { display:flex; gap:8px; align-items:center; }
+#panel-speech .quirk-block input[type="text"] { max-width:280px; }
+#panel-speech .chip-zone { margin-top:6px; background: var(--panel-alt); border:1px solid var(--line); border-radius:10px; padding:6px; }
+#panel-speech .chip { font-size:12.5px; padding:4px 8px; border-radius:12px; background:#15202b; border:1px solid var(--line); color:var(--ink); }
+
+/* Cues */
+#panel-speech .cue-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+#panel-speech .cue-label { display:block; color: var(--muted); font-weight:600; font-size:12.5px; margin-bottom:4px; }
+#panel-speech .cue-cell textarea { width:100%; max-width:520px; font-size:12.5px; background: var(--panel-alt); border:1px solid var(--line); color: var(--text); border-radius:8px; }
+
+/* Buttons */
+#panel-speech .btn, #panel-speech .btn-mini, #panel-speech button {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background .15s, transform .1s, border-color .15s;
+}
+#panel-speech .btn:hover, #panel-speech .btn-mini:hover, #panel-speech button:hover {
+  border-color: var(--accent);
+  transform: scale(1.02);
+}
+
+/* Preview well */
+#panel-speech #sp-preview {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+/* Compact mode tweaks */
+#panel-speech .speech-editor.compact .field-row { grid-template-columns:96px minmax(180px,1fr) 120px; }
+#panel-speech .speech-editor.compact .field-row .field select,
+#panel-speech .speech-editor.compact .field-row .field input[type="text"] { max-width:340px; }
+#panel-speech .speech-editor.compact .quirk-block input[type="text"] { max-width:240px; }
+#panel-speech .speech-editor.compact .cue-cell textarea { max-width:380px; }
+
+/* Tooltips */
+#panel-speech [data-tip]{ position:relative; }
+#panel-speech [data-tip]:hover::after{
+  content: attr(data-tip);
+  position:absolute; top:-30px; left:0; white-space:nowrap;
+  background: var(--panel-alt);
+  color: var(--text);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:4px 6px; font-size:12px; pointer-events:none; z-index:5;
+}
+
+/* ----- Cue Table Layout Tweaks ----- */
+
+/* Applies only when NOT in compact mode */
+.cm-panel[data-panel="speech"]:not(.compact) .cue-table td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.cm-panel[data-panel="speech"]:not(.compact) .cue-table th {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Slightly wider columns for better visual separation */
+.cm-panel[data-panel="speech"] .cue-table th,
+.cm-panel[data-panel="speech"] .cue-table td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Keep dense feel, but loosen row grouping visually */
+.cm-panel[data-panel="speech"] .cue-table tr:nth-child(even) {
+  background-color: rgba(255,255,255,0.02);
+}
+
+/* Make first column stand out */
+.cm-panel[data-panel="speech"] .cue-table td.em {
+  font-weight: 600;
+  opacity: .9;
+  padding-right: 12px;
+}
+

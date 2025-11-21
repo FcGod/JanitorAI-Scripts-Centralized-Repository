@@ -1,0 +1,222 @@
+/* MythOS Brand Theme — overrides for Phase-6+ Studio
+   Place after theme.css so these tokens win. Designer-safe. */
+
+:root {
+  /* Core palette from Visual Branding Brief */
+  --color-primary: #4B6CC1;   /* Deep Blue – knowledge, depth */
+  --color-accent:  #D9B26C;   /* Gold – mythic creativity */
+  --color-slate:   #1E1F26;   /* Slate – structure */
+  --color-sky:     #BFD7EA;   /* Sky – clarity */
+  --color-ink:     #E7ECF2;   /* UI text on dark */
+  --color-muted:   #9AA4AF;   /* Secondary text */
+  --color-line:    #2A2E38;   /* Hairline separators */
+
+  /* Gradients */
+  --gradient-core:  linear-gradient(90deg, #4B6CC1, #1E1F26);
+  --gradient-studio:linear-gradient(120deg, #4B6CC1, #BFD7EA);
+
+  /* Map to base tokens used by layout.css */
+  --bg:      var(--color-slate);
+  --panel:   #141a21;
+  --ink:     var(--color-ink);
+  --muted:   var(--color-muted);
+  --line:    var(--color-line);
+  --accent:  var(--color-primary);
+  --accent-2:var(--color-sky);
+
+  --ok:   #35B57A;
+  --warn: #FFCC66;
+  --err:  #FF5D82;
+
+  /* Radii & shadows */
+  --r-lg: 12px;
+  --sh-card: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Typography */
+html, body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+  color: var(--ink);
+}
+code, pre, .mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Branded header */
+.mythos-header {
+  background: var(--gradient-studio);
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.mythos-header h1 {
+  font-family: Montserrat, Inter, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.logo-myth { color: #fff; }
+.logo-os   { color: var(--color-accent); opacity: 0.95; }
+.mythos-header .pill.phase {
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* Tabs */
+.cm-tabs {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+}
+.cm-tabs button {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.cm-tabs button:hover { transform: translateY(-1px); }
+.cm-tabs button.active {
+  background: rgba(99, 179, 255, 0.10);
+  border-color: #27425f;
+  color: var(--color-sky);
+}
+
+/* Panels */
+.cm-panel {
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+}
+.cm-panel h2 {
+  font-family: Montserrat, Inter, sans-serif;
+  font-weight: 600;
+  color: var(--color-sky);
+  margin: 0 0 10px 0;
+}
+
+/* Buttons */
+.btn {
+  background: #142235;
+  border: 1px solid #27425f;
+  color: #d6e9ff;
+  border-radius: 12px;
+  padding: 7px 12px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.primary {
+  background: var(--color-primary);
+  border-color: #3758a6;
+  color: #fff;
+}
+.btn.warn {
+  background: #2a2205;
+  border-color: #4a3a00;
+  color: #ffd98a;
+}
+.btn.danger {
+  background: #2a0f17;
+  border-color: #5f2731;
+  color: #ffd6de;
+}
+
+/* Inputs */
+input[type="text"], input[type="number"], select, textarea {
+  background: #0F1318;
+  color: var(--ink);
+  border: 1px solid #2A3440;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid rgba(99,179,255,0.35);
+  border-color: #35537a;
+}
+
+/* Utility */
+.pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #EAF3FF;
+}
+.muted { color: var(--muted); }
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin: 6px 0;
+}
+.cm-log {
+  background: #0F1318;
+  border: 1px solid #2A3440;
+}
+.cm-footer {
+  color: #aab4c0;
+}
+
+/* ==========================================================================
+   MythOS Design Token Fallbacks
+   --------------------------------------------------------------------------
+   Ensures all core theme variables exist.
+   Add this to the END of theme.mythos.css
+   ========================================================================== */
+
+:root {
+  /* ---------------- Core Surfaces ---------------- */
+  --bg:               #0b0e12;  /* base background */
+  --panel:            #12161d;  /* card panels, toolbar bars */
+  --panel-alt:        #161a20;  /* nested cards, controls */
+  --panel-overlay:    rgba(20,25,32,0.92);
+  --line:             #252a33;  /* borders, dividers */
+  --shadow-1:         rgba(0,0,0,0.35);
+
+  /* ---------------- Text Colors ---------------- */
+  --text:             #e8eef7;  /* primary text */
+  --muted:            #9aa7b2;  /* secondary text / labels */
+  --disabled:         #555d67;
+  --link:             #5dd3c9;  /* interactive color */
+
+  /* ---------------- Brand Accents ---------------- */
+  --accent:           #5dd3c9;  /* MythOS cyan-green */
+  --accent-2:         #c679f6;  /* secondary purple accent */
+  --accent-danger:    #e06b75;  /* for delete, remove */
+  --accent-warning:   #f1b563;  /* for warnings */
+  --accent-success:   #6cd57a;  /* for success checks */
+
+  /* ---------------- UI Components ---------------- */
+  --btn-bg:           var(--panel-alt);
+  --btn-border:       var(--line);
+  --btn-hover:        var(--accent);
+  --btn-text:         var(--text);
+
+  --input-bg:         var(--panel-alt);
+  --input-border:     var(--line);
+  --input-text:       var(--text);
+  --input-focus:      var(--accent);
+
+  --scroll-thumb:     #3a3f4a;
+  --scroll-track:     #15191f;
+
+  /* ---------------- Graph / Radar ---------------- */
+  --graph-bg:         #0f1216;
+  --graph-ring:       rgba(255,255,255,0.05);
+  --graph-line:       var(--accent);
+  --graph-node:       #5dd3c9;
+
+  /* ---------------- Transitions ---------------- */
+  --fast:             0.15s ease-out;
+  --medium:           0.25s ease;
+  --slow:             0.45s ease-in-out;
+}
+
+/* optional scrollbar styling to unify theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+

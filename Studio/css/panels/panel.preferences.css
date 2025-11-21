@@ -1,0 +1,142 @@
+/* /css/panels/preferences.panel.css — SCOPED TO #panel-preferences */
+
+#panel-preferences { color: var(--text, #dfe6ee); }
+
+/* Layout */
+#panel-preferences .prefs-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 1100px){
+  #panel-preferences .prefs-wrap { grid-template-columns: 1fr; }
+}
+
+/* Cards */
+#panel-preferences .card {
+  background: var(--panel, rgba(255,255,255,0.03));
+  border: 1px solid var(--line, #252a33);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 0 var(--shadow-1, rgba(0,0,0,0.25));
+}
+#panel-preferences .card h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: var(--text, #e8eef7);
+  letter-spacing: .2px;
+}
+
+/* Form rows */
+#panel-preferences label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted, #9aa7b2);
+  margin: 6px 0 4px 0;
+}
+
+/* Inputs/selects */
+#panel-preferences input[type="number"],
+#panel-preferences input[type="text"],
+#panel-preferences select {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--panel-alt, #161a20);
+  color: var(--text, #e8eef7);
+  border: 1px solid var(--line, #2a3140);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+#panel-preferences input::placeholder { color: var(--muted, #8a95a3); }
+#panel-preferences input:focus,
+#panel-preferences select:focus {
+  outline: none;
+  border-color: var(--accent, #5dd3c9);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #5dd3c9) 30%, transparent);
+}
+
+/* Sliders */
+#panel-preferences input[type="range"]{
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--panel-alt, #141820);
+  border: 1px solid var(--line, #2a3140);
+  border-radius: 8px;
+  height: 8px;
+  appearance: none;
+}
+#panel-preferences input[type="range"]::-webkit-slider-thumb{
+  appearance: none;
+  width: 14px; height: 14px;
+  background: var(--accent, #5dd3c9);
+  border: 1px solid color-mix(in srgb, var(--accent, #5dd3c9) 70%, #000 30%);
+  border-radius: 50%;
+}
+#panel-preferences input[type="range"]::-moz-range-thumb{
+  width: 14px; height: 14px;
+  background: var(--accent, #5dd3c9);
+  border: 1px solid color-mix(in srgb, var(--accent, #5dd3c9) 70%, #000 30%);
+  border-radius: 50%;
+}
+
+/* Compact inline helpers */
+#panel-preferences .row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+#panel-preferences .row-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px 12px;
+}
+
+/* Buttons */
+#panel-preferences .btn,
+#panel-preferences .btn-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--panel-alt, #161a20);
+  color: var(--text, #e8eef7);
+  border: 1px solid var(--line, #2a3140);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+#panel-preferences .btn:hover,
+#panel-preferences .btn-mini:hover {
+  border-color: var(--accent, #5dd3c9);
+}
+
+/* Token gauge */
+#panel-preferences .gauge {
+  height: 10px;
+  background: var(--panel-alt, #141820);
+  border: 1px solid var(--line, #2a3140);
+  border-radius: 8px;
+  overflow: hidden;
+}
+#panel-preferences .gauge-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent, #5dd3c9);
+  transition: width .2s ease;
+}
+
+/* Little helper text */
+#panel-preferences .hint {
+  font-size: 12px;
+  color: var(--muted, #9aa7b2);
+  margin-top: 6px;
+}
+
+/* Hard overrides (just in case any old panel styles leak) */
+#panel-preferences .card,
+#panel-preferences .prefs-wrap {
+  background: var(--panel, #12161d) !important;
+  border-color: var(--line, #252a33) !important;
+  color: var(--text, #e8eef7) !important;
+}

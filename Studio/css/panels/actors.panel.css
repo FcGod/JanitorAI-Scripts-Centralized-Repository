@@ -1,0 +1,3 @@
+/* css/panels/actors.panel.css */
+#panel-actors .actor-wrap { display:flex; gap:12px; }
+#panel-actors .card { background: rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:12px; padding:10px; }

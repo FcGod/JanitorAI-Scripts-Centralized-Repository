@@ -1,0 +1,36 @@
+/* /css/layout.css */
+/* Structural layout — do not theme here */
+.cm-header { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; }
+.cm-header h1 { margin: 0; font-size: 16px; }
+.cm-header .ver { opacity: 0.8; font-weight: 400; margin-left: 6px; }
+
+
+.cm-tabs { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.cm-tabs button { background: #0f141b; border: 1px solid var(--line); color: var(--ink); padding: 8px 10px; border-radius: 10px; cursor: pointer; }
+.cm-tabs button.active { background: #122233; border-color: #27425f; color: #cfe6ff; }
+
+
+.cm-main { padding: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+.cm-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.cm-panel.hidden { display: none; }
+.panel-body { display: block; }
+
+
+.cm-log { background: #0f1318; border: 1px solid #2a3440; border-radius: 10px; padding: 8px; min-height: 120px; overflow: auto; }
+.cm-footer { padding: 10px 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+/* Locations split layout safety */
+#panel-locations #col-left { position: relative; z-index: 2; }
+#panel-locations #col-right .card,
+#panel-locations #col-right .view { overflow: hidden; }
+#panel-locations svg#loc-svg { display: block; }
+
+/* Make mixed flex rows align to the top by default */
+.cm-panel .row.flex { align-items: flex-start; } /* if you use a .flex helper */
+/* Keep form controls inside their cards on the Locations panel */
+#panel-locations input,
+#panel-locations select,
+#panel-locations textarea { width: 100%; max-width: 100%; box-sizing: border-box; }
+
+
+

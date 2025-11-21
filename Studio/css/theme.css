@@ -1,0 +1,22 @@
+<!-- /css/theme.css -->
+/* Theme tokens only — safe for designers to tweak */
+:root {
+--bg: #0b0d10;
+--panel: #141a21;
+--ink: #e7ecf2;
+--muted: #9aa4af;
+--line: #1e2630;
+--accent: #63b3ff;
+--accent-2: #9dd0ff;
+--ok: #2ecc71;
+--warn: #ffcc66;
+--err: #ff5d82;
+}
+
+
+/* Typography & primitives */
+html, body { background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif; }
+.muted { color: var(--muted); }
+.btn { background: #122233; border: 1px solid #27425f; color: #cfe6ff; padding: 6px 10px; border-radius: 10px; cursor: pointer; }
+.btn:hover { filter: brightness(1.1); }
+.pill { padding: 2px 8px; border-radius: 999px; background: #0f1520; border: 1px solid #223044; color: var(--accent-2); font-size: 12px; }

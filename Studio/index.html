@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MythOS Studio Reborn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- █ Fonts (load early to reduce FOUT) █ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+    <!-- █ Core Styles █ -->
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/theme.mythos.css" />
+	<link rel="stylesheet" href="css/misc.css" />
+    
+	<!-- █ Panel Styles (scoped) █ -->
+    <link rel="stylesheet" href="css/panels/project.panel.css" />
+    <link rel="stylesheet" href="css/panels/actors.panel.css" />
+    <link rel="stylesheet" href="css/panels/speech.panel.css" />
+    <link rel="stylesheet" href="css/panels/focus.panel.css" />
+    <link rel="stylesheet" href="css/panels/relationships.panel.css" />
+    <link rel="stylesheet" href="css/panels/lorebook.panel.css" />
+    <link rel="stylesheet" href="css/panels/testing.panel.css" />
+    <link rel="stylesheet" href="css/panels/tokens.panel.css" />
+
+    <!-- █ Minimal inline helpers (isolated from child tab CSS/JS) █ -->
+    <style>
+        :root { --tab-gap: 8px; }
+        body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        .parent-tabs { display: flex; gap: var(--tab-gap); padding: 10px; border-bottom: 1px solid var(--border, #2a2e37); background: var(--panel, transparent); }
+        .parent-tabs button { padding: 8px 12px; border: 1px solid var(--border, #2a2e37); background: transparent; color: inherit; border-radius: 8px; cursor: pointer; }
+        .parent-tabs button.active { background: rgba(255,255,255,0.08); border-color: var(--accent, #6b7cff); font-weight: 600; }
+        .wrap { padding: 12px; }
+        .hidden { display: none; }
+        .cm-panel.is-hidden { display: none; }
+    </style>
+</head>
+
+<body>
+    <!-- █ Header █ -->
+    <header class="cm-header" role="banner" aria-label="MythOS Studio Header">
+        <h1>MythOS Studio <span class="ver">vNext</span></h1>
+        <span class="pill">11/8/2025 Development Edition - Not for Deployment</span>
+    </header>
+
+    <!-- █ Parent Sections (Basic / Advanced) █ -->
+    <nav class="parent-tabs" id="cm-parent-tabs" role="tablist" aria-label="Parent Sections">
+        <button id="parent-basic" data-parent="basic" role="tab" aria-selected="true" aria-controls="wrap-basic" class="active">Basic</button>
+        <button id="parent-advanced" data-parent="advanced" role="tab" aria-selected="false" aria-controls="wrap-advanced">Advanced</button>
+    </nav>
+
+    <!-- █ BASIC: Tabs + Panels █ -->
+    <div id="wrap-basic" class="wrap" role="region" aria-label="Basic Workspace">
+        <nav class="cm-tabs" id="tabs-basic" role="tablist" aria-label="Basic Panels">
+            <button id="tab-project" data-tab="project" role="tab" aria-selected="true" aria-controls="panel-project" class="active">Project</button>
+            <button id="tab-actors" data-tab="actors" role="tab" aria-selected="false" aria-controls="panel-actors">Actors</button>
+            <button id="tab-speech" data-tab="speech" role="tab" aria-selected="false" aria-controls="panel-speech">Speech</button>
+            <button id="tab-focus" data-tab="focus" role="tab" aria-selected="false" aria-controls="panel-focus">Focus</button>
+            <button id="tab-relationships" data-tab="relationships" role="tab" aria-selected="false" aria-controls="panel-relationships">Relationships</button>
+            <button id="tab-lorebook" data-tab="lorebook" role="tab" aria-selected="false" aria-controls="panel-lorebook">Lorebook</button>
+        </nav>
+
+        <!-- Panels: show Project by default; hide others at load -->
+        <section id="panel-project" data-panel="project" class="cm-panel" aria-labelledby="tab-project">
+            <div class="panel-body">
+                <div id="project-root"></div>
+            </div>
+        </section>
+        <section id="panel-actors" data-panel="actors" class="cm-panel is-hidden" aria-labelledby="tab-actors">
+            <div class="panel-body"></div>
+        </section>
+        <section id="panel-speech" data-panel="speech" class="cm-panel is-hidden" aria-labelledby="tab-speech">
+            <div class="panel-body"></div>
+        </section>
+        <section id="panel-focus" data-panel="focus" class="cm-panel is-hidden" aria-labelledby="tab-focus">
+            <div class="panel-body"></div>
+        </section>
+        <section id="panel-relationships" data-panel="relationships" class="cm-panel is-hidden" aria-labelledby="tab-relationships">
+            <div class="panel-body"></div>
+        </section>
+        <section id="panel-lorebook" data-panel="lorebook" class="cm-panel is-hidden" aria-labelledby="tab-lorebook">
+            <div class="panel-body"></div>
+        </section>
+    </div>
+
+    <!-- █ ADVANCED: Tabs + Panels █ -->
+    <div id="wrap-advanced" class="wrap" style="display:none" role="region" aria-label="Advanced Workspace">
+        <nav class="cm-tabs" id="tabs-advanced" role="tablist" aria-label="Advanced Panels">
+            <button id="tab-tokens" data-tab="tokens" role="tab" aria-selected="true" aria-controls="panel-tokens" class="active">Tokens</button>
+            <button id="tab-engine" data-tab="engine" role="tab" aria-selected="false" aria-controls="panel-engine">Engine</button>
+            <button id="tab-testing" data-tab="testing" role="tab" aria-selected="false" aria-controls="panel-testing">Testing</button>
+        </nav>
+        <main class="cm-main">
+            <section id="panel-tokens" data-panel="tokens" class="cm-panel" aria-labelledby="tab-tokens">
+                <div class="panel-body"></div>
+            </section>
+            <section id="panel-engine" data-panel="engine" class="cm-panel" aria-labelledby="tab-engine">
+                <div class="panel-body"></div>
+            </section>
+            <section id="panel-testing" data-panel="testing" class="cm-panel" aria-labelledby="tab-testing">
+                <div class="panel-body"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- (Optional) EXPERIMENTAL scaffold kept for future use; hidden by default
+    <div id="wrap-experimental" class="wrap hidden" role="region" aria-label="Experimental Workspace">
+        <nav class="cm-tabs" id="tabs-experimental" role="tablist" aria-label="Experimental Panels">
+            <button id="tab-exp-opt-a" data-tab="exp-opt-a" role="tab" aria-selected="true" aria-controls="panel-exp-opt-a" class="active">Option A</button>
+            <button id="tab-exp-opt-b" data-tab="exp-opt-b" role="tab" aria-selected="false" aria-controls="panel-exp-opt-b">Option B</button>
+            <button id="tab-exp-opt-c" data-tab="exp-opt-c" role="tab" aria-selected="false" aria-controls="panel-exp-opt-c">Option C</button>
+            <button id="tab-exp-opt-d" data-tab="exp-opt-d" role="tab" aria-selected="false" aria-controls="panel-exp-opt-d">Option D</button>
+            <button id="tab-exp-opt-e" data-tab="exp-opt-e" role="tab" aria-selected="false" aria-controls="panel-exp-opt-e">Option E</button>
+        </nav>
+        <main class="cm-main">
+            <section id="panel-exp-opt-a" data-panel="exp-opt-a" class="cm-panel" aria-labelledby="tab-exp-opt-a">
+                <h2>Option A (Experimental)</h2>
+                <p>Placeholder content.</p>
+            </section>
+            <section id="panel-exp-opt-b" data-panel="exp-opt-b" class="cm-panel" aria-labelledby="tab-exp-opt-b">
+                <h2>Option B (Experimental)</h2>
+                <p>Placeholder content.</p>
+            </section>
+            <section id="panel-exp-opt-c" data-panel="exp-opt-c" class="cm-panel" aria-labelledby="tab-exp-opt-c">
+                <h2>Option C (Experimental)</h2>
+                <p>Placeholder content.</p>
+            </section>
+            <section id="panel-exp-opt-d" data-panel="exp-opt-d" class="cm-panel" aria-labelledby="tab-exp-opt-d">
+                <h2>Option D (Experimental)</h2>
+                <p>Placeholder content.</p>
+            </section>
+            <section id="panel-exp-opt-e" data-panel="exp-opt-e" class="cm-panel" aria-labelledby="tab-exp-opt-e">
+                <h2>Option E (Experimental)</h2>
+                <p>Placeholder content.</p>
+            </section>
+        </main>
+    </div> -->
+
+    <!-- █ Scripts: Router █ -->
+    <script src="js/studio/router.js"></script>
+
+    <!-- █ Core: State / Schema / Engine glue █ -->
+    <script src="js/core/store.js"></script>
+    <script src="js/core/bus.js"></script>
+    <script src="js/core/schema.normalize.js"></script>
+    <script src="js/core/persist.local.js"></script>
+    <script src="js/core/engine.templates.js"></script>
+    <script src="js/core/actors.access.js"></script>
+
+    <!-- █ Relationships UI █ -->
+    <script src="js/ui/relationships/relationships.tips.js"></script>
+    <script src="js/ui/relationships/relationships.graph.js"></script>
+    <script src="js/ui/relationships/relationships.panel.js"></script>
+
+    <!-- █ Helpers: Export / IO / Harness █ -->
+    <script src="js/core/export.core.js"></script>
+    <script src="js/tests/harness.bridge.js"></script>
+    <script src="js/core/export.package.js"></script>
+    <script src="js/tests/harness.js"></script>
+
+    <!-- █ App bootstrap (bind GUI.State.CFG ↔ CFGStore) █ -->
+    <script src="js/app/bootstrap.cfg.js"></script>
+
+    <!-- █ Axis Presets (only) █ -->
+    <script src="js/axis/presets.js"></script>
+
+    <!-- █ Lorebook Library (order important) █ -->
+    <script src="js/ui/lorebook/lore.model.js"></script>
+    <script src="js/ui/lorebook/lore.validate.js"></script>
+    <script src="js/ui/lorebook/lore.search.js"></script>
+    <script src="js/ui/lorebook/lore.seed.js"></script>
+    <script src="js/ui/lorebook/lore.diff.js"></script>
+    <script src="js/ui/lorebook/lore.metrics.js"></script>
+    <script src="js/ui/lorebook/lore.lore.io.js"></script>
+    <script src="js/ui/lorebook/lorebook.panel.js"></script>
+
+    <!-- █ Speech Module (helpers first) █ -->
+    <script src="js/ui/speech/SpeechQuirks.js"></script>
+    <script src="js/ui/speech/speech.cues.js"></script>
+    <script src="js/ui/speech/speech.templates.js"></script>
+    <script src="js/ui/speech/speech.preview.js"></script>
+    <script src="js/ui/speech/speech.meters.js"></script>
+    <script src="js/ui/speech/speech.panel.js"></script>
+
+    <!-- █ Focus Panel (helpers first) █ -->
+    <script src="js/ui/focus/focus.alloc.js"></script>
+    <script src="js/ui/focus/focus.radar.js"></script>
+    <script src="js/ui/focus/focus.panel.js"></script>
+
+    <!-- █ Testing █ -->
+    <script src="js/ui/testing/testing.scenarios.js"></script>
+    <script src="js/ui/testing/testing.runner.js"></script>
+    <script src="js/ui/testing/testing.inspect.js"></script>
+    <script src="js/ui/testing/testing.panel.js"></script>
+
+    <!-- █ Panels (each exposes window.CMPanel_<tab>) █ -->
+    <script src="js/ui/project/project.panel.js"></script>
+    <script src="js/ui/actors/actors.units.js"></script>
+    <script src="js/ui/actors/actors.radar.js"></script>
+    <script src="js/ui/actors/actors.panel.js"></script>
+    <script src="js/ui/tokens/tokens.panel.js"></script>
+    <script src="js/ui/engine/engine.panel.js"></script>
+    <script src="js/ui/actors/actors.anatomy.patch.js"></script>
+    <script>MythOSActorsAnatomyPatch.enable();</script>
+
+    <!-- █ App: Child Tabs / Navigation (after panels) █ -->
+    <script src="js/app/tabs.js"></script>
+
+    <!-- █ Parent Tab Router (ES5, no deps) █ -->
+    <script>
+    (function () {
+        var parent = (function(){ try { return localStorage.getItem('mythos.parent') || 'basic'; } catch(_e) { return 'basic'; } })();
+        if (parent !== 'basic') return;
+
+        var projBtn = document.getElementById('tab-project');
+        if (projBtn) {
+            if (projBtn.className.indexOf('active') === -1) projBtn.className += ' active';
+            projBtn.setAttribute('aria-selected', 'true');
+        }
+
+        var panels = document.querySelectorAll('#wrap-basic .cm-panel');
+        for (var i = 0; i < panels.length; i++) {
+            var p = panels[i];
+            var id = p.getAttribute('data-panel');
+            if (id === 'project') p.className = p.className.replace(/\bis-hidden\b/g, '');
+            else if (p.className.indexOf('is-hidden') === -1) p.className += ' is-hidden';
+        }
+
+        try {
+            if (window.CMTabs && CMTabs.select) {
+                CMTabs.select('project');
+            } else if (projBtn && projBtn.click) {
+                projBtn.click();
+            }
+        } catch (_e) { /* keep usable even if tabs.js changes */ }
+    })();
+    </script>
+
+    <!-- █ Parent Switcher (Basic / Advanced) █ -->
+    <script>
+    (function () {
+        var bar = document.getElementById('cm-parent-tabs');
+        if (!bar) return;
+        var tabs = bar.getElementsByTagName('button');
+        var wraps = {
+            basic: document.getElementById('wrap-basic'),
+            advanced: document.getElementById('wrap-advanced')
+        };
+        function getAttr(el, n) { return el.getAttribute(n); }
+        function setActive(which) {
+            for (var i = 0; i < tabs.length; i++) {
+                var btn = tabs[i];
+                var id = getAttr(btn, 'data-parent');
+                var on = (id === which);
+                btn.className = on ? 'active' : '';
+                btn.setAttribute('aria-selected', on ? 'true' : 'false');
+                if (wraps[id]) wraps[id].style.display = on ? '' : 'none';
+            }
+        }
+        var last = 'basic';
+        try { last = localStorage.getItem('mythos.parent') || 'basic'; } catch (_e) {}
+        if (last !== 'basic' && last !== 'advanced') last = 'basic';
+        setActive(last);
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].onclick = (function (btn) { return function () {
+                var which = getAttr(btn, 'data-parent') || 'basic';
+                setActive(which);
+                try { localStorage.setItem('mythos.parent', which); } catch (_e) {}
+            };})(tabs[i]);
+        }
+    })();
+    </script>
+</body>
+</html>

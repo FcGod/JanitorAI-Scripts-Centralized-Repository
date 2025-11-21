@@ -1,0 +1,135 @@
+Folder PATH listing
+Volume serial number is A093-3A5D
+C:.
+¦   filetree.txt
+¦   index.html
+¦   
++---css
+¦   ¦   layout.css
+¦   ¦   theme.css
+¦   ¦   theme.mythos.css
+¦   ¦   theme.txt
+¦   ¦   
+¦   +---panels
+¦           actors.panel.css
+¦           focus.panel.css
+¦           lorebook.panel.css
+¦           New Text Document.txt
+¦           panel.preferences.css
+¦           project.focus-radar.css
+¦           project.panel.css
+¦           relationships.panel.css
+¦           speech.panel.css
+¦           testing.panel.css
+¦           tokens.panel.css
+¦           
++---engine
+¦       === EMCE  Expressive Micro-Cue Engi.txt
+¦       auditor.rules.js
+¦       mythos-harness.html
+¦       New Text Document.txt
+¦       
++---js
+¦   +---app
+¦   ¦       bootstrap.cfg.js
+¦   ¦       bootstrap.cfg.txt
+¦   ¦       tabs.js
+¦   ¦       
+¦   +---axis
+¦   ¦       presets.js
+¦   ¦       
+¦   +---core
+¦   ¦       actors.access.js
+¦   ¦       bus.js
+¦   ¦       engine.templates.js
+¦   ¦       export.core.js
+¦   ¦       export.package.js
+¦   ¦       io.files.js
+¦   ¦       persist.local.js
+¦   ¦       schema.normalize.js
+¦   ¦       store.js
+¦   ¦       store.txt
+¦   ¦       
+¦   +---lore
+¦   ¦       lore.io.js
+¦   ¦       New Text Document.txt
+¦   ¦       
+¦   +---studio
+¦   ¦       router.js
+¦   ¦       
+¦   +---tests
+¦   ¦       harness.bridge.js
+¦   ¦       harness.js
+¦   ¦       New Text Document.txt
+¦   ¦       
+¦   +---ui
+¦       +---actors
+¦       ¦       actors.anatomy.js
+¦       ¦       actors.anatomy.patch.js
+¦       ¦       actors.panel.js
+¦       ¦       actors.radar.js
+¦       ¦       actors.units.js
+¦       ¦       
+¦       +---debug
+¦       ¦       debug.panel.js
+¦       ¦       
+¦       +---engine
+¦       ¦       engine.panel.js
+¦       ¦       
+¦       +---focus
+¦       ¦       focus.alloc-bak.js
+¦       ¦       focus.alloc.js
+¦       ¦       focus.panel.js
+¦       ¦       focus.radar.js
+¦       ¦       
+¦       +---lorebook
+¦       ¦       lore.diff.js
+¦       ¦       lore.lore.io.js
+¦       ¦       lore.metrics.js
+¦       ¦       lore.model.js
+¦       ¦       lore.search.js
+¦       ¦       lore.seed.js
+¦       ¦       lore.validate.js
+¦       ¦       lorebook.panel.js
+¦       ¦       lorebook.panel.txt
+¦       ¦       
+¦       +---preferences
+¦       ¦       preferences.panel.js
+¦       ¦       
+¦       +---project
+¦       ¦       project.panel.js
+¦       ¦       
+¦       +---relationships
+¦       ¦       New Text Document.txt
+¦       ¦       relationships.graph.js
+¦       ¦       relationships.panel.js
+¦       ¦       relationships.tips.js
+¦       ¦       
+¦       +---speech
+¦       ¦       New Text Document.txt
+¦       ¦       speach.cues.js
+¦       ¦       speech.chips.js
+¦       ¦       speech.cues.js
+¦       ¦       speech.meters.js
+¦       ¦       speech.panel.js
+¦       ¦       speech.panel.js.backup.txt
+¦       ¦       speech.perview.js
+¦       ¦       speech.preview.js
+¦       ¦       speech.quirks.js-bak
+¦       ¦       speech.quirks.json
+¦       ¦       speech.templates.js
+¦       ¦       SpeechQuirks.js
+¦       ¦       
+¦       +---testing
+¦       ¦       New Text Document.txt
+¦       ¦       testing.inspect.js
+¦       ¦       testing.panel.js
+¦       ¦       testing.runner.js
+¦       ¦       testing.scenarios.js
+¦       ¦       
+¦       +---tokens
+¦               tokens.panel.js
+¦               
++---tests
+        LocalHarness.html
+        
