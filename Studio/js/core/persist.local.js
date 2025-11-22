@@ -46,7 +46,7 @@
 
   var KEY = 'mythos.studio.profile.v6';
 
-  function dateISO(){ try { return new Date().toISOString(); } catch(_e){ return ''; } }
+  function nowISO(){ try { return new Date().toISOString(); } catch(_e){ return ''; } }
 
   function save(label){
     try {
@@ -55,7 +55,7 @@
       var packet = {
         version: 6,
         label: label || 'Default Profile',
-        savedAt: dateISO(),
+        savedAt: nowISO(),
         cfg: cfg
       };
       root.localStorage.setItem(KEY, JSON.stringify(packet));

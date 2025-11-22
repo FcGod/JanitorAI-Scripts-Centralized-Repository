@@ -13,42 +13,28 @@
 /* /js/app/tabs.js */
 (function(root){
   'use strict';
+
   var currentTab = null;
 
-  //querySelectorAll Shorthand
   function qsa(sel, el){ return (el||document).querySelectorAll(sel); }
-  //querySelector Shorthand
   function qs(sel, el){ return (el||document).querySelector(sel); }
 
   function getApi(tab){ return root['CMPanel_' + tab]; }
 
 function setActive(tab){
-    var i=0,
-        buttons = qsa('nav.cm-tabs button'),
-        panels  = qsa('section[data-panel]');
-
-    for(i=0;i<buttons.length;i++){
-        var button = buttons[i];
-        var isButton = (button.getAttribute('data-tab') === tab);
-
-        if (isButton) {
-            button.classList.add('active');
-            button.setAttribute('aria-selected','true');
-        }
-        else {
-            button.classList.remove('active');
-            button.setAttribute('aria-selected','false');
-        }
+    var i, btns = qsa('nav.cm-tabs button'), panels = qsa('section[data-panel]');
+    for(i=0;i<btns.length;i++){
+        var b = btns[i];
+        var is = (b.getAttribute('data-tab') === tab);
+        if (is) { b.classList.add('active'); b.setAttribute('aria-selected','true'); }
+        else    { b.classList.remove('active'); b.setAttribute('aria-selected','false'); }
     }
-
     for(i=0;i<panels.length;i++){
-        var panel = panels[i];
-
-        if (panel.getAttribute('data-panel') === tab) {
-            panel.classList.remove('is-hidden');
-        }
-        else {
-            panel.classList.add('is-hidden');
+        var p = panels[i];
+        if (p.getAttribute('data-panel') === tab) {
+            p.classList.remove('is-hidden');
+        } else {
+            p.classList.add('is-hidden');
         }
     }
 }
@@ -82,24 +68,20 @@ function setActive(tab){
   }
 
   function bind(){
-    var i=0,
-        buttons = qsa('nav.cm-tabs button');
-
-    for(i=0;i<buttons.length;i++){
-      (function(button){
-        button.onclick = function(){
-          var tab = button.getAttribute('data-tab');
+    var i, btns = qsa('nav.cm-tabs button');
+    for(i=0;i<btns.length;i++){
+      (function(btn){
+        btn.onclick = function(){
+          var tab = btn.getAttribute('data-tab');
           switchTo(tab);
         };
-      })(buttons[i]);
+      })(btns[i]);
     }
     // Initial state
     switchTo('project');
   }
 
-  if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bind);
-  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', bind); }
   else { bind(); }
 
   root.CMvNext = root.CMvNext || {};

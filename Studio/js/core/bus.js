@@ -3,7 +3,7 @@
  * Module: Event Bus (Lightweight)
  * File:   /js/core/bus.js
  * Namespace: window.CMvNext.bus
- * Version: 1.0.1 (Studio v6)
+ * Version: 1.0.0 (Studio v6)
  * Layer: Studio / Messaging
  * --------------------------------------------------------------
  * Purpose:
@@ -33,11 +33,10 @@
  *   O(#listeners for evt) + O(#onAny) per emit.
  *
  * Testing:
- *   var off = CMvNext.bus.listen('x', console.log); CMvNext.bus.emit('x', 1); off();
+ *   var off = CMvNext.bus.on('x', console.log); CMvNext.bus.emit('x', 1); off();
  *
  * Change Log:
  *   - 1.0.0 2025-10-31: Initial headerization.
- *   - 1.0.1 2025-11-08: Refactoring
  * ==============================================================
  */
 
@@ -45,44 +44,30 @@
 (function(root){
   'use strict';
 
-  var map = {};       // evt -> [listener, listenrer, ...]
-  var any = [];       // [fn, fn, ...] receives (event, payload)
+  var map = {};       // evt -> [fn, fn, ...]
+  var any = [];       // [fn, fn, ...] receives (evt, payload)
 
-
-  function listen(event, listener){
-    if (!event || typeof listener !== 'function') return function(){};
-    var list = map[event] = map[event] || [];
-    list.push(listener);
-    return function off(){ detachListener(event, listener); };
+  function on(evt, fn){
+    if (!evt || typeof fn !== 'function') return function(){};
+    var list = map[evt] = map[evt] || [];
+    list.push(fn);
+    return function off(){ offEvt(evt, fn); };
   }
 
-
-  function listenOnce(event, listener){
-    if (!event || typeof listener !== 'function') return function(){};
-
-    function wrap(x){
-        try{ listener(x); }
-        finally { detachListener(event, wrap); }
-    }
-
-    return listen(event, wrap);
+  function once(evt, fn){
+    if (!evt || typeof fn !== 'function') return function(){};
+    function wrap(x){ try{ fn(x); } finally { offEvt(evt, wrap); } }
+    return on(evt, wrap);
   }
 
-
-  function detachListener(event, listener){
-    var list = map[event]; if (!list) return;
-
-    var i;
-    for (i = list.length - 1; i >= 0; i--) {
-        if (list[i] === listener) list.splice(i, 1);
-    }
-
-    if (!list.length) delete map[event];
+  function offEvt(evt, fn){
+    var list = map[evt]; if (!list) return;
+    var i; for (i = list.length - 1; i >= 0; i--) { if (list[i] === fn) list.splice(i, 1); }
+    if (!list.length) delete map[evt];
   }
 
-
-  function emit(event, payload){
-    var list = map[event];
+  function emit(evt, payload){
+    var list = map[evt]; 
     // snapshot arrays to avoid mutation during emit
     if (list) {
       var i, snap = list.slice(0);
@@ -90,27 +75,20 @@
     }
     if (any.length){
       var j, all = any.slice(0);
-      for (j = 0; j < all.length; j++) { try { all[j](event, payload); } catch(_e){} }
+      for (j = 0; j < all.length; j++) { try { all[j](evt, payload); } catch(_e){} }
     }
   }
 
-  function listenAll(fn){
+  function onAny(fn){
     if (typeof fn !== 'function') return function(){};
     any.push(fn);
-    return function off(){ detachAll(fn); };
+    return function off(){ offAny(fn); };
   }
 
-  function detachAll(fn){
+  function offAny(fn){
     var i; for (i = any.length - 1; i >= 0; i--) { if (any[i] === fn) any.splice(i, 1); }
   }
 
   root.CMvNext = root.CMvNext || {};
-  root.CMvNext.bus = {
-      listen: listen,
-      listenOnce: listenOnce,
-      detachListener: detachListener,
-      emit: emit,
-      listenAll: listenAll,
-      detachAll: detachAll
-  };
+  root.CMvNext.bus = { on: on, once: once, off: offEvt, emit: emit, onAny: onAny, offAny: offAny };
 })(window);

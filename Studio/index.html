@@ -90,6 +90,7 @@
             <button id="tab-tokens" data-tab="tokens" role="tab" aria-selected="true" aria-controls="panel-tokens" class="active">Tokens</button>
             <button id="tab-engine" data-tab="engine" role="tab" aria-selected="false" aria-controls="panel-engine">Engine</button>
             <button id="tab-testing" data-tab="testing" role="tab" aria-selected="false" aria-controls="panel-testing">Testing</button>
+			<button id="tab-scriptdebug" data-tab="scriptdebug" role="tab" aria-selected="false" aria-controls="panel-scriptdebug">Script Debug Tool</button>
         </nav>
         <main class="cm-main">
             <section id="panel-tokens" data-panel="tokens" class="cm-panel" aria-labelledby="tab-tokens">
@@ -99,6 +100,9 @@
                 <div class="panel-body"></div>
             </section>
             <section id="panel-testing" data-panel="testing" class="cm-panel" aria-labelledby="tab-testing">
+                <div class="panel-body"></div>
+            </section>
+			 <section id="panel-scriptdebug" data-panel="scriptdebug" class="cm-panel" aria-labelledby="tab-scriptdebug">
                 <div class="panel-body"></div>
             </section>
         </main>
@@ -189,10 +193,23 @@
     <script src="js/ui/focus/focus.panel.js"></script>
 
     <!-- █ Testing █ -->
+    <!-- Script debugging libraries -->
+    <script src="js/lib/esprima.min.js"></script>
+    <script src="js/lib/escodegen.min.js"></script>
+
+    <!-- Shared script-debugger core + inspector -->
+    <script src="js/lib/scriptdebug.runner.js"></script>
+    <script src="js/lib/scriptdebug.inspect.js"></script>
+
+    <!-- Script debugger Studio panel -->
+    <script src="js/ui/scriptdebug/scriptdebug.panel.js"></script>
+
+    <!-- Existing testing harness -->
     <script src="js/ui/testing/testing.scenarios.js"></script>
     <script src="js/ui/testing/testing.runner.js"></script>
     <script src="js/ui/testing/testing.inspect.js"></script>
     <script src="js/ui/testing/testing.panel.js"></script>
+
 
     <!-- █ Panels (each exposes window.CMPanel_<tab>) █ -->
     <script src="js/ui/project/project.panel.js"></script>

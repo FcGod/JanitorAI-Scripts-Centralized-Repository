@@ -45,93 +45,50 @@
 // --- Anatomy & Body Cues normalizers (ES5) ---
 function ensureAnatomyDefaults(actor){
   actor.appearance = actor.appearance || {};
-  var actorAppearance = actor.appearance;
+  var ap = actor.appearance;
 
   // Only create appendages container if *something* is present later
-  if (!actorAppearance.appendages) actorAppearance.appendages = {}; // lightweight, empty object is fine
+  if (!ap.appendages) ap.appendages = {}; // lightweight, empty object is fine
 
-  var actorAppendages = actorAppearance.appendages;
+  var ad = ap.appendages;
   // Create sub-objects only if toggled by UI later; start minimal.
-  if (actorAppendages.ears == null && actorAppendages.tail == null && actorAppendages.wings == null && actorAppendages.horns == null){
+  if (ad.ears == null && ad.tail == null && ad.wings == null && ad.horns == null){
     // stay empty; "empty ⇒ absent" semantics
   }
 
   // Markings/texture are optional; create lazily if author uses them
-  if (!actorAppearance.markings) actorAppearance.markings = [];          // ok to be empty list
-  if (!actorAppearance.texture)  actorAppearance.texture  = { fur:false, scales:false, feathers:false, notes:"" };
+  if (!ap.markings) ap.markings = [];          // ok to be empty list
+  if (!ap.texture)  ap.texture  = { fur:false, scales:false, feathers:false, notes:"" };
 }
 
 function ensureBodyCuesDefaults(actor, cueKeys){
-  var i, key;
+  var i, k;
   actor.cues_body = actor.cues_body || {};
   for (i=0;i<cueKeys.length;i++){
-    key = cueKeys[i];
-    if (actor.cues_body[key] == null) actor.cues_body[key] = ""; // empty string means "no authored body cue"
+    k = cueKeys[i];
+    if (actor.cues_body[k] == null) actor.cues_body[k] = ""; // empty string means "no authored body cue"
   }
 }
 
 // Call these from your existing normalize pass after actors load:
 //   for each actor: ensureAnatomyDefaults(actor); ensureBodyCuesDefaults(actor, SpeechCues.keys)
 
-function uniq(arr) {
-    var m={},
-        o=[],
-        i;
-
-    for(i=0;i<(arr||[]).length;i++) {
-        var v=arr[i];
-        if(v && !m[v]){
-            m[v]=1; o.push(v);
-        }
-    }
-    return o;
+function uniq(arr){ var m={}, o=[], i; for(i=0;i<(arr||[]).length;i++){ var v=arr[i]; if(v && !m[v]){ m[v]=1; o.push(v); } } return o; }
+function normalize(cfg){
+cfg = cfg || {};
+cfg.version = cfg.version || 1;
+cfg.world = cfg.world || { id:'world', name:'World', validLocations:[], allowOutside:false };
+cfg.features = cfg.features || { debug:false, axisMode:'VADF' };
+cfg.emotions = cfg.emotions || { schema:['V','A','D','F'], caps:{min:-1,max:1}, decayPerTurn:{V:0.02,A:0.02,D:0.02,F:0.02} };
+cfg.locations = cfg.locations || [];
+cfg.actors = cfg.actors || [];
+cfg.studio = cfg.studio || {}; cfg.studio.axisPresets = cfg.studio.axisPresets || {};
+if((!cfg.locations || !cfg.locations.length) && cfg.world && cfg.world.validLocations && cfg.world.validLocations.length){
+var i; cfg.locations=[]; for(i=0;i<cfg.world.validLocations.length;i++){ var id=cfg.world.validLocations[i]; if(id){ cfg.locations.push({ id:id, name:id }); } }
 }
-
-function normalize(cfg) {
-    cfg = cfg || {};
-    cfg.version = cfg.version || 1;
-    cfg.world = cfg.world || {
-        id:'world',
-        name:'World',
-        validLocations:[],
-        allowOutside:false
-    };
-    cfg.features = cfg.features || {
-        debug:false,
-        axisMode:'VADF'
-    };
-    cfg.emotions = cfg.emotions || {
-        schema:['V','A','D','F'],
-        caps:{min:-1,max:1},
-        decayPerTurn:{
-            V:0.02,
-            A:0.02,
-            D:0.02,
-            F:0.02
-        }
-    };
-    cfg.locations = cfg.locations || [];
-    cfg.actors = cfg.actors || [];
-    cfg.studio = cfg.studio || {};
-    cfg.studio.axisPresets = cfg.studio.axisPresets || {};
-
-    if((!cfg.locations || !cfg.locations.length) && cfg.world && cfg.world.validLocations && cfg.world.validLocations.length) {
-        var i;
-        cfg.locations=[];
-        for(i=0;i<cfg.world.validLocations.length;i++){
-            var id=cfg.world.validLocations[i];
-            if(id){
-                cfg.locations.push({ id:id, name:id });
-            }
-        }
-    }
-    var ids=[], j;
-    for(j=0;j<cfg.locations.length;j++){
-        var L=cfg.locations[j];
-        if(L && L.id){ ids.push(L.id); }
-    }
-    cfg.world.validLocations = uniq(ids);
-    return cfg;
+var ids=[], j; for(j=0;j<cfg.locations.length;j++){ var L=cfg.locations[j]; if(L && L.id){ ids.push(L.id); } }
+cfg.world.validLocations = uniq(ids);
+return cfg;
 }
 root.normalizeCFG = normalize;
 })(window);

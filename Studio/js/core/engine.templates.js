@@ -45,25 +45,25 @@
   var map = {};
 
   // ---- internal helper: simple XHR loader (ES5-safe) ----
-  function xhrGet(url, callback){
+  function xhrGet(url, cb){
     try{
       var x = new XMLHttpRequest();
       x.onreadystatechange = function(){
         if (x.readyState === 4){
-          if (x.status >= 200 && x.status < 300) callback(null, x.responseText);
-          else callback(new Error('HTTP ' + x.status + ' for ' + url));
+          if (x.status >= 200 && x.status < 300) cb(null, x.responseText);
+          else cb(new Error('HTTP ' + x.status + ' for ' + url));
         }
       };
       x.open('GET', url, true);
       x.send(null);
-    }catch(e){ callback(e); }
+    }catch(e){ cb(e); }
   }
 
   // ---- registry methods ----
   function register(name, getter){ map[name] = getter; }
-  function get(name, callback){
-    if (!map[name]) return callback(new Error('template not found: ' + name));
-    try { map[name](callback); } catch(e){ callback(e); }
+  function get(name, cb){
+    if (!map[name]) return cb(new Error('template not found: ' + name));
+    try { map[name](cb); } catch(e){ cb(e); }
   }
   function list(){
     var k, a = [];

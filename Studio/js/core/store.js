@@ -42,70 +42,22 @@
 
 
 /* /js/core/store.js */
-(function (root) {
-    'use strict';
-    var subs = [];
-    var state = {CFG: null};
-
-    function get () {
-        return state.CFG;
-    }
-
-    function set (next) {
-        state.CFG = next;
-        notify (true);
-    }
-
-    function patch (mut) {
-        if (!state.CFG) return;
-        mut (state.CFG);
-        notify (true);
-    }
-
-    function select (sel, cb) {
-        var item = {sel: sel, cb: cb, last: sel (state.CFG)};
-        subs.push (item);
-        try {
-            cb (item.last);
-        } catch (_e) {
-        }
-        return function () {
-            var i;
-            for (i = 0; i < subs.length; i++) {
-                if (subs[i] === item) {
-                    subs.splice (i, 1);
-                    break;
-                }
-            }
-        };
-    }
-
-    function notify () {
-        var i;
-        for (i = 0; i < subs.length; i++) {
-            var s = subs[i];
-            var cur = s.sel (state.CFG);
-            if (cur !== s.last) {
-                s.last = cur;
-                try {
-                    s.cb (cur);
-                } catch (_e) {
-                }
-            }
-        }
-        if (root.CMvNext && CMvNext.bus && typeof CMvNext.bus.emit === 'function') {
-            try {
-                CMvNext.bus.emit ('cfg:changed', state.CFG);
-            } catch (_e) {
-            }
-        }
-        if (root.GUI && typeof GUI.onChange === 'function') {
-            try {
-                GUI.onChange (state.CFG);
-            } catch (_e) {
-            }
-        }
-    }
-
-    root.CFGStore = {get: get, set: set, patch: patch, select: select};
-}) (window);
+(function(root){
+'use strict';
+var subs = [];
+var state = { CFG: null };
+function get(){ return state.CFG; }
+function set(next){ state.CFG = next; notify(true); }
+function patch(mut){ if(!state.CFG) return; mut(state.CFG); notify(true); }
+function select(sel, cb){
+var item = { sel: sel, cb: cb, last: sel(state.CFG) };
+subs.push(item);
+try { cb(item.last); } catch(_e){}
+return function(){ var i; for(i=0;i<subs.length;i++){ if(subs[i]===item){ subs.splice(i,1); break; } } };
+}
+function notify(){ var i; for(i=0;i<subs.length;i++){ var s=subs[i]; var cur=s.sel(state.CFG); if(cur!==s.last){ s.last=cur; try{s.cb(cur);}catch(_e){} } }
+if(root.CMvNext && CMvNext.bus && typeof CMvNext.bus.emit==='function'){ try{ CMvNext.bus.emit('cfg:changed', state.CFG); }catch(_e){} }
+if(root.GUI && typeof GUI.onChange==='function'){ try{ GUI.onChange(state.CFG); }catch(_e){} }
+}
+root.CFGStore = { get:get, set:set, patch:patch, select:select };
+})(window);

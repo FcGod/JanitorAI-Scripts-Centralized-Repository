@@ -45,13 +45,9 @@
     try{
       var blob = new Blob([String(text || '')], { type:'application/json;charset=utf-8' });
       var a = document.createElement('a');
-
       a.href = URL.createObjectURL(blob);
       a.download = filename || 'download.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
       setTimeout(function(){ try{ URL.revokeObjectURL(a.href); }catch(_e){} }, 0);
       return true;
     }catch(_e){ return false; }

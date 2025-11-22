@@ -1,0 +1,660 @@
+(function(root){
+  'use strict';
+
+  /**
+   * EngineExporter
+   * --------------
+   * Compiles the Studio authoring CFG into a lean EngineCFG runtime object.
+   *
+   * Usage:
+   *   var cfg = CFGStore.get();
+   *   var engineCfg = EngineExporter.exportEnginePackage(cfg);
+   *
+   * EngineCFG shape:
+   * {
+   *   version: "engine-cfg-v1",
+   *   engine:  { token:{charsPerToken}, limits:{...}, split:{...} },
+   *   actors:  [ ActorRuntime, ... ],
+   *   relations: {
+   *     graph: { "alice:bob":{trust,...}, ... },
+   *     perActor: { alice:{topTies:[...]}, ... }
+   *   }
+   * }
+   */
+
+  var EngineExporter = {};
+
+  // ---------- Public API ----------
+
+  EngineExporter.exportEnginePackage = function(authoringCfg){
+    var cfg    = normalizeAuthoringCfg(authoringCfg);
+    var actors = buildActorIndex(cfg);
+    var engine = compileEngineGlobals(cfg);
+    var cueData = compileCuePoolsFromLorebook(cfg, actors, engine);
+    var actorsRuntime = compileActorsRuntime(cfg, actors, cueData, engine);
+    var relations = compileRelationsRuntime(cfg, actors);
+
+    var engineCfg = {
+      version: "engine-cfg-v1",
+      engine:  engine,
+      actors:  actorsRuntime,
+      relations: relations
+    };
+
+    return engineCfg;
+  };
+
+  // ---------- Normalization ----------
+
+  function normalizeAuthoringCfg(cfg){
+    cfg = cfg || {};
+    if (!cfg.actors) cfg.actors = {};
+    if (!cfg.lorebook) cfg.lorebook = {};
+    if (!cfg.lorebook.entries) cfg.lorebook.entries = [];
+    if (!cfg.engine) cfg.engine = {};
+    if (!cfg.engine.token) cfg.engine.token = {};
+    if (!cfg.engine.limits) cfg.engine.limits = {};
+    if (!cfg.engine.split) cfg.engine.split = {};
+    if (!cfg.params) cfg.params = {};
+    if (!cfg.params.token_caps) cfg.params.token_caps = {};
+    if (!cfg.params.token_caps.actors) cfg.params.token_caps.actors = {};
+    return cfg;
+  }
+
+  // ---------- Actor index ----------
+
+  function buildActorIndex(cfg){
+    var map  = cfg.actors || {};
+    var list = [];
+    var byId = {};
+    var k;
+    for (k in map){
+      if (!map.hasOwnProperty(k)) continue;
+      list.push(k);
+      byId[k] = map[k] || {};
+    }
+    list.sort();
+    return { list:list, byId:byId };
+  }
+
+  // ---------- Engine globals ----------
+
+  function compileEngineGlobals(cfg){
+    var eng = cfg.engine || {};
+    var tok = eng.token || {};
+    var lim = eng.limits || {};
+    var split = eng.split || {};
+
+    var charsPerToken = +tok.chars_per_token;
+    if (!charsPerToken || charsPerToken <= 0) charsPerToken = 4.0;
+
+    var maxCuesGlobal = +lim.max_cues_global;
+    if (!maxCuesGlobal || maxCuesGlobal <= 0) maxCuesGlobal = 6;
+
+    var poolTotalTokens = +lim.pool_total_tokens;
+    // allow override from params.token_caps.pool_total if present
+    if ((!poolTotalTokens || poolTotalTokens <= 0) &&
+        cfg.params && cfg.params.token_caps && cfg.params.token_caps.pool_total){
+      poolTotalTokens = +cfg.params.token_caps.pool_total;
+    }
+    if (!poolTotalTokens || poolTotalTokens <= 0) poolTotalTokens = 240;
+
+    var scenarioFrac = split.scenarioFrac;
+    if (scenarioFrac == null && eng.split_scenario != null){
+      scenarioFrac = +eng.split_scenario;
+    }
+    if (scenarioFrac == null || isNaN(scenarioFrac)) scenarioFrac = 0.35;
+    if (scenarioFrac < 0) scenarioFrac = 0;
+    if (scenarioFrac > 1) scenarioFrac = 1;
+
+    return {
+      token: {
+        charsPerToken: charsPerToken
+      },
+      limits: {
+        maxCuesGlobal: maxCuesGlobal,
+        poolTotalTokens: poolTotalTokens
+      },
+      split: {
+        scenarioFrac: scenarioFrac,
+        personalityFrac: 1 - scenarioFrac
+      }
+    };
+  }
+
+  // ---------- Cue pools from Lorebook ----------
+
+  function compileCuePoolsFromLorebook(cfg, actorMeta, engine){
+    var entries = cfg.lorebook.entries || [];
+    var grouped = {};
+    var i, e, aid;
+
+    // group entries by actorId
+    for (i = 0; i < entries.length; i++){
+      e = entries[i];
+      if (!e || e.enabled === false) continue;
+      aid = e.actorId;
+      if (!aid || !actorMeta.byId[aid]) continue;
+      if (!grouped[aid]) grouped[aid] = [];
+      grouped[aid].push(e);
+    }
+
+    var cpt = engine.token.charsPerToken || 4.0;
+    var out = { byActor:{} };
+    for (aid in grouped){
+      if (!grouped.hasOwnProperty(aid)) continue;
+      out.byActor[aid] = compileCuePoolsForActor(
+        aid,
+        grouped[aid],
+        cpt,
+        actorMeta.byId[aid]
+      );
+    }
+
+    return out;
+  }
+
+  function compileCuePoolsForActor(actorId, entries, charsPerToken, srcActor){
+    var cuePools = {
+      scenario: {},  // emotion -> [cue]
+      parts: {},     // emotion -> part -> [cue]
+      special: {}    // reserved
+    };
+    var persona = {
+      base: "",
+      byMood: {}     // emotion -> [ {text, weight, priority} ]
+    };
+
+    var i, e;
+    for (i = 0; i < entries.length; i++){
+      e = entries[i];
+      if (!e) continue;
+      if (e.enabled === false) continue;
+
+      var scenText = e.scenario || "";
+      var persText = e.personality || "";
+      if (!scenText && !persText) continue;
+
+      var emotions = (e.emotions && e.emotions.length) ? e.emotions.slice() : [];
+      var parts = (e.parts && e.parts.length) ? e.parts.slice() : [];
+
+      var intensity = (e.intensity != null) ? clamp01(e.intensity) : 0.5;
+      var weight    = (e.probability != null) ? clamp01(e.probability) : 1.0;
+      var priority  = (e.priority != null) ? (e.priority|0) : 0;
+
+      if (scenText){
+        routeScenarioCue(
+          cuePools,
+          scenText,
+          emotions,
+          parts,
+          intensity,
+          weight,
+          priority,
+          charsPerToken,
+          e,
+          srcActor
+        );
+      }
+
+      if (persText){
+        routePersonaCue(
+          persona,
+          persText,
+          emotions,
+          weight,
+          priority
+        );
+      }
+    }
+
+    sortCuePools(cuePools);
+    sortPersona(persona);
+
+    return {
+      cuePools: cuePools,
+      persona: persona
+    };
+  }
+
+  function clamp01(v){
+    v = +v;
+    if (isNaN(v)) return 0;
+    if (v < 0) return 0;
+    if (v > 1) return 1;
+    return v;
+  }
+
+  function estimateTokens(text, charsPerToken){
+    if (!text) return 0;
+    var len = text.length;
+    if (!charsPerToken || charsPerToken <= 0) charsPerToken = 4;
+    return Math.ceil(len / charsPerToken);
+  }
+
+  function isAppendagePart(part){
+    part = String(part || "").toLowerCase();
+    return part === "ears" || part === "tail" || part === "wings" || part === "horns";
+  }
+
+  function actorHasAppendage(srcActor, part){
+    if (!srcActor || !srcActor.appearance || !srcActor.appearance.appendages) return false;
+    var slot = srcActor.appearance.appendages[part] || {};
+    return !!slot.present;
+  }
+
+  function addScenarioCue(cuePools, emotion, cue){
+    if (!cuePools.scenario[emotion]) cuePools.scenario[emotion] = [];
+    cuePools.scenario[emotion].push(cue);
+  }
+
+  function addPartsCue(cuePools, emotion, part, cue){
+    if (!cuePools.parts[emotion]) cuePools.parts[emotion] = {};
+    if (!cuePools.parts[emotion][part]) cuePools.parts[emotion][part] = [];
+    cuePools.parts[emotion][part].push(cue);
+  }
+
+  function cloneCue(c){
+    var out = {};
+    var k;
+    for (k in c){ if (c.hasOwnProperty(k)) out[k] = c[k]; }
+    return out;
+  }
+
+  function routeScenarioCue(cuePools, text, emotions, parts, intensity, weight, priority, charsPerToken, entry, srcActor){
+    var tokens = estimateTokens(text, charsPerToken);
+    if (!emotions || !emotions.length) emotions = ["neutral"];
+
+    var genericParts = [];
+    var appendageParts = [];
+
+    if (parts && parts.length){
+      var j, p;
+      for (j = 0; j < parts.length; j++){
+        p = parts[j];
+        if (isAppendagePart(p)){
+          if (actorHasAppendage(srcActor, p)){
+            appendageParts.push(p);
+          }
+        } else {
+          genericParts.push(p);
+        }
+      }
+    }
+
+    if (!parts || !parts.length){
+      genericParts.push("body");
+    }
+
+    var baseCue = {
+      text: text,
+      tokens: tokens,
+      intensity: intensity,
+      weight: weight,
+      priority: priority,
+      id: entry.id || null
+    };
+
+    var i, emo;
+
+    if (genericParts.length){
+      for (i = 0; i < emotions.length; i++){
+        emo = emotions[i];
+        addScenarioCue(cuePools, emo, cloneCue(baseCue));
+      }
+    }
+
+    if (appendageParts.length){
+      for (i = 0; i < emotions.length; i++){
+        emo = emotions[i];
+        var k;
+        for (k = 0; k < appendageParts.length; k++){
+          var part = appendageParts[k];
+          addPartsCue(cuePools, emo, part, cloneCue(baseCue));
+        }
+      }
+    }
+  }
+
+  function routePersonaCue(persona, text, emotions, weight, priority){
+    if (!emotions || !emotions.length){
+      persona.base = mergePersonaBase(persona.base, text);
+      return;
+    }
+    var i, emo;
+    for (i = 0; i < emotions.length; i++){
+      emo = emotions[i];
+      if (!persona.byMood[emo]) persona.byMood[emo] = [];
+      persona.byMood[emo].push({
+        text: text,
+        weight: weight,
+        priority: priority
+      });
+    }
+  }
+
+  function mergePersonaBase(oldBase, newText){
+    if (!oldBase) return newText;
+    return oldBase + " " + newText;
+  }
+
+  function cueCompare(a, b){
+    var ap = (a.priority|0), bp = (b.priority|0);
+    if (ap !== bp) return bp - ap; // priority desc
+    if (a.intensity !== b.intensity) return a.intensity - b.intensity; // intensity asc
+    return (a.tokens|0) - (b.tokens|0); // shorter first
+  }
+
+  function sortCuePools(cuePools){
+    var emo, part;
+    for (emo in cuePools.scenario){
+      if (!cuePools.scenario.hasOwnProperty(emo)) continue;
+      cuePools.scenario[emo].sort(cueCompare);
+    }
+    for (emo in cuePools.parts){
+      if (!cuePools.parts.hasOwnProperty(emo)) continue;
+      var obj = cuePools.parts[emo];
+      for (part in obj){
+        if (!obj.hasOwnProperty(part)) continue;
+        obj[part].sort(cueCompare);
+      }
+    }
+  }
+
+  function sortPersona(persona){
+    var emo, arr;
+    for (emo in persona.byMood){
+      if (!persona.byMood.hasOwnProperty(emo)) continue;
+      arr = persona.byMood[emo];
+      arr.sort(function(a, b){
+        var ap = (a.priority|0), bp = (b.priority|0);
+        if (ap !== bp) return bp - ap;
+        return a.weight - b.weight;
+      });
+    }
+  }
+
+  // ---------- Actors runtime ----------
+
+  function compileActorsRuntime(cfg, actorMeta, cueData, engine){
+    var out = [];
+    var list = actorMeta.list;
+    var byId = actorMeta.byId;
+    var i, id, srcActor, compiledCue;
+
+    for (i = 0; i < list.length; i++){
+      id = list[i];
+      srcActor = byId[id] || {};
+      compiledCue = cueData.byActor[id] || {
+        cuePools: { scenario:{}, parts:{}, special:{} },
+        persona: { base:"", byMood:{} }
+      };
+
+      var actorRt = {
+        id:   id,
+        name: getActorName(srcActor),
+        role: getActorRole(srcActor),
+
+        profile:    compileProfileRuntime(srcActor),
+        appearance: compileAppearanceRuntime(srcActor),
+        personality: compilePersonalityRuntime(srcActor),
+
+        persona: compiledCue.persona,
+        cuePools: compiledCue.cuePools,
+
+        runtime:   compileRuntimeBudgetsForActor(id, cfg, engine),
+        relations: { topTies: [] }, // filled in by compileRelationsRuntime
+        emo:       compileEmoOverlayForActor(srcActor)
+      };
+
+      out.push(actorRt);
+    }
+
+    return out;
+  }
+
+  function getActorName(srcActor){
+    var p = srcActor.profile || {};
+    return p.preferredName || p.fullName || "Actor";
+  }
+
+  function getActorRole(srcActor){
+    var p = srcActor.profile || {};
+    return p.role || "";
+  }
+
+  function compileProfileRuntime(srcActor){
+    var p = srcActor.profile || {};
+    return {
+      fullName:      p.fullName || "",
+      preferredName: p.preferredName || "",
+      gender:        p.gender || "",
+      pronouns:      p.pronouns || "",
+      role:          p.role || "",
+      ageDisplay:    p.age || ""
+    };
+  }
+
+  function compileAppearanceRuntime(srcActor){
+    var a = srcActor.appearance || {};
+    var app = a.appendages || {};
+
+    function ap(part){
+      var s = app[part] || {};
+      return {
+        present: !!s.present,
+        style:   s.style || ""
+      };
+    }
+
+    return {
+      summary:       a.summary || "",
+      build:         a.build || "",
+      heightDisplay: a.height_display || "",
+      hair:          a.hair || "",
+      eyes:          a.eyes || "",
+      appendages: {
+        ears:  ap("ears"),
+        tail:  ap("tail"),
+        wings: ap("wings"),
+        horns: ap("horns")
+      }
+    };
+  }
+
+  function compilePersonalityRuntime(srcActor){
+    var p = srcActor.personality || {};
+    var ocean = p.ocean || {};
+    return {
+      temperament: p.temperament || "",
+      ocean: {
+        O: +ocean.O || 0,
+        C: +ocean.C || 0,
+        E: +ocean.E || 0,
+        A: +ocean.A || 0,
+        N: +ocean.N || 0
+      }
+    };
+  }
+
+  // ---------- Runtime budgets (Focus + Engine) ----------
+
+  function compileRuntimeBudgetsForActor(id, cfg, engine){
+    var caps = cfg.params.token_caps || {};
+    var pool = +caps.pool_total || engine.limits.poolTotalTokens || 240;
+    var per  = caps.actors || {};
+    var slot = per[id] || null;
+
+    var allocated = 0;
+    if (slot && slot.value != null){
+      allocated = +slot.value || 0;
+    } else {
+      var count = countKeys(cfg.actors || {});
+      if (count > 0){
+        allocated = Math.floor(pool / count);
+      }
+    }
+    if (allocated < 0) allocated = 0;
+
+    var scenFrac = engine.split.scenarioFrac;
+    if (scenFrac < 0) scenFrac = 0;
+    if (scenFrac > 1) scenFrac = 1;
+
+    var maxScenarioTokens    = Math.floor(allocated * scenFrac);
+    var maxPersonalityTokens = allocated - maxScenarioTokens;
+
+    if (maxScenarioTokens < 0) maxScenarioTokens = 0;
+    if (maxPersonalityTokens < 0) maxPersonalityTokens = 0;
+
+    var maxCuesGlobal  = engine.limits.maxCuesGlobal || 6;
+    var maxCuesPerTurn = maxCuesGlobal;
+
+    var focusWeight = (pool > 0) ? (allocated / pool) : 0;
+
+    return {
+      maxScenarioTokens:    maxScenarioTokens,
+      maxPersonalityTokens: maxPersonalityTokens,
+      maxCuesPerTurn:       maxCuesPerTurn,
+      focusWeight:          focusWeight,
+      bias: {
+        bodyOverVoice:    0.5,
+        appendagesWeight: 1.0,
+        reuseCooldown:    2
+      }
+    };
+  }
+
+  function countKeys(obj){
+    var k, n = 0;
+    for (k in obj){ if (obj.hasOwnProperty(k)) n++; }
+    return n;
+  }
+
+  // ---------- EMO overlay from temperament ----------
+
+  function compileEmoOverlayForActor(srcActor){
+    var p = srcActor.personality || {};
+    var t = p.temperament || "Calm";
+    var v = 0, a = 0, d = 0;
+
+    if (t === "Calm"){
+      v = 0.0; a = -0.1; d = 0.0;
+    } else if (t === "Reactive"){
+      v = 0.0; a = 0.1; d = 0.0;
+    } else if (t === "Volatile"){
+      v = -0.05; a = 0.2; d = 0.05;
+    } else if (t === "Cheerful"){
+      v = 0.15; a = 0.05; d = 0.0;
+    }
+
+    return {
+      baselinePad: { v:v, a:a, d:d },
+      emotionPad: {}
+    };
+  }
+
+  // ---------- Relationships ----------
+
+  function compileRelationsRuntime(cfg, actorMeta){
+    var rels = cfg.relationships || {};
+    var byActor = rels.actors || rels; // allow either shape
+    var graph = {};
+    var perActor = {};
+    var i, aId, tId, srcMap, pairKey;
+
+    var actors = actorMeta.list;
+    for (i = 0; i < actors.length; i++){
+      aId = actors[i];
+      srcMap = byActor[aId] || {};
+      for (tId in srcMap){
+        if (!srcMap.hasOwnProperty(tId)) continue;
+        var r = srcMap[tId];
+        pairKey = aId + ":" + tId;
+        graph[pairKey] = extractRelationData(r);
+      }
+    }
+
+    for (i = 0; i < actors.length; i++){
+      aId = actors[i];
+      perActor[aId] = compileRelationsForActor(aId, graph);
+    }
+
+    return {
+      graph: graph,
+      perActor: perActor
+    };
+  }
+
+  function extractRelationData(r){
+    if (!r) return { trust:0, affinity:0, respect:0, rivalry:0, influence:0 };
+    return {
+      trust:     +r.trust || 0,
+      affinity:  +r.affinity || 0,
+      respect:   +r.respect || 0,
+      rivalry:   +r.rivalry || 0,
+      influence: +r.influence || 0
+    };
+  }
+
+  function compileRelationsForActor(actorId, graph){
+    var topTies = [];
+    var prefix = actorId + ":";
+    var k, rel, target;
+
+    for (k in graph){
+      if (!graph.hasOwnProperty(k)) continue;
+      if (k.indexOf(prefix) !== 0) continue;
+      target = k.split(":")[1];
+      rel = graph[k];
+
+      var strength = (rel.trust + rel.affinity + rel.respect) / 3;
+      var valence = classifyValence(strength, rel.rivalry);
+      var tension = classifyTension(rel.rivalry, rel.influence);
+      var role    = classifyRole(rel);
+
+      topTies.push({
+        to: target,
+        role: role,
+        valence: valence,
+        tension: tension,
+        strength: round2(strength)
+      });
+    }
+
+    topTies.sort(function(a, b){ return b.strength - a.strength; });
+    topTies = topTies.slice(0, 5);
+
+    return { topTies: topTies };
+  }
+
+  function classifyValence(strength, rivalry){
+    if (rivalry > 0.6 && strength < 0.4) return "hostile";
+    if (rivalry > 0.3 && strength < 0.5) return "mixed";
+    if (strength >= 0.6) return "warm";
+    return "neutral";
+  }
+
+  function classifyTension(rivalry, influence){
+    var t = (rivalry + influence) / 2;
+    if (t < 0.3) return "low";
+    if (t < 0.6) return "medium";
+    return "high";
+  }
+
+  function classifyRole(r){
+    if (r.trust > 0.7 && r.affinity > 0.7) return "confidant";
+    if (r.respect > 0.6 && r.influence > 0.5) return "mentor";
+    if (r.rivalry > 0.7) return "rival";
+    if (r.affinity > 0.5 && r.trust < 0.3) return "crush";
+    return "associate";
+  }
+
+  function round2(x){
+    return Math.round(x * 100) / 100;
+  }
+
+  // ---------- Export symbol ----------
+
+  root.EngineExporter = EngineExporter;
+
+}(this));

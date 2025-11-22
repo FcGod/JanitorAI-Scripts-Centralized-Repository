@@ -122,42 +122,42 @@
   // ----- flattener (dot-path) -----
   // Produces paths like:
   //   a.b, a.c[], a.c[].d, a.c[2].d  (we also keep the array wildcard form for allow-list matching)
-  function flatten(obj, prefix, output, shape) {
-    if (!output) output = {};
+  function flatten(obj, prefix, out, shape) {
+    if (!out) out = {};
     if (!shape) shape = {};
-    var key, i;
+    var k, i;
 
     if (obj === null || typeof obj !== 'object') {
-      output[prefix || ''] = obj;
-      return { flat: output, shape: shape };
+      out[prefix || ''] = obj;
+      return { flat: out, shape: shape };
     }
 
     // arrays
     if (isArr(obj)) {
-      output[prefix || ''] = obj;
+      out[prefix || ''] = obj;
       // record wildcard shape
       shape[(prefix || '') + '[]'] = true;
       for (i = 0; i < obj.length; i++) {
-        flatten(obj[i], (prefix ? prefix + '[' + i + ']' : '[' + i + ']'), output, shape);
+        flatten(obj[i], (prefix ? prefix + '[' + i + ']' : '[' + i + ']'), out, shape);
         // also store wildcard-like convenience key for matching
         flatten(obj[i], (prefix ? prefix + '[]' : '[]'), {}, shape); // shape only
       }
-      return { flat: output, shape: shape };
+      return { flat: out, shape: shape };
     }
 
     // objects
-    output[prefix || ''] = obj;
-    for (key in obj) if (own(obj, key)) {
-      flatten(obj[key], prefix ? (prefix + '.' + key) : key, output, shape);
+    out[prefix || ''] = obj;
+    for (k in obj) if (own(obj, k)) {
+      flatten(obj[k], prefix ? (prefix + '.' + k) : k, out, shape);
     }
-    return { flat: output, shape: shape };
+    return { flat: out, shape: shape };
   }
 
   // ----- reconstruct from flat (using bracket indices) -----
   function reconstruct(flat) {
     var root = {}, keys = [];
-    var key;
-    for (key in flat) if (own(flat, key)) keys.push(key);
+    var k;
+    for (k in flat) if (own(flat, k)) keys.push(k);
     keys.sort();
 
     for (var i = 0; i < keys.length; i++) {
