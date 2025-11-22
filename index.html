@@ -1,12 +1,11 @@
-<!-- index.html in your repo root -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatbot Creation Guides</title>
+    <title>JanitorAI Community Resources HUB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,76 +16,134 @@
         }
         .container {
             text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px 20px;
         }
-        h1 { margin-bottom: 50px; }
+        h1 { margin-bottom: 40px; letter-spacing: 1px; }
+
         .guides {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap; /* optional, allows wrapping */
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
         }
+
+        /* CARD STYLING */
         .guide-card {
             background: #2a2a2a;
-            padding: 40px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 12px;
             text-decoration: none;
             color: #fff;
-            transition: transform 0.2s;
-            min-width: 250px;
-            max-width: 350px;
-            width: 90%;
+            transition: transform 0.2s, background 0.2s, border 0.2s;
+            width: 300px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #333;
         }
+
+        /* GitHub card extra emphasis */
+        .guide-card.github-highlight {
+            background: #222;
+            border: 1px solid #555;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            width: 350px;
+        }
+
         .guide-card:hover {
             transform: translateY(-5px);
             background: #3a3a3a;
+            border-color: #666;
         }
-        .guide-card h2 { margin-top: 0; }
-        .guide-card p { color: #aaa; }
+        .guide-card h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; }
+        .guide-card p { color: #aaa; margin: 0; font-size: 0.9rem; line-height: 1.4; }
 
-        @media (max-width: 600px) {
+        /* SEPARATOR STYLING */
+        .separator {
+            flex-basis: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            color: #666;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .separator-line {
+            height: 1px;
+            background: #333;
+            flex-grow: 1;
+            max-width: 150px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
             body {
                 align-items: flex-start;
-                padding-top: 20px;
-            }
-            .container {
-                width: 90%;
             }
             .guides {
-                flex-direction: column;
-                gap: 20px;
-                align-items: center;
-                width: 100%;
+                flex-direction: column; /* Stack vertical */
             }
-            .guide-card {
-                width: 100%;
+            .guide-card, .guide-card.github-highlight {
+                width: 100%; /* Full width on mobile */
+                max-width: 400px;
+            }
+            .separator {
+                margin: 20px 0;
             }
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Chatbot Creation Guides</h1>
+        <h1>JanitorAI Community Resources HUB</h1>
         <div class="guides">
+
             <a href="GuideBookSite/book/index.html" class="guide-card">
                 <h2>📘 Script Guide</h2>
-                <p>Learn how to write scripts, lorebooks, and dynamic behaviors.</p>
+                <p>How to write scripts, lorebooks, and dynamic behaviors.</p>
             </a>
+
             <a href="ChatbotBookSite/book/index.html" class="guide-card">
-                <h2>🧠 Chatbot Design Guide</h2>
-                <p>Understand LLM thinking and character design principles.</p>
+                <h2>🧠 Design Guide</h2>
+                <p>LLM thinking and character design principles.</p>
             </a>
-            <a href="https://github.com/FcGod/JanitorAI-Scripts-Centralized-Repository" class="guide-card">
+
+            <div class="separator">
+                <div class="separator-line"></div>
+                <span>⬆️ Guides & Resources ⬆️</span>
+                <div class="separator-line"></div>
+            </div>
+
+            <a href="https://github.com/FcGod/JanitorAI-Scripts-Centralized-Repository" class="guide-card github-highlight">
                 <h2>📖 GitHub Repository</h2>
-                <p>See and copy the code. All in one place.</p>
+                <p>The Source Code. Copy, paste, and contribute. All in one place.</p>
             </a>
+
+            <div class="separator">
+                <div class="separator-line"></div>
+                <span>⬇️ Community Projects ⬇️</span>
+                <div class="separator-line"></div>
+            </div>
+
             <a href="Studio/index.html" class="guide-card">
-                <h2>📖 MythOS Studio Suite [WIP]</h2>
-                <p>All-in-one Advanced Lorebook Maker with nice GUI interface. UNDER WORKS</p>
+                <h2>🔮 MythOS Studio [WIP]</h2>
+                <p>Advanced Lorebook Maker with GUI interface.</p>
             </a>
+
+            <a href="OfflineEditor/index.html" class="guide-card">
+                <h2>🛠️ Offline Editor [WIP]</h2>
+                <p>Simulation for rapid script testing with auto-completion.</p>
+            </a>
+
         </div>
     </div>
 </body>
 </html>
-

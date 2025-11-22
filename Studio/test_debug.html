@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="js/lib/esprima.min.js"></script>
+</head>
+
+<body>
+    <div id="output"></div>
+    <script>
+        const code = "const a = {}; const b = a?.b ?? 'default';";
+        try {
+            esprima.parse(code);
+            document.getElementById('output').textContent = "Success";
+        } catch (e) {
+            document.getElementById('output').textContent = "Error: " + e.message;
+        }
+    </script>
+</body>
+
+</html>

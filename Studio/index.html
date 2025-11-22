@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>MythOS Studio Reborn</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- █ Fonts (load early to reduce FOUT) █ -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@600&display=swap"
+        rel="stylesheet">
 
     <!-- █ Core Styles █ -->
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/theme.mythos.css" />
-	<link rel="stylesheet" href="css/misc.css" />
-    
-	<!-- █ Panel Styles (scoped) █ -->
+    <link rel="stylesheet" href="css/misc.css" />
+
+    <!-- █ Panel Styles (scoped) █ -->
     <link rel="stylesheet" href="css/panels/project.panel.css" />
     <link rel="stylesheet" href="css/panels/actors.panel.css" />
     <link rel="stylesheet" href="css/panels/speech.panel.css" />
@@ -26,14 +29,49 @@
 
     <!-- █ Minimal inline helpers (isolated from child tab CSS/JS) █ -->
     <style>
-        :root { --tab-gap: 8px; }
-        body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-        .parent-tabs { display: flex; gap: var(--tab-gap); padding: 10px; border-bottom: 1px solid var(--border, #2a2e37); background: var(--panel, transparent); }
-        .parent-tabs button { padding: 8px 12px; border: 1px solid var(--border, #2a2e37); background: transparent; color: inherit; border-radius: 8px; cursor: pointer; }
-        .parent-tabs button.active { background: rgba(255,255,255,0.08); border-color: var(--accent, #6b7cff); font-weight: 600; }
-        .wrap { padding: 12px; }
-        .hidden { display: none; }
-        .cm-panel.is-hidden { display: none; }
+        :root {
+            --tab-gap: 8px;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        .parent-tabs {
+            display: flex;
+            gap: var(--tab-gap);
+            padding: 10px;
+            border-bottom: 1px solid var(--border, #2a2e37);
+            background: var(--panel, transparent);
+        }
+
+        .parent-tabs button {
+            padding: 8px 12px;
+            border: 1px solid var(--border, #2a2e37);
+            background: transparent;
+            color: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .parent-tabs button.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent, #6b7cff);
+            font-weight: 600;
+        }
+
+        .wrap {
+            padding: 12px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .cm-panel.is-hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -46,19 +84,27 @@
 
     <!-- █ Parent Sections (Basic / Advanced) █ -->
     <nav class="parent-tabs" id="cm-parent-tabs" role="tablist" aria-label="Parent Sections">
-        <button id="parent-basic" data-parent="basic" role="tab" aria-selected="true" aria-controls="wrap-basic" class="active">Basic</button>
-        <button id="parent-advanced" data-parent="advanced" role="tab" aria-selected="false" aria-controls="wrap-advanced">Advanced</button>
+        <button id="parent-basic" data-parent="basic" role="tab" aria-selected="true" aria-controls="wrap-basic"
+            class="active">Basic</button>
+        <button id="parent-advanced" data-parent="advanced" role="tab" aria-selected="false"
+            aria-controls="wrap-advanced">Advanced</button>
     </nav>
 
     <!-- █ BASIC: Tabs + Panels █ -->
     <div id="wrap-basic" class="wrap" role="region" aria-label="Basic Workspace">
         <nav class="cm-tabs" id="tabs-basic" role="tablist" aria-label="Basic Panels">
-            <button id="tab-project" data-tab="project" role="tab" aria-selected="true" aria-controls="panel-project" class="active">Project</button>
-            <button id="tab-actors" data-tab="actors" role="tab" aria-selected="false" aria-controls="panel-actors">Actors</button>
-            <button id="tab-speech" data-tab="speech" role="tab" aria-selected="false" aria-controls="panel-speech">Speech</button>
-            <button id="tab-focus" data-tab="focus" role="tab" aria-selected="false" aria-controls="panel-focus">Focus</button>
-            <button id="tab-relationships" data-tab="relationships" role="tab" aria-selected="false" aria-controls="panel-relationships">Relationships</button>
-            <button id="tab-lorebook" data-tab="lorebook" role="tab" aria-selected="false" aria-controls="panel-lorebook">Lorebook</button>
+            <button id="tab-project" data-tab="project" role="tab" aria-selected="true" aria-controls="panel-project"
+                class="active">Project</button>
+            <button id="tab-actors" data-tab="actors" role="tab" aria-selected="false"
+                aria-controls="panel-actors">Actors</button>
+            <button id="tab-speech" data-tab="speech" role="tab" aria-selected="false"
+                aria-controls="panel-speech">Speech</button>
+            <button id="tab-focus" data-tab="focus" role="tab" aria-selected="false"
+                aria-controls="panel-focus">Focus</button>
+            <button id="tab-relationships" data-tab="relationships" role="tab" aria-selected="false"
+                aria-controls="panel-relationships">Relationships</button>
+            <button id="tab-lorebook" data-tab="lorebook" role="tab" aria-selected="false"
+                aria-controls="panel-lorebook">Lorebook</button>
         </nav>
 
         <!-- Panels: show Project by default; hide others at load -->
@@ -76,7 +122,8 @@
         <section id="panel-focus" data-panel="focus" class="cm-panel is-hidden" aria-labelledby="tab-focus">
             <div class="panel-body"></div>
         </section>
-        <section id="panel-relationships" data-panel="relationships" class="cm-panel is-hidden" aria-labelledby="tab-relationships">
+        <section id="panel-relationships" data-panel="relationships" class="cm-panel is-hidden"
+            aria-labelledby="tab-relationships">
             <div class="panel-body"></div>
         </section>
         <section id="panel-lorebook" data-panel="lorebook" class="cm-panel is-hidden" aria-labelledby="tab-lorebook">
@@ -87,10 +134,14 @@
     <!-- █ ADVANCED: Tabs + Panels █ -->
     <div id="wrap-advanced" class="wrap" style="display:none" role="region" aria-label="Advanced Workspace">
         <nav class="cm-tabs" id="tabs-advanced" role="tablist" aria-label="Advanced Panels">
-            <button id="tab-tokens" data-tab="tokens" role="tab" aria-selected="true" aria-controls="panel-tokens" class="active">Tokens</button>
-            <button id="tab-engine" data-tab="engine" role="tab" aria-selected="false" aria-controls="panel-engine">Engine</button>
-            <button id="tab-testing" data-tab="testing" role="tab" aria-selected="false" aria-controls="panel-testing">Testing</button>
-			<button id="tab-scriptdebug" data-tab="scriptdebug" role="tab" aria-selected="false" aria-controls="panel-scriptdebug">Script Debug Tool</button>
+            <button id="tab-tokens" data-tab="tokens" role="tab" aria-selected="true" aria-controls="panel-tokens"
+                class="active">Tokens</button>
+            <button id="tab-engine" data-tab="engine" role="tab" aria-selected="false"
+                aria-controls="panel-engine">Engine</button>
+            <button id="tab-testing" data-tab="testing" role="tab" aria-selected="false"
+                aria-controls="panel-testing">Testing</button>
+            <button id="tab-scriptdebug" data-tab="scriptdebug" role="tab" aria-selected="false"
+                aria-controls="panel-scriptdebug">Script Debug Tool</button>
         </nav>
         <main class="cm-main">
             <section id="panel-tokens" data-panel="tokens" class="cm-panel" aria-labelledby="tab-tokens">
@@ -102,7 +153,7 @@
             <section id="panel-testing" data-panel="testing" class="cm-panel" aria-labelledby="tab-testing">
                 <div class="panel-body"></div>
             </section>
-			 <section id="panel-scriptdebug" data-panel="scriptdebug" class="cm-panel" aria-labelledby="tab-scriptdebug">
+            <section id="panel-scriptdebug" data-panel="scriptdebug" class="cm-panel" aria-labelledby="tab-scriptdebug">
                 <div class="panel-body"></div>
             </section>
         </main>
@@ -194,12 +245,8 @@
 
     <!-- █ Testing █ -->
     <!-- Script debugging libraries -->
-    <script src="js/lib/esprima.min.js"></script>
-    <script src="js/lib/escodegen.min.js"></script>
-
-    <!-- Shared script-debugger core + inspector -->
-    <script src="js/lib/scriptdebug.runner.js"></script>
-    <script src="js/lib/scriptdebug.inspect.js"></script>
+    <!-- Monaco Editor Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
 
     <!-- Script debugger Studio panel -->
     <script src="js/ui/scriptdebug/scriptdebug.panel.js"></script>
@@ -226,67 +273,70 @@
 
     <!-- █ Parent Tab Router (ES5, no deps) █ -->
     <script>
-    (function () {
-        var parent = (function(){ try { return localStorage.getItem('mythos.parent') || 'basic'; } catch(_e) { return 'basic'; } })();
-        if (parent !== 'basic') return;
+        (function () {
+            var parent = (function () { try { return localStorage.getItem('mythos.parent') || 'basic'; } catch (_e) { return 'basic'; } })();
+            if (parent !== 'basic') return;
 
-        var projBtn = document.getElementById('tab-project');
-        if (projBtn) {
-            if (projBtn.className.indexOf('active') === -1) projBtn.className += ' active';
-            projBtn.setAttribute('aria-selected', 'true');
-        }
-
-        var panels = document.querySelectorAll('#wrap-basic .cm-panel');
-        for (var i = 0; i < panels.length; i++) {
-            var p = panels[i];
-            var id = p.getAttribute('data-panel');
-            if (id === 'project') p.className = p.className.replace(/\bis-hidden\b/g, '');
-            else if (p.className.indexOf('is-hidden') === -1) p.className += ' is-hidden';
-        }
-
-        try {
-            if (window.CMTabs && CMTabs.select) {
-                CMTabs.select('project');
-            } else if (projBtn && projBtn.click) {
-                projBtn.click();
+            var projBtn = document.getElementById('tab-project');
+            if (projBtn) {
+                if (projBtn.className.indexOf('active') === -1) projBtn.className += ' active';
+                projBtn.setAttribute('aria-selected', 'true');
             }
-        } catch (_e) { /* keep usable even if tabs.js changes */ }
-    })();
+
+            var panels = document.querySelectorAll('#wrap-basic .cm-panel');
+            for (var i = 0; i < panels.length; i++) {
+                var p = panels[i];
+                var id = p.getAttribute('data-panel');
+                if (id === 'project') p.className = p.className.replace(/\bis-hidden\b/g, '');
+                else if (p.className.indexOf('is-hidden') === -1) p.className += ' is-hidden';
+            }
+
+            try {
+                if (window.CMTabs && CMTabs.select) {
+                    CMTabs.select('project');
+                } else if (projBtn && projBtn.click) {
+                    projBtn.click();
+                }
+            } catch (_e) { /* keep usable even if tabs.js changes */ }
+        })();
     </script>
 
     <!-- █ Parent Switcher (Basic / Advanced) █ -->
     <script>
-    (function () {
-        var bar = document.getElementById('cm-parent-tabs');
-        if (!bar) return;
-        var tabs = bar.getElementsByTagName('button');
-        var wraps = {
-            basic: document.getElementById('wrap-basic'),
-            advanced: document.getElementById('wrap-advanced')
-        };
-        function getAttr(el, n) { return el.getAttribute(n); }
-        function setActive(which) {
-            for (var i = 0; i < tabs.length; i++) {
-                var btn = tabs[i];
-                var id = getAttr(btn, 'data-parent');
-                var on = (id === which);
-                btn.className = on ? 'active' : '';
-                btn.setAttribute('aria-selected', on ? 'true' : 'false');
-                if (wraps[id]) wraps[id].style.display = on ? '' : 'none';
+        (function () {
+            var bar = document.getElementById('cm-parent-tabs');
+            if (!bar) return;
+            var tabs = bar.getElementsByTagName('button');
+            var wraps = {
+                basic: document.getElementById('wrap-basic'),
+                advanced: document.getElementById('wrap-advanced')
+            };
+            function getAttr(el, n) { return el.getAttribute(n); }
+            function setActive(which) {
+                for (var i = 0; i < tabs.length; i++) {
+                    var btn = tabs[i];
+                    var id = getAttr(btn, 'data-parent');
+                    var on = (id === which);
+                    btn.className = on ? 'active' : '';
+                    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+                    if (wraps[id]) wraps[id].style.display = on ? '' : 'none';
+                }
             }
-        }
-        var last = 'basic';
-        try { last = localStorage.getItem('mythos.parent') || 'basic'; } catch (_e) {}
-        if (last !== 'basic' && last !== 'advanced') last = 'basic';
-        setActive(last);
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].onclick = (function (btn) { return function () {
-                var which = getAttr(btn, 'data-parent') || 'basic';
-                setActive(which);
-                try { localStorage.setItem('mythos.parent', which); } catch (_e) {}
-            };})(tabs[i]);
-        }
-    })();
+            var last = 'basic';
+            try { last = localStorage.getItem('mythos.parent') || 'basic'; } catch (_e) { }
+            if (last !== 'basic' && last !== 'advanced') last = 'basic';
+            setActive(last);
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].onclick = (function (btn) {
+                    return function () {
+                        var which = getAttr(btn, 'data-parent') || 'basic';
+                        setActive(which);
+                        try { localStorage.setItem('mythos.parent', which); } catch (_e) { }
+                    };
+                })(tabs[i]);
+            }
+        })();
     </script>
 </body>
+
 </html>
