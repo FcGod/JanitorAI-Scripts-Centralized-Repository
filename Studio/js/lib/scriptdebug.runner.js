@@ -3,7 +3,7 @@
 
   var Runner = {};
 
-  // ----------------- Small helpers -----------------
+  // ----------------- AST WALKER -----------------
   function walkAst(node, visitor, parent) {
     if (!node || typeof node.type !== 'string') return;
     visitor(node, parent);
@@ -24,42 +24,57 @@
     }
   }
 
-  function cloneLoc(obj) {
-    if (!obj) return null;
+  // ----------------- LOC LITERAL HELPERS -----------------
+  function makePointObject(p) {
     return {
-      start: { line: obj.start && obj.start.line, column: obj.start && obj.start.column },
-      end:   { line: obj.end && obj.end.line,   column: obj.end && obj.end.column }
+      type: 'ObjectExpression',
+      properties: [
+        {
+          type: 'Property',
+          key: { type: 'Identifier', name: 'line' },
+          value: { type: 'Literal', value: p && typeof p.line === 'number' ? p.line : null },
+          kind: 'init'
+        },
+        {
+          type: 'Property',
+          key: { type: 'Identifier', name: 'column' },
+          value: { type: 'Literal', value: p && typeof p.column === 'number' ? p.column : null },
+          kind: 'init'
+        }
+      ]
     };
   }
 
-  function locToLiteralValue(loc, captureLoc) {
-    if (!captureLoc) return null;
-    if (!loc) return null;
-    try {
-      return JSON.stringify(cloneLoc(loc));
-    } catch (_e) {
-      return null;
+  function makeLocLiteral(loc) {
+    if (!loc || !loc.start || !loc.end) {
+      return { type: 'Literal', value: null };
     }
+    return {
+      type: 'ObjectExpression',
+      properties: [
+        {
+          type: 'Property',
+          key: { type: 'Identifier', name: 'start' },
+          value: makePointObject(loc.start),
+          kind: 'init'
+        },
+        {
+          type: 'Property',
+          key: { type: 'Identifier', name: 'end' },
+          value: makePointObject(loc.end),
+          kind: 'init'
+        }
+      ]
+    };
   }
 
-  function parseLocJSON(str) {
-    if (!str) return null;
-    try {
-      var obj = JSON.parse(str);
-      return cloneLoc(obj);
-    } catch (_e) {
-      return null;
-    }
-  }
-
-  // ----------------- Instrumentation helpers -----------------
-
-  function instrumentIfStatement(node, src, idx, captureLoc) {
+  // ----------------- INSTRUMENTATION -----------------
+  function instrumentIfStatement(node, src, idx) {
     var id = 'if_' + idx;
     var test = node.test;
-    var exprText = '';
 
-    if (test && test.range && test.range.length === 2) {
+    var exprText = '';
+    if (test.range && test.range.length === 2) {
       exprText = src.slice(test.range[0], test.range[1]);
     }
 
@@ -70,39 +85,37 @@
         { type: 'Literal', value: id },
         { type: 'Literal', value: exprText },
         test,
-        { type: 'Literal', value: locToLiteralValue(node.loc, captureLoc) }
+        makeLocLiteral(node.loc)
       ]
     };
 
     // Consequent
-    if (node.consequent) {
-      if (node.consequent.type !== 'BlockStatement') {
-        node.consequent = {
-          type: 'BlockStatement',
-          body: [ node.consequent ],
-          loc: node.consequent.loc
-        };
-      }
-      node.consequent.body.unshift({
-        type: 'ExpressionStatement',
-        expression: {
-          type: 'CallExpression',
-          callee: { type: 'Identifier', name: '__TRACE_BRANCH' },
-          arguments: [
-            { type: 'Literal', value: 'enter-then' },
-            { type: 'Literal', value: id },
-            { type: 'Literal', value: locToLiteralValue(node.consequent.loc || node.loc, captureLoc) }
-          ]
-        }
-      });
+    if (node.consequent.type !== 'BlockStatement') {
+      node.consequent = {
+        type: 'BlockStatement',
+        body: [node.consequent],
+        loc: node.consequent.loc
+      };
     }
+    node.consequent.body.unshift({
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'CallExpression',
+        callee: { type: 'Identifier', name: '__TRACE_BRANCH' },
+        arguments: [
+          { type: 'Literal', value: 'enter-then' },
+          { type: 'Literal', value: id },
+          makeLocLiteral(node.loc)
+        ]
+      }
+    });
 
-    // Alternate
+    // Alternate (else)
     if (node.alternate) {
       if (node.alternate.type !== 'BlockStatement') {
         node.alternate = {
           type: 'BlockStatement',
-          body: [ node.alternate ],
+          body: [node.alternate],
           loc: node.alternate.loc
         };
       }
@@ -114,69 +127,42 @@
           arguments: [
             { type: 'Literal', value: 'enter-else' },
             { type: 'Literal', value: id },
-            { type: 'Literal', value: locToLiteralValue(node.alternate.loc || node.loc, captureLoc) }
+            makeLocLiteral(node.loc)
           ]
         }
       });
     }
   }
 
-  function instrumentLoop(node, idx, captureLoc) {
+  function instrumentLoopStatement(node, idx) {
     var id = 'loop_' + idx;
+    var body = node.body;
 
-    if (!node.body) return;
-    if (node.body.type !== 'BlockStatement') {
-      node.body = {
+    if (!body) return;
+
+    if (body.type !== 'BlockStatement') {
+      body = {
         type: 'BlockStatement',
-        body: [ node.body ],
-        loc: node.body.loc
+        body: [body],
+        loc: body.loc
       };
+      node.body = body;
     }
 
-    // loop-iter marker inside the loop body
-    node.body.body.unshift({
+    body.body.unshift({
       type: 'ExpressionStatement',
       expression: {
         type: 'CallExpression',
-        callee: { type: 'Identifier', name: '__TRACE_LOOP' },
+        callee: { type: 'Identifier', name: '__TRACE_LOOP_ITER' },
         arguments: [
-          { type: 'Literal', value: 'loop-iter' },
           { type: 'Literal', value: id },
-          { type: 'Literal', value: locToLiteralValue(node.loc, captureLoc) }
+          makeLocLiteral(node.loc)
         ]
       }
     });
   }
 
-  function instrumentSwitchStatement(node, idx, captureLoc) {
-    var id = 'switch_' + idx;
-    var cases = node.cases || [];
-    var i, c;
-
-    for (i = 0; i < cases.length; i++) {
-      c = cases[i];
-      if (!c.consequent || !c.consequent.length) continue;
-
-      c.consequent.unshift({
-        type: 'ExpressionStatement',
-        expression: {
-          type: 'CallExpression',
-          callee: { type: 'Identifier', name: '__TRACE_BRANCH' },
-          arguments: [
-            { type: 'Literal', value: 'enter-case' },
-            { type: 'Literal', value: id + '_case_' + i },
-            { type: 'Literal', value: locToLiteralValue(c.loc || node.loc, captureLoc) }
-          ]
-        }
-      });
-    }
-  }
-
-  function instrumentScript(src, options) {
-    if (!root.esprima || !root.escodegen) {
-      return { error: new Error('esprima + escodegen are required for script debugging.') };
-    }
-
+  function instrumentScript(src) {
     var ast;
     try {
       ast = root.esprima.parse(src, {
@@ -188,22 +174,17 @@
       return { error: e };
     }
 
-    var opts = options || {};
-    var captureLoc = !!opts.captureLoc;
-
-    var ifCounter = 0;
-    var loopCounter = 0;
-    var switchCounter = 0;
-
+    var counter = 0;
     walkAst(ast, function (node) {
       if (node.type === 'IfStatement') {
-        instrumentIfStatement(node, src, ++ifCounter, captureLoc);
-      } else if (node.type === 'ForStatement' ||
-                 node.type === 'WhileStatement' ||
-                 node.type === 'DoWhileStatement') {
-        instrumentLoop(node, ++loopCounter, captureLoc);
-      } else if (node.type === 'SwitchStatement') {
-        instrumentSwitchStatement(node, ++switchCounter, captureLoc);
+        instrumentIfStatement(node, src, ++counter);
+      } else if (
+        node.type === 'ForStatement' ||
+        node.type === 'ForInStatement' ||
+        node.type === 'WhileStatement' ||
+        node.type === 'DoWhileStatement'
+      ) {
+        instrumentLoopStatement(node, ++counter);
       }
     });
 
@@ -211,219 +192,161 @@
     return { code: code };
   }
 
-  // ----------------- CONTEXT SETUP -----------------
-
-  function createBaseContext() {
-    var ctx = { character: {} };
-
-    // Simple Janitor-style-ish surfaces (local-only simulation)
-    ctx.chat = {
-      message_count: 0,
-      messages: [],
-      last_message: '',
-      last_user_message: '',
-      last_speaker: ''
-    };
-
-    ctx.user = {
-      id: '',
-      name: ''
-    };
-
-    ctx.state = {};
-    ctx.env = {};
-
-    return ctx;
-  }
-
-  function applyContextOverrides(baseCtx, overrides) {
-    if (!overrides || typeof overrides !== 'object') return baseCtx;
-    var key, sub, k2;
-
-    for (key in overrides) {
-      if (!overrides.hasOwnProperty(key)) continue;
-      if (key === 'character') {
-        sub = overrides.character;
-        if (sub && typeof sub === 'object') {
-          for (k2 in sub) {
-            if (!sub.hasOwnProperty(k2)) continue;
-            // Do NOT allow overrides of scenario/personality tracking slots
-            if (k2 === 'scenario' || k2 === 'personality') continue;
-            baseCtx.character[k2] = sub[k2];
-          }
+  // ----------------- CONTEXT MERGE -----------------
+  function mergeObjects(target, source) {
+    if (!target || !source) return;
+    var k, sv, tv, isObj;
+    for (k in source) {
+      if (!source.hasOwnProperty(k)) continue;
+      sv = source[k];
+      tv = target[k];
+      isObj =
+        sv &&
+        typeof sv === 'object' &&
+        Object.prototype.toString.call(sv) === '[object Object]';
+      if (isObj) {
+        if (!tv || Object.prototype.toString.call(tv) !== '[object Object]') {
+          target[k] = {};
+          tv = target[k];
         }
+        mergeObjects(tv, sv);
       } else {
-        baseCtx[key] = overrides[key];
+        target[k] = sv;
       }
     }
-
-    return baseCtx;
   }
 
   // ----------------- SANDBOX EXECUTION -----------------
-
   function runInstrumented(code, inputText, options) {
-    var opts = options || {};
+    options = options || {};
 
-    // maxTrace: how many events we keep in the trace (for UI)
-    var maxTrace = typeof opts.maxTrace === 'number' && opts.maxTrace > 0 ? opts.maxTrace : 2000;
-
-    // maxSteps: safety cap; default to maxTrace if not provided
-    var maxSteps = typeof opts.maxSteps === 'number' && opts.maxSteps > 0 ? opts.maxSteps : maxTrace;
-
-    var captureLoc = !!opts.captureLoc;
+    var maxTrace = typeof options.maxTrace === 'number' && options.maxTrace > 0 ?
+      options.maxTrace : 2000;
+    var maxSteps = typeof options.maxSteps === 'number' && options.maxSteps > 0 ?
+      options.maxSteps : 5000;
 
     var trace = [];
     var step = 0;
 
-    // Initial scenario/personality (before script runs)
-    var scenario = '';
-    var personality = '';
-
-    if (opts.initialScenario != null) {
-      scenario = String(opts.initialScenario);
-    }
-    if (opts.initialPersonality != null) {
-      personality = String(opts.initialPersonality);
-    }
-
-    // Build base context
-    var context = createBaseContext();
-
-    function pushEvent(ev) {
-      step++;
+    function pushTrace(ev) {
+      if (!ev) return;
+      if (trace.length >= maxTrace) return;
+      ev.step = ++step;
+      trace.push(ev);
       if (step > maxSteps) {
-        throw new Error('Debug run aborted: exceeded maxSteps (' + maxSteps + ')');
-      }
-      if (trace.length < maxTrace) {
-        ev.step = step;
-        trace.push(ev);
+        throw new Error('Max steps exceeded (' + maxSteps + ')');
       }
     }
 
+    var scenario = options.initialScenario != null ?
+      String(options.initialScenario) : '';
+    var personality = options.initialPersonality != null ?
+      String(options.initialPersonality) : '';
+
+    var context = {
+      character: {},
+      chat: {},
+      user: {},
+      meta: {}
+    };
+
+    // Merge overrides first
+    if (options.contextData && typeof options.contextData === 'object') {
+      mergeObjects(context, options.contextData);
+    }
+
+    // Instrument scenario/personality writes
     Object.defineProperty(context.character, 'scenario', {
-      configurable: true,
-      enumerable: true,
       get: function () { return scenario; },
       set: function (v) {
         scenario = String(v);
-        pushEvent({
+        pushTrace({
           kind: 'write-scenario',
-          value: scenario,
-          loc: null
+          value: scenario
         });
       }
     });
 
     Object.defineProperty(context.character, 'personality', {
-      configurable: true,
-      enumerable: true,
       get: function () { return personality; },
       set: function (v) {
         personality = String(v);
-        pushEvent({
+        pushTrace({
           kind: 'write-personality',
-          value: personality,
-          loc: null
+          value: personality
         });
       }
     });
 
-    // Apply user-provided context overrides AFTER defineProperty,
-    // without clobbering scenario/personality accessors.
-    if (opts.contextData && typeof opts.contextData === 'object') {
-      context = applyContextOverrides(context, opts.contextData);
+    // Initial chat fields
+    context.chat = context.chat || {};
+    context.chat.last_user_message = inputText || '';
+    if (!context.chat.last_message) {
+      context.chat.last_message = inputText || '';
+    }
+    if (typeof context.chat.message_count !== 'number') {
+      context.chat.message_count = 1;
+    }
+    if (!context.chat.last_messages) {
+      context.chat.last_messages = [{ message: inputText || '' }];
     }
 
-    // Map inputText into typical chat surfaces if not already set
-    var rawMsg = inputText || '';
-    if (!context.chat) {
-      context.chat = {
-        message_count: 0,
-        messages: [],
-        last_message: '',
-        last_user_message: '',
-        last_speaker: ''
-      };
-    }
-    if (typeof context.chat.last_user_message === 'undefined') {
-      context.chat.last_user_message = rawMsg;
-    }
-    if (typeof context.chat.last_message === 'undefined') {
-      context.chat.last_message = rawMsg;
-    }
-
-    function __TRACE_IF(id, exprSrc, result, locJson) {
-      var bool = !!result;
-      pushEvent({
+    // Trace helpers
+    function __TRACE_IF(id, exprSrc, result, loc) {
+      pushTrace({
         kind: 'if',
         id: id,
         expr: exprSrc,
-        result: bool,
-        loc: captureLoc ? parseLocJSON(locJson) : null
+        result: !!result,
+        loc: loc || null
       });
-      return bool;
+      return !!result;
     }
 
-    function __TRACE_BRANCH(kind, id, locJson) {
-      pushEvent({
+    function __TRACE_BRANCH(kind, id, loc) {
+      pushTrace({
         kind: kind,
         id: id,
-        loc: captureLoc ? parseLocJSON(locJson) : null
+        loc: loc || null
       });
     }
 
-    function __TRACE_LOOP(kind, id, locJson) {
-      pushEvent({
-        kind: kind, // 'loop-iter'
+    function __TRACE_LOOP_ITER(id, loc) {
+      pushTrace({
+        kind: 'loop-iter',
         id: id,
-        loc: captureLoc ? parseLocJSON(locJson) : null
+        loc: loc || null
       });
     }
 
-    function __TRACE_GENERIC(kind, info, locJson) {
-      pushEvent({
-        kind: kind,
-        info: info || null,
-        loc: captureLoc ? parseLocJSON(locJson) : null
-      });
-    }
-
-    var fn, err = null;
+    var fn;
     try {
       fn = new Function(
         'inputText',
         'context',
         '__TRACE_IF',
         '__TRACE_BRANCH',
-        '__TRACE_LOOP',
-        '__TRACE_GENERIC',
-        '"use strict";\n' +
-        'var DEBUG = false;\n' +
-        'var ctx = context;\n' +
-        code
+        '__TRACE_LOOP_ITER',
+        '"use strict";\n' + code
       );
     } catch (e) {
       return {
-        scenario: scenario,
-        personality: personality,
-        trace: trace,
+        scenario: '',
+        personality: '',
+        trace: [],
         error: e
       };
     }
 
+    var err = null;
     try {
-      fn(inputText, context, __TRACE_IF, __TRACE_BRANCH, __TRACE_LOOP, __TRACE_GENERIC);
-    } catch (eRun) {
-      err = eRun;
-      if (trace.length < maxTrace) {
-        trace.push({
-          step: step + 1,
-          kind: 'error',
-          message: String(eRun && eRun.message || eRun),
-          loc: null
-        });
-      }
+      fn(inputText, context, __TRACE_IF, __TRACE_BRANCH, __TRACE_LOOP_ITER);
+    } catch (e2) {
+      err = e2;
+      pushTrace({
+        kind: 'error',
+        message: String(e2 && e2.message || e2)
+      });
     }
 
     return {
@@ -435,17 +358,18 @@
   }
 
   // ----------------- PUBLIC API -----------------
+  Runner.run = function (src, inputText, options) {
+    options = options || {};
+    if (!root.esprima || !root.escodegen) {
+      return {
+        scenario: '',
+        personality: '',
+        trace: [],
+        error: new Error('esprima / escodegen not loaded')
+      };
+    }
 
-  // options may contain:
-  //  - maxTrace           : max events stored for UI (default 2000)
-  //  - maxSteps           : safety cap for execution (default = maxTrace)
-  //  - captureLoc         : include loc info when available
-  //  - contextData        : overrides merged into simulated context
-  //  - initialScenario    : starting context.character.scenario
-  //  - initialPersonality : starting context.character.personality
-  Runner.run = function (script, inputText, options) {
-    var src = script || '';
-    var inst = instrumentScript(src, options);
+    var inst = instrumentScript(src);
     if (inst.error) {
       return {
         scenario: '',
@@ -454,7 +378,8 @@
         error: inst.error
       };
     }
-    return runInstrumented(inst.code, inputText || '', options);
+
+    return runInstrumented(inst.code, inputText, options);
   };
 
   root.ScriptDebugRunner = Runner;

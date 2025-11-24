@@ -1,0 +1,163 @@
+/* --- Script Debug: Clean entry formatting --- */
+
+/* --- Improved Excel-style look for existing div-based debug rows --- */
+
+#cm-scriptdebug-log {
+  font-family: Consolas, Menlo, monospace;
+  white-space: pre-wrap;
+  overflow: auto;
+  height: 100%;
+  padding: 0;                 /* remove padding so rows edge-align */
+  background: #1b1b1b;
+  color: #d0d0d0;
+  border-left: 1px solid #333;
+}
+
+/* Each debug row */
+.dbg-entry {
+  display: grid;
+  grid-template-columns: 3.5em 7em 6em 1fr;
+  gap: 8px;
+
+  padding: 4px 8px;
+  border-bottom: 1px solid #3336;
+  line-height: 1.35em;
+
+  /* Excel zebra striping */
+  background: #171717;
+}
+
+.dbg-entry:nth-child(even) {
+  background: #1f1f1f;
+}
+
+/* Hover highlight */
+.dbg-entry:hover {
+  background: #242424;
+}
+
+/* Column styling */
+.dbg-entry .dbg-idx {
+  text-align: right;
+  color: #aaa;
+}
+
+.dbg-entry .dbg-kind {
+  text-align: left;
+  font-size: 11px;
+  padding: 2px 6px;
+  background: #2e2e2e;
+  color: #fff;
+  border-radius: 3px;
+}
+
+.dbg-entry .dbg-loc {
+  text-align: left;
+  color: #ffd88a;
+  font-size: 11px;
+}
+
+.dbg-entry .dbg-details {
+  padding-left: 0;
+  white-space: pre-wrap;
+  color: #ccc;
+}
+
+.dbg-true {
+  color: #90ee90;
+}
+
+.dbg-false {
+  color: #ff8080;
+}
+
+/* Diff highlight */
+.dbg-diff-add {
+  background: rgba(255,255,0,0.3);
+  padding: 0 2px;
+}
+}
+
+/* Script Debugger trace table – Excel-ish look */
+
+.cm-trace-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: Consolas, Menlo, monospace;
+  font-size: 12px;
+  background: #151515;
+  border: 1px solid #333;         /* outer border */
+}
+
+/* Header row */
+.cm-trace-table thead th {
+  text-align: left;
+  padding: 4px 8px;
+  background: #202020;
+  color: #f0f0f0;
+  border-bottom: 1px solid #444;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Body cells */
+.cm-trace-table tbody td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #333;  /* row grid lines */
+  border-right: 1px solid #333;   /* column grid lines */
+  vertical-align: top;
+}
+
+/* Remove right border on last column to keep it clean */
+.cm-trace-table tbody td:last-child,
+.cm-trace-table thead th:last-child {
+  border-right: none;
+}
+
+/* Excel-style zebra striping */
+.cm-trace-table tbody tr:nth-child(odd) td {
+  background: #171717;
+}
+
+.cm-trace-table tbody tr:nth-child(even) td {
+  background: #1b1b1b;
+}
+
+/* Hover highlight */
+.cm-trace-table tbody tr:hover td {
+  background: #242424;
+}
+
+/* Align the step column a bit tighter & right aligned */
+.cm-trace-table tbody td:first-child,
+.cm-trace-table thead th:first-child {
+  width: 3.5em;
+  text-align: right;
+}
+
+/* Location column a bit narrower */
+.cm-trace-table thead th:nth-child(3),
+.cm-trace-table tbody td:nth-child(3) {
+  width: 6em;
+}
+
+/* Expanded-mode result coloring still applies */
+.dbg-true {
+  color: #90ee90;
+}
+
+.dbg-false {
+  color: #ff8080;
+}
+
+/* Diff highlight & no-change text */
+.dbg-diff-add {
+  background: rgba(255,255,0,0.25);
+}
+
+.dbg-no-change {
+  color: #999;
+}
+
